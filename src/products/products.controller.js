@@ -56,6 +56,13 @@ exports.updateCategory = async (req, res) => {
     if (categoryImage) category.categoryImage = categoryImage;
     if (brandName) category.brandName = brandName;
     await category.save();
+    return res
+      .status(200)
+      .json({
+        message: "category updated successfully",
+        status: 200,
+        category,
+      });
   } catch (error) {
     logger.error(error);
     return res
