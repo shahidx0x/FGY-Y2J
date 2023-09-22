@@ -1,5 +1,5 @@
 const { authLimiter } = require("../../middleware/rateLimiter");
-const { createUser, signInUser } = require("./controller");
+const { createUser, signInUser } = require("./auth.controller");
 
 const auth_router = require("express").Router();
 

@@ -12,12 +12,12 @@ const authenticate = (req, res, next) => {
       next();
     } else {
       res.status(401).json({
-        message: "Unauthorized User",
+        message: "unauthorized user",
       });
     }
   } catch (error) {
     logger.error(error);
-    res.status(401).json({ message: "Unauthorized User" });
+    res.status(401).json({ message: "unauthorized user" });
   }
 };
 

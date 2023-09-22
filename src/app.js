@@ -4,10 +4,9 @@ const xss = require("xss-clean");
 const mongoSanitize = require("express-mongo-sanitize");
 const compression = require("compression");
 const cors = require("cors");
-const config = require("../configs/config");
-const { authLimiter } = require("../middleware/rateLimiter");
 const serverLog = require("../middleware/serverLog");
-const auth_router = require("./auths/routes");
+const auth_router = require("./auths/auth.routes");
+const products_router = require("./products/products.routes");
 
 const app = express();
 
@@ -36,5 +35,6 @@ app.use(serverLog);
 
 // limit repeated failed requests to auth endpoints
 app.use(auth_router);
+app.use(products_router);
 
 module.exports = app;
