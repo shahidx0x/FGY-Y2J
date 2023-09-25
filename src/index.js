@@ -4,12 +4,20 @@ const config = require("../configs/config");
 const logger = require("../configs/logger");
 let server;
 
-mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
-  logger.info("Connected to MongoDB");
-  server = app.listen(config.port, () => {
-    logger.info(`Listening to port ${config.port}`);
+mongoose
+  .connect(
+    "mongodb+srv://shahid:191002118@parkingfinder.rhe2oic.mongodb.net/?retryWrites=true&w=majority",
+    config.mongoose.options
+  )
+  .then(() => {
+    logger.info("Connected to MongoDB");
+    const ip = "0.0.0.0";
+    const port = process.env.PORT || 3000;
+
+    server = app.listen(port, ip, () => {
+      logger.info(`Server is running on http://${ip}:${port}`);
+    });
   });
-});
 
 const exitHandler = () => {
   if (server) {
