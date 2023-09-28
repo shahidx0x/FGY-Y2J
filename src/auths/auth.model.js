@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const userSchema = new Schema(
+
+const userSchema = new mongoose.Schema(
   {
     cartNumber: {
       type: String,
@@ -9,47 +9,42 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
-      lower: true,
     },
     password: {
       type: String,
       required: true,
     },
-    company: {
-      type: String,
-      required: true,
+    company: String,
+    isAccountVerified: {
+      type: Boolean,
+      default: false,
     },
-    location: {
-      type: String,
-      required: true,
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
     },
-    zipCode: {
-      type: String,
-      required: true,
+    cardVerified: {
+      type: Boolean,
+      default: false,
     },
-    firstName: {
-      type: String,
-      required: true,
+    phoneNumber: String,
+    isAccountActive: {
+      type: Boolean,
+      default: true,
     },
-    lastName: {
-      type: String,
-      required: true,
-    },
-    subscription: {
-      type: String,
-      required: true,
-    },
-    paymentMethod: {
-      type: String,
-      required: true,
-    },
-    cardNumber: {
-      type: String,
-      required: true,
-    },
+    profilePicture: String,
+    location: String,
+    zipCode: String,
+    firstName: String,
+    lastName: String,
+    subscription: String,
+    paymentMethod: String,
+    cardNumber: String,
+    resetPasswordToken: Number,
+    resetPasswordExpires: Number,
     role: {
       type: String,
-      required: true,
+      enum: ["user", "admin"],
       default: "user",
     },
   },
