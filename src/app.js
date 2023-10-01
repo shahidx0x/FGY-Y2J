@@ -7,11 +7,17 @@ const cors = require("cors");
 const serverLog = require("../middleware/serverLog");
 const auth_router = require("./auths/auth.routes");
 const products_router = require("./products/products.routes");
+const path = require("path");
 
 const app = express();
+app.use(express.static(path.join(__dirname, "auths")));
+// app.set("view engine", "ejs");
+// app.set("views", path.join(__dirname, "auths"));
 
 // set security HTTP headers
 app.use(helmet());
+
+console.log(path.join(__dirname, "auths/"));
 
 // parse json request body
 app.use(express.json());
