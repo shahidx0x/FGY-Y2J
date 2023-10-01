@@ -222,7 +222,7 @@ const authController = {
         // host: config.email.host,
         service: "Gmail",
         port: 465,
-        // secure: true,
+        secure: true,
         auth: {
           user: config.email.user,
           pass: config.email.password,

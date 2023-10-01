@@ -10,7 +10,7 @@ const products_router = require("./products/products.routes");
 const path = require("path");
 
 const app = express();
-app.use(express.static(path.join(__dirname, "auths")));
+// app.use(express.static(path.join(__dirname, "auths")));
 // app.set("view engine", "ejs");
 // app.set("views", path.join(__dirname, "auths"));
 
