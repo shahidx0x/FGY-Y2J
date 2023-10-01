@@ -227,6 +227,9 @@ const authController = {
           user: config.email.user,
           pass: config.email.password,
         },
+        tls: {
+          rejectUnauthorized: false,
+        },
       });
       let cypher = Encryption(`${resetToken}/${email}`);
       const data = {
@@ -263,7 +266,7 @@ const authController = {
         }
       );
     } catch (err) {
-      logger.error(err);
+      console.log(err);
     }
   },
   verify_email: async (req, res) => {
