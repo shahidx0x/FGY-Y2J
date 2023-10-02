@@ -1,21 +1,22 @@
 const colors = require("colors");
 const logger = require("../configs/logger");
+
+const methodColors = {
+  GET: "green",
+  POST: "cyan",
+  DELETE: "red",
+  PATCH: "magenta",
+};
+
 const serverLog = (req, res, next) => {
-  console.log(req.headers);
-  let requestMethod;
-  if (req.method === "GET") requestMethod = `${req.method}`.bgGreen;
-  else if (req.method === "DELET") requestMethod = `${req.method}`.bgRed;
-  else if (req.method === "POST") requestMethod = `${req.method}`.bgCyan;
-  else if (req.method === "PATCH") requestMethod = `${req.method}`.bgMagenta;
-  logger.info(
-    `${req.rawHeaders[3]}`.green +
-      " " +
-      requestMethod +
-      " " +
-      "==>".magenta +
-      " " +
-      `${req.url}`.cyan
-  );
+  const requestMethodColor = methodColors[req.method] || "white";
+  const requestMethod = colors[requestMethodColor](req.method);
+  const userAgent = colors.green(req.headers["user-agent"].slice(0, 36));
+  const url = colors.cyan(req.url);
+  const arrow = colors.magenta("=>");
+
+  logger.info(`${userAgent} ${requestMethod} ${arrow} ${url}`);
   next();
 };
+
 module.exports = serverLog;
