@@ -7,9 +7,9 @@ const cors = require("cors");
 const serverLog = require("../middleware/serverLog");
 const auth_router = require("./auths/auth.routes");
 const path = require("path");
-const category_router = require("./products/categories/categories.router");
-const subcat_router = require("./products/categories/subcategories/subcategories.router");
-const brands_router = require("./products/brands/brands.router");
+const category_router = require("./main/categories/categories.router");
+const subcat_router = require("./main/categories/subcategories/subcategories.router");
+const brands_router = require("./main/brands/brands.router");
 
 const app = express();
 // app.use(express.static(path.join(__dirname, "auths")));
