@@ -163,8 +163,8 @@ const authController = {
 
       const transporter = nodemailer.createTransport({
         // host: config.email.host,
-        service: "Gmail",
-        port: 465,
+        service: "hotmail",
+        // port: 465,
         // secure: true,
         auth: {
           user: config.email.user,
@@ -218,17 +218,14 @@ const authController = {
       const resetToken = Math.floor(Math.random() * 900000) + 100000;
       user.resetPasswordToken = resetToken;
       await user.save();
+      console.log(config.email.user, config.email.password);
       const transporter = nodemailer.createTransport({
         // host: config.email.host,
-        service: "Gmail",
-        port: 465,
-        secure: true,
+        service: "hotmail",
+        // port: 465,
         auth: {
           user: config.email.user,
           pass: config.email.password,
-        },
-        tls: {
-          rejectUnauthorized: false,
         },
       });
       let cypher = Encryption(`${resetToken}/${email}`);
