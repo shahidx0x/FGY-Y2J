@@ -10,7 +10,6 @@ const brandSchema = new Schema({
   brand_slug: {
     type: String,
     required: true,
-    unique: true,
     lowercase: true,
     trim: true,
   },

@@ -5,7 +5,9 @@ const brandsController = {
     try {
       const brand = new Brands(req.body);
       await brand.save();
-      res.status(201).json({ message: "Brand created successfully", brand });
+      res
+        .status(200)
+        .json({ message: "Brand created successfully", status: 200, brand });
     } catch (error) {
       res.status(500).json({ message: "Error creating brand", error });
     }
@@ -13,8 +15,20 @@ const brandsController = {
 
   getAllBrands: async (req, res) => {
     try {
-      const brands = await Brands.find();
-      res.status(200).json(brands);
+      const page = parseInt(req.query.page, 10) || 1;
+      const limit = parseInt(req.query.limit, 10) || 10;
+      const skip = (page - 1) * limit;
+
+      const brands = await Brands.find().skip(skip).limit(limit);
+      const totalBrands = await Brands.countDocuments();
+
+      res.status(200).json({
+        status: 200,
+        total_brands: totalBrands,
+        current_page: page,
+        per_page: limit,
+        brands,
+      });
     } catch (error) {
       res.status(500).json({ message: "Error fetching brands", error });
     }
@@ -54,9 +68,11 @@ const brandsController = {
       if (!updatedBrand) {
         return res.status(404).json({ message: "Brand not found" });
       }
-      res
-        .status(200)
-        .json({ message: "Brand updated successfully", brand: updatedBrand });
+      res.status(200).json({
+        message: "Brand updated successfully",
+        status: 200,
+        brand: updatedBrand,
+      });
     } catch (error) {
       res.status(500).json({ message: "Error updating brand", error });
     }
