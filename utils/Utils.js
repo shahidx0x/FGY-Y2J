@@ -20,7 +20,17 @@ function Decryption(text) {
   return decrypted.toString();
 }
 
+function getClientIp(req) {
+  return req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+}
+
+function getUserAgent(req) {
+  return req.headers["user-agent"];
+}
+
 module.exports = {
   Encryption,
   Decryption,
+  getClientIp,
+  getUserAgent,
 };
