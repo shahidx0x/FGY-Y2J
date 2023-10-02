@@ -11,7 +11,7 @@ const methodColors = {
 const serverLog = (req, res, next) => {
   const requestMethodColor = methodColors[req.method] || "white";
   const requestMethod = colors[requestMethodColor](req.method);
-  const userAgent = colors.green(req.headers["user-agent"].slice(0, 35));
+  const userAgent = colors.bgMagenta(req.headers["user-agent"].slice(0, 35));
   const url = colors.cyan(req.url);
   const arrow = colors.magenta("=>");
 
