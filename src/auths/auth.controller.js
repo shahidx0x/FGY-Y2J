@@ -230,7 +230,7 @@ const authController = {
       });
       let cypher = Encryption(`${resetToken}/${email}`);
       const data = {
-        link: `http://${config.host}:${config.port}/${cypher}`,
+        link: `http://${config.host}:${config.port}/verify/email/${cypher}`,
       };
       ejs.renderFile(
         path.join(__dirname, "verify_email.view.ejs"),
@@ -266,7 +266,8 @@ const authController = {
       console.log(err);
     }
   },
-  verify_email: async (req, res) => {
+  verify_email: async (req, res, next) => {
+    if (req.params < 10) next();
     const { cypher } = req.params;
     let de_cypher = Decryption(cypher);
 

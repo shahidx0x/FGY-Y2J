@@ -23,8 +23,18 @@ const CategoryController = {
 
   getAllCategories: async (req, res) => {
     try {
-      const categories = await Category.find();
-      res.status(200).json({ data: categories });
+      const page = parseInt(req.query.page, 10) || 1;
+      const limit = parseInt(req.query.limit, 10) || 10;
+      const skip = (page - 1) * limit;
+      const totalCategory = await Category.countDocuments();
+      const categories = await Category.find().skip(skip).limit(limit);
+      res.status(200).json({
+        status: 200,
+        total_categories: totalCategory,
+        current_page: page,
+        per_page: limit,
+        categories,
+      });
     } catch (error) {
       res
         .status(500)
@@ -76,13 +86,10 @@ const CategoryController = {
     try {
       const categoryId = req.params.id;
 
-      const category = await Category.findById(categoryId);
+      const category = await Category.findByIdAndDelete(categoryId);
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
       }
-
-      await category.remove();
-
       res.status(200).json({ message: "Category deleted successfully" });
     } catch (error) {
       res

@@ -3,7 +3,7 @@ const SubCategoryController = require("./subcategories.controller");
 const subcat_router = express.Router();
 
 subcat_router.post(
-  "/subcategory/:categoryId",
+  "/create/subcategory/:categoryId",
   SubCategoryController.addSubCategory
 );
 subcat_router.patch(
