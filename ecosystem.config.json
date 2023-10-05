@@ -1,15 +1,22 @@
 {
-    "apps": [
-      {
-        "name": "FGI-Y2J",
-        "script": "src/index.js",
-        "instances": 1,
-        "autorestart": true,
-        "watch": false,
-        "time": true,
-        "env": {
-          "NODE_ENV": "production"
-        }
+  "apps": [
+    {
+      "name": "FGI-Y2J",
+      "script": "src/index.js",
+      "instances": "max",
+      "exec_mode": "cluster",
+      "autorestart": true,
+      "watch": false,
+      "time": true,
+      "error_file": "./logs/err.log",
+      "out_file": "./logs/out.log",
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "env_maintenance": {
+        "NODE_ENV": "maintenance",
+        "MAINTENANCE_MODE": "true"
       }
-    ]
-  }
+    }
+  ]
+}
