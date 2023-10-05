@@ -25,7 +25,8 @@ const subCategorySchema = new mongoose.Schema(
 );
 
 const categorySchema = new mongoose.Schema(
-  {    category_label: {
+  {
+    category_label: {
       type: String,
       required: true,
     },
@@ -33,6 +34,7 @@ const categorySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isActive: Boolean,
     image: String,
     brand_id: String,
     subCategories: [subCategorySchema],
