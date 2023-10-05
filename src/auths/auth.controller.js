@@ -95,10 +95,10 @@ const authController = {
       const page = parseInt(req.query.page, 10) || 1;
       const limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
-
+      const totalUsers = await Signup.countDocuments();
       const users = await Signup.find().skip(skip).limit(limit);
       const totalAdmin = await Signup.find({ role: "admin" });
-      const total_page = Math.ceil(users.length / limit);
+      const total_page = Math.ceil(totalUsers / limit);
 
       res.status(200).json({
         status: 200,
