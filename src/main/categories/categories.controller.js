@@ -28,7 +28,7 @@ const CategoryController = {
       const skip = (page - 1) * limit;
       const totalCategory = await Category.countDocuments();
       const categories = await Category.find().skip(skip).limit(limit);
-      const total_page = Math.ceil(totalBrands / limit);
+      const total_page = Math.ceil(totalCategory / limit);
       res.status(200).json({
         status: 200,
         total_categories: totalCategory,

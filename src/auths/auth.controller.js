@@ -23,6 +23,7 @@ const authController = {
         lastName,
         subscription,
         paymentMethod,
+        profilePicture,
         cardNumber,
         password,
       } = req.body;
@@ -49,6 +50,7 @@ const authController = {
 
       const newUser = new Signup({
         cartNumber,
+        profilePicture,
         email,
         company,
         location,
@@ -74,6 +76,7 @@ const authController = {
       }
       let resultObject = result.toObject();
       delete resultObject.password;
+      delete resultObject.cardNumber;
       res.status(200).json({
         message: "Signup successful",
         status: 200,
@@ -85,6 +88,29 @@ const authController = {
       return res
         .status(500)
         .json({ message: "Internal server error", status: 500 });
+    }
+  },
+  getAllUsers: async (req, res) => {
+    try {
+      const page = parseInt(req.query.page, 10) || 1;
+      const limit = parseInt(req.query.limit, 10) || 10;
+      const skip = (page - 1) * limit;
+
+      const users = await Signup.find().skip(skip).limit(limit);
+      const totalAdmin = await Signup.find({ role: "admin" });
+      const total_page = Math.ceil(users.length / limit);
+
+      res.status(200).json({
+        status: 200,
+        total_user: users.length,
+        total_admin: totalAdmin.length,
+        total_page: total_page,
+        current_page: page,
+        per_page: limit,
+        users,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching users", error });
     }
   },
 
