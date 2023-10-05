@@ -10,6 +10,7 @@ const path = require("path");
 const category_router = require("./main/categories/categories.router");
 const subcat_router = require("./main/categories/subcategories/subcategories.router");
 const brands_router = require("./main/brands/brands.router");
+const serverMaintain = require("../middleware/serverMaintain");
 
 const app = express();
 

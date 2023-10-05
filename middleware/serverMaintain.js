@@ -4,3 +4,4 @@ const serverMaintain = (req, res, next) => {
   }
   next();
 };
+module.exports = serverMaintain;
