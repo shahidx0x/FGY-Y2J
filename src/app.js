@@ -13,6 +13,7 @@ const brands_router = require("./main/brands/brands.router");
 
 const app = express();
 
+app.use(serverMaintain);
 app.set("trust proxy", 1);
 app.use(helmet());
 app.use(express.json());
