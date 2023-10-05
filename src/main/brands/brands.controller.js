@@ -21,10 +21,12 @@ const brandsController = {
 
       const brands = await Brands.find().skip(skip).limit(limit);
       const totalBrands = await Brands.countDocuments();
+      const total_page = Math.ceil(totalBrands / limit);
 
       res.status(200).json({
         status: 200,
         total_brands: totalBrands,
+        total_page: total_page,
         current_page: page,
         per_page: limit,
         brands,
