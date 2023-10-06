@@ -4,6 +4,7 @@ const auth_router = require("express").Router();
 
 auth_router.get("/verify/email/:cypher", authController.verify_email);
 auth_router.get("/get/users", authController.getAllUsers);
+auth_router.get("/get/user", authController.getUserByEmail);
 auth_router.post("/signup", authLimiter, authController.createUser);
 auth_router.post("/signin", authLimiter, authController.signInUser);
 auth_router.post(
