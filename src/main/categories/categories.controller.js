@@ -35,7 +35,7 @@ const CategoryController = {
         total_page: total_page,
         current_page: page,
         per_page: limit,
-        categories,
+        data: categories,
       });
     } catch (error) {
       res

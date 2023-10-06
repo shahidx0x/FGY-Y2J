@@ -24,6 +24,7 @@ const authController = {
         subscription,
         paymentMethod,
         profilePicture,
+        phoneNumber,
         cardNumber,
         password,
       } = req.body;
@@ -58,6 +59,7 @@ const authController = {
         firstName,
         lastName,
         subscription,
+        phoneNumber,
         paymentMethod,
         cardNumber,
         password: passwordHash,
@@ -102,12 +104,14 @@ const authController = {
 
       res.status(200).json({
         status: 200,
-        total_user: users.length,
-        total_admin: totalAdmin.length,
-        total_page: total_page,
-        current_page: page,
-        per_page: limit,
-        users,
+        meta: {
+          total_user: totalUsers,
+          total_admin: totalAdmin.length,
+          total_page: total_page,
+          current_page: page,
+          per_page: limit,
+        },
+        data: users,
       });
     } catch (error) {
       res.status(500).json({ message: "Error fetching users", error });

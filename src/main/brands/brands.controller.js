@@ -29,7 +29,7 @@ const brandsController = {
         total_page: total_page,
         current_page: page,
         per_page: limit,
-        brands,
+        data: brands,
       });
     } catch (error) {
       res.status(500).json({ message: "Error fetching brands", error });
