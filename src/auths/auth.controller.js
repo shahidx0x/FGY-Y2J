@@ -92,6 +92,67 @@ const authController = {
         .json({ message: "Internal server error", status: 500 });
     }
   },
+  updateUser: async (req, res) => {
+    try {
+      const fieldsToUpdate = [
+        "cartNumber",
+        "company",
+        "location",
+        "zipCode",
+        "firstName",
+        "lastName",
+        "subscription",
+        "paymentMethod",
+        "profilePicture",
+        "phoneNumber",
+        "cardNumber",
+      ];
+      const { email, password } = req.body;
+      const userToUpdate = await Signup.findOne({ email });
+      if (!userToUpdate) {
+        return res
+          .status(404)
+          .json({ message: "User not found with this email" });
+      }
+
+      fieldsToUpdate.forEach((field) => {
+        if (req.body[field]) {
+          userToUpdate[field] = req.body[field];
+        }
+      });
+
+      if (password) {
+        const salt = crypto.randomBytes(16).toString("hex");
+        const iterations = 10000;
+        const hashBuffer = crypto.pbkdf2Sync(
+          password,
+          salt,
+          iterations,
+          32,
+          "sha512"
+        );
+        userToUpdate.password = `${salt}:${hashBuffer.toString("hex")}`;
+      }
+
+      const result = await userToUpdate.save();
+
+      let resultObject = result.toObject();
+      delete resultObject.password;
+      delete resultObject.cardNumber;
+
+      res.status(200).json({
+        message: "User updated successfully",
+        status: 200,
+        data: resultObject,
+      });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "Internal server error", status: 500 });
+    }
+  },
+
   getAllUsers: async (req, res) => {
     try {
       const page = parseInt(req.query.page, 10) || 1;

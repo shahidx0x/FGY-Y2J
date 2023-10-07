@@ -31,10 +31,12 @@ const CategoryController = {
       const total_page = Math.ceil(totalCategory / limit);
       res.status(200).json({
         status: 200,
-        total_categories: totalCategory,
-        total_page: total_page,
-        current_page: page,
-        per_page: limit,
+        meta: {
+          total_categories: totalCategory,
+          total_page: total_page,
+          current_page: page,
+          per_page: limit,
+        },
         data: categories,
       });
     } catch (error) {
