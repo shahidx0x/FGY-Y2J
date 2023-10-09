@@ -23,8 +23,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(xss());
 app.use(mongoSanitize());
 app.use(compression());
-app.use(cors());
-app.options("*", cors());
+
+const corsOptions = {
+  origin: "https://app.gobd.xyz",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(serverLog);
 app.use(auth_router);
 app.use(brands_router);
