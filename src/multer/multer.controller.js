@@ -2,6 +2,7 @@ const multer = require("multer");
 const sharp = require("sharp");
 const config = require("../../configs/config");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single("file");
@@ -17,7 +18,10 @@ exports.uploadFile = async (req, res) => {
       return res.status(400).send("No file uploaded");
     }
 
-    const filename = Date.now() + "-" + req.file.originalname;
+    const randomUID = uuidv4();
+    const fileExtension = path.extname(req.file.originalname);
+    const filename = `${randomUID}${fileExtension}`;
+
     const outputPath = path.join(__dirname, "..", "..", "uploads", filename);
 
     try {

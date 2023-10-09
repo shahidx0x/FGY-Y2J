@@ -8,5 +8,6 @@ key
 cp
 *.yaml
 connect
-
+*.jpg
+*.png
 
