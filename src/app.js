@@ -6,14 +6,15 @@ const compression = require("compression");
 const cors = require("cors");
 const serverLog = require("../middleware/serverLog");
 const auth_router = require("./auths/auth.routes");
-const path = require("path");
 const category_router = require("./main/categories/categories.router");
 const subcat_router = require("./main/categories/subcategories/subcategories.router");
 const brands_router = require("./main/brands/brands.router");
 const serverMaintain = require("../middleware/serverMaintain");
-
+const multer_router = require("./multer/multer.router");
 const app = express();
 
+app.use("/uploads", express.static("uploads"));
+app.use("/", multer_router);
 app.use(serverMaintain);
 app.set("trust proxy", 1);
 app.use(helmet());
