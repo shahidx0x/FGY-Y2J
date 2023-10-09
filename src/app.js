@@ -12,7 +12,8 @@ const brands_router = require("./main/brands/brands.router");
 const serverMaintain = require("../middleware/serverMaintain");
 const multer_router = require("./multer/multer.router");
 const app = express();
-
+app.use(cors());
+app.options("*", cors());
 app.use("/uploads", express.static("uploads"));
 app.use("/", multer_router);
 app.use(serverMaintain);
@@ -23,16 +24,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(xss());
 app.use(mongoSanitize());
 app.use(compression());
-
-const corsOptions = {
-  origin: "https://app.gobd.xyz",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
-  optionsSuccessStatus: 204,
-};
-
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 app.use(serverLog);
 app.use(auth_router);
 app.use(brands_router);
