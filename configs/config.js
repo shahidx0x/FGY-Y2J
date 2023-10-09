@@ -1,15 +1,18 @@
 const dotenv = require("dotenv");
 const path = require("path");
 dotenv.config({ path: path.join(__dirname, "../.env") });
-let host;
+let host, domain;
 if (process.env.ENV === "DEV") {
   host = "0.0.0.0";
+  domain = `http://localhost:${process.env.PORT}`;
 } else {
   host = process.env.SERVER_IP;
+  domain = process.env.SERVER_DOMAIN;
 }
 module.exports = {
   env: "production",
   host: host,
+  domain: domain,
   port: process.env.PORT,
   email: {
     host: process.env.EMAIL_HOST,

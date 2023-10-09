@@ -26,7 +26,7 @@ exports.uploadFile = async (req, res) => {
         .jpeg({ quality: 80 })
         .toFile(outputPath);
 
-      const fileUrl = `${config.host}/uploads/${filename}`;
+      const fileUrl = `${config.domain}/uploads/${filename}`;
       res.status(200).json({
         message: "File uploaded successfully",
         fileUrl,
