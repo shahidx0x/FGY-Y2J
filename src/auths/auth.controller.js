@@ -96,6 +96,7 @@ const authController = {
     try {
       const fieldsToUpdate = [
         "cartNumber",
+        "role",
         "company",
         "location",
         "zipCode",
