@@ -12,6 +12,7 @@ const brands_router = require("./main/brands/brands.router");
 const serverMaintain = require("../middleware/serverMaintain");
 const multer_router = require("./multer/multer.router");
 const app = express();
+
 app.use(cors());
 app.options("*", cors());
 app.use("/uploads", express.static("uploads"));
