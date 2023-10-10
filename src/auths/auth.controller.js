@@ -337,7 +337,7 @@ const authController = {
       });
       let cypher = Encryption(`${resetToken}/${email}`);
       const data = {
-        link: `https://${config.domain}/verify/email/${cypher}`,
+        link: `${config.domain}/verify/email/${cypher}`,
       };
       ejs.renderFile(
         path.join(__dirname, "verify_email.view.ejs"),
