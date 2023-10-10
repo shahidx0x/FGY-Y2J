@@ -380,12 +380,13 @@ const authController = {
 
     try {
       const user = await Signup.findOne({ email: de_cypher.split("/")[1] });
+      
 
       if (user.resetPasswordToken === Number(de_cypher.split("/")[0])) {
         fs.readFile(
           path.join(__dirname, "email_var_success.view.html"),
           "utf8",
-          (err, data) => {
+          (err, data) => { 
             if (err) {
               console.error("Error reading the HTML file:", err);
               res.status(500).send("Internal Server Error");
