@@ -24,4 +24,6 @@ auth_router.post(
   authLimiter,
   authController.send_verify_email
 );
+
+auth_router.get("/check/session", authenticate, authController.checkSession);
 module.exports = auth_router;

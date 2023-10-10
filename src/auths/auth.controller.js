@@ -10,6 +10,9 @@ const fs = require("fs");
 const { Encryption, Decryption } = require("../../utils/Utils");
 
 const authController = {
+  checkSession: async (req, res) => {
+    res.status(200).json({ status: 200, message: "session is valid" });
+  },
   createUser: async (req, res) => {
     let token;
     try {
@@ -266,10 +269,10 @@ const authController = {
       await user.save();
 
       const transporter = nodemailer.createTransport({
-        // host: config.email.host,
-        service: "hotmail",
-        // port: 465,
-        // secure: true,
+        host: config.email.host,
+        // service: "hotmail",
+        port: 465,
+        secure: true,
         auth: {
           user: config.email.user,
           pass: config.email.password,
@@ -324,9 +327,9 @@ const authController = {
       await user.save();
       console.log(config.email.user, config.email.password);
       const transporter = nodemailer.createTransport({
-        // host: config.email.host,
-        service: "hotmail",
-        // port: 465,
+        host: config.email.host,
+        // service: "hotmail",
+        port: 465,
         auth: {
           user: config.email.user,
           pass: config.email.password,
@@ -334,7 +337,7 @@ const authController = {
       });
       let cypher = Encryption(`${resetToken}/${email}`);
       const data = {
-        link: `http://${config.host}:${config.port}/verify/email/${cypher}`,
+        link: `https://${config.host}:${config.port}/verify/email/${cypher}`,
       };
       ejs.renderFile(
         path.join(__dirname, "verify_email.view.ejs"),
