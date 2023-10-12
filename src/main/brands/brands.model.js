@@ -15,7 +15,8 @@ const brandSchema = new Schema({
   },
   brand_image: {
     type: String,
-    trim: true,
+    default:
+      "https://www.ivins.com/wp-content/uploads/2020/09/placeholder-1.png",
   },
 });
 
