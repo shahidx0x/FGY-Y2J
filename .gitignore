@@ -10,4 +10,4 @@ cp
 connect
 *.jpg
 *.png
-
+*.log
