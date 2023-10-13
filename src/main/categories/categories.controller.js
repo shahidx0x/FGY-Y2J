@@ -26,8 +26,19 @@ const CategoryController = {
       const page = parseInt(req.query.page, 10) || 1;
       const limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
-      const totalCategory = await Category.countDocuments();
-      const categories = await Category.find().skip(skip).limit(limit);
+
+      const brandId = req.query.brand_id || req.params.brand_id;
+      if (!brandId) {
+        return res.status(400).json({ message: "brand_id is required" });
+      }
+
+      const totalCategory = await Category.countDocuments({
+        brand_id: brandId,
+      });
+      const categories = await Category.find({ brand_id: brandId })
+        .skip(skip)
+        .limit(limit);
+
       const total_page = Math.ceil(totalCategory / limit);
       res.status(200).json({
         status: 200,
