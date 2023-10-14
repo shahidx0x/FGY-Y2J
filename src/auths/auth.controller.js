@@ -14,7 +14,7 @@ const authController = {
     res.status(200).json({ status: 200, message: "session is valid" });
   },
   createUser: async (req, res) => {
-    let token;
+    let accessToken, refreshToken;
     try {
       const {
         email,
@@ -71,21 +71,34 @@ const authController = {
       const result = await newUser.save();
 
       if (result) {
-        token = jwt.sign(
+        accessToken = jwt.sign(
           { email: result.email, id: result._id },
           config.jwt.secret,
           {
             expiresIn: config.jwt.accessExpire,
           }
         );
+
+        refreshToken = jwt.sign(
+          { email: registered.email, id: registered._id },
+          config.refressToken.secret,
+          { expiresIn: config.refressToken.accessExpire }
+        );
+
+        result.refreshToken = refreshToken;
+        await result.save();
       }
+
       let resultObject = result.toObject();
       delete resultObject.password;
       delete resultObject.cardNumber;
+      delete resultObject.refreshToken;
+      s;
       res.status(200).json({
         message: "Signup successful",
         status: 200,
-        jwt: token,
+        jwt: accessToken,
+        refreshToken,
         data: resultObject,
       });
     } catch (error) {
@@ -95,6 +108,7 @@ const authController = {
         .json({ message: "Internal server error", status: 500 });
     }
   },
+
   updateUser: async (req, res) => {
     try {
       const fieldsToUpdate = [
@@ -197,6 +211,7 @@ const authController = {
 
   signInUser: async (req, res) => {
     let registered;
+    let accessToken, refreshToken;
     try {
       const { email, password } = req.body;
       registered = await Signup.findOne({ email: email });
@@ -215,17 +230,29 @@ const authController = {
         const inputPasswordHash = hashBuffer.toString("hex");
 
         if (inputPasswordHash === storedPasswordHash) {
-          token = jwt.sign(
+          accessToken = jwt.sign(
             { email: registered.email, id: registered._id },
             config.jwt.secret,
             { expiresIn: config.jwt.accessExpire }
           );
+
+          refreshToken = jwt.sign(
+            { email: registered.email, id: registered._id },
+            config.refressToken.secret,
+            { expiresIn: config.refressToken.accessExpire }
+          );
+
+          registered.refreshToken = refreshToken;
+          await registered.save();
+
           let resultObject = registered.toObject();
           delete resultObject.password;
+          delete resultObject.refreshToken;
           return res.status(200).json({
             message: "signin successful",
             status: 200,
-            jwt: token,
+            jwt: accessToken,
+            refreshToken,
             data: resultObject,
           });
         } else {
@@ -380,13 +407,12 @@ const authController = {
 
     try {
       const user = await Signup.findOne({ email: de_cypher.split("/")[1] });
-      
 
       if (user.resetPasswordToken === Number(de_cypher.split("/")[0])) {
         fs.readFile(
           path.join(__dirname, "email_var_success.view.html"),
           "utf8",
-          (err, data) => { 
+          (err, data) => {
             if (err) {
               console.error("Error reading the HTML file:", err);
               res.status(500).send("Internal Server Error");
@@ -401,6 +427,29 @@ const authController = {
     } catch (error) {
       console.error("Error verifying email:", error);
       res.status(500).send("Internal Server Error");
+    }
+  },
+  verify_refresh_token: async (req, res) => {
+    const refreshToken = req.body.token;
+    if (!refreshToken) return res.status(400).send("Refresh token is required");
+
+    try {
+      const decoded = jwt.verify(refreshToken, config.refressToken.secret);
+      const user = await Signup.findOne({ refreshToken: refreshToken });
+      if (!user)
+        return res
+          .status(401)
+          .json({ status: 401, message: "Invalid refresh token" });
+      const accessToken = jwt.sign({ id: decoded.id }, config.jwt.secret, {
+        expiresIn: config.jwt.accessExpire,
+      });
+      res.json({
+        message: "jwt token generated successfully",
+        status: 200,
+        jwt: accessToken,
+      });
+    } catch (error) {
+      res.status(401).json({ status: 401, message: "Invalid refresh token" });
     }
   },
 };

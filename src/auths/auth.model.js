@@ -42,6 +42,7 @@ const userSchema = new mongoose.Schema(
     cardNumber: String,
     resetPasswordToken: Number,
     resetPasswordExpires: Number,
+    refreshToken: String,
     role: {
       type: String,
       enum: ["user", "admin"],

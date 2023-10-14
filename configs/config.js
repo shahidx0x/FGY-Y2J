@@ -32,4 +32,8 @@ module.exports = {
     secret: process.env.JWT_SEC,
     accessExpire: process.env.JWT_EXPR,
   },
+  refressToken: {
+    secret: process.env.REFRESS_SEC,
+    accessExpire: process.env.REFRESS_EXPR,
+  },
 };
