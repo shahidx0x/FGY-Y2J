@@ -37,6 +37,28 @@ const brandsController = {
       res.status(500).json({ message: "Error fetching brands", error });
     }
   },
+  getAllBrandsIdandName: async (req, res) => {
+    try {
+      const brands = await Brands.find();
+      const totalBrands = await Brands.countDocuments();
+      const filter_brand = brands.map((each) => {
+        return {
+          id: each._id,
+          name: each.brand_label,
+        };
+      });
+
+      res.status(200).json({
+        status: 200,
+        meta: {
+          total_brands: totalBrands,
+        },
+        data: filter_brand,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching brands", error });
+    }
+  },
 
   getBrandById: async (req, res) => {
     try {

@@ -16,6 +16,12 @@ brands_router.get(
   brandsController.getAllBrands
 );
 brands_router.get(
+  "/get/all/brands/id/and/name",
+  authenticate,
+
+  brandsController.getAllBrandsIdandName
+);
+brands_router.get(
   "/get/brands/by/:id",
   authenticate,
 
