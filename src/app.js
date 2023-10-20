@@ -11,6 +11,7 @@ const subcat_router = require("./main/categories/subcategories/subcategories.rou
 const brands_router = require("./main/brands/brands.router");
 const serverMaintain = require("../middleware/serverMaintain");
 const multer_router = require("./multer/multer.router");
+const products_router = require("./main/products/products.router");
 const app = express();
 
 app.use(cors());
@@ -30,5 +31,6 @@ app.use(auth_router);
 app.use(brands_router);
 app.use(category_router);
 app.use(subcat_router);
+app.use(products_router);
 
 module.exports = app;

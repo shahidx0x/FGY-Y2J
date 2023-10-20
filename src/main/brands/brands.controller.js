@@ -25,7 +25,7 @@ const brandsController = {
 
       res.status(200).json({
         status: 200,
-        meta:{
+        meta: {
           total_brands: totalBrands,
           total_page: total_page,
           current_page: page,
