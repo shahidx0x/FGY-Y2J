@@ -4,38 +4,19 @@ const ProductsController = {
   getAllProducts: async (req, res) => {
     try {
       const page = parseInt(req.query.page, 10) || 1;
-      const limit = parseInt(req.query.limit, 10) || 10;
+      let limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
-      const products = await Products.find().skip(skip).limit(limit);
+
+      let products;
       const totalProducts = await Products.countDocuments();
+      if (limit === -1) {
+        products = await Products.find();
+        limit = totalProducts;
+      } else {
+        products = await Products.find().skip(skip).limit(limit);
+      }
+
       const totalPages = Math.ceil(totalProducts / limit);
-
-      const transformedProducts = products.map((product) => {
-        return {
-          id: product._id,
-          name: product.name,
-          des: product.des,
-          brand_id: product.brand_id,
-          category_id: product.category_id,
-          subcategory_ids: product.subcategory_ids,
-          product_image: product.product_image,
-          fet_image: product.fet_image,
-          min_purchease: product.min_purchease,
-          max_purchease: product.max_purchease,
-
-          sku: {
-            booked: product.sku_booked,
-            ongoing: product.sku_ongoing,
-            available: product.sku_available,
-            stock: product.sku_stock,
-          },
-          varient: {
-            name: product.var_name,
-            des: product.var_des,
-            image: product.var_image,
-          },
-        };
-      });
 
       return res.status(200).json({
         status: 200,
@@ -45,7 +26,7 @@ const ProductsController = {
           total_pages: totalPages,
           total_products: totalProducts,
         },
-        data: transformedProducts,
+        data: products,
       });
     } catch (error) {
       return res
@@ -53,6 +34,7 @@ const ProductsController = {
         .json({ status: 500, error: "Could not fetch products" });
     }
   },
+
   getAllProductsByBrandId: async (req, res) => {
     try {
       const page = parseInt(req.query.page, 10) || 1;
@@ -70,33 +52,6 @@ const ProductsController = {
       const totalProducts = await Products.countDocuments(filter);
       const totalPages = Math.ceil(totalProducts / limit);
 
-      const transformedProducts = products.map((product) => {
-        return {
-          id: product._id,
-          name: product.name,
-          des: product.des,
-          brand_id: product.brand_id,
-          category_id: product.category_id,
-          subcategory_ids: product.subcategory_ids,
-          product_image: product.product_image,
-          fet_image: product.fet_image,
-          min_purchease: product.min_purchease,
-          max_purchease: product.max_purchease,
-
-          sku: {
-            booked: product.sku_booked,
-            ongoing: product.sku_ongoing,
-            available: product.sku_available,
-            stock: product.sku_stock,
-          },
-          varient: {
-            name: product.var_name,
-            des: product.var_des,
-            image: product.var_image,
-          },
-        };
-      });
-
       return res.status(200).json({
         status: 200,
         meta: {
@@ -105,7 +60,7 @@ const ProductsController = {
           total_pages: totalPages,
           total_products: totalProducts,
         },
-        data: transformedProducts,
+        data: products,
       });
     } catch (error) {
       return res
@@ -114,47 +69,15 @@ const ProductsController = {
     }
   },
 
-  createProducts: async (req, res) => {
+  createProduct: async (req, res) => {
     try {
-      const newProduct = await Products.create(req.body);
-      const {
-        var_name,
-        var_des,
-        var_image,
-        sku_booked,
-        sku_ongoing,
-        sku_available,
-        sku_stock,
-      } = newProduct;
-      const data = {
-        var: {
-          name: var_name,
-          des: var_des,
-          image: var_image,
-        },
-        sku: {
-          booked: sku_booked,
-          ongoing: sku_ongoing,
-          available: sku_available,
-          stock: sku_stock,
-        },
-        id: newProduct._id,
-        name: newProduct.name,
-        des: newProduct.des,
-        brand_id: newProduct.brand_id,
-        category_id: newProduct.category_id,
-        subcategory_ids: newProduct.subcategory_ids,
-        product_image: newProduct.product_image,
-        fet_image: newProduct.fet_image,
-        min_purchease: newProduct.min_purchease,
-        max_purchease: newProduct.max_purchease,
-      };
-
-      return res
+      const product = new Products(req.body);
+      await product.save();
+      res
         .status(201)
-        .json({ message: "Product Created Successfully", data });
+        .json({ message: "Product Created Successfully", product });
     } catch (error) {
-      return res.status(500).json({ error: "Could not create a new product" });
+      res.status(500).json({ message: "Error creating product", error });
     }
   },
 
@@ -165,31 +88,97 @@ const ProductsController = {
         req.body,
         { new: true }
       );
-      if (!updatedProduct) {
-        return res
-          .status(404)
-          .json({ status: 404, error: "Product not found" });
-      }
-      return res.json({
-        status: 200,
-        message: "Product info updated successfully",
-      });
+      if (!updatedProduct)
+        return res.status(404).json({ message: "Product not found" });
+      res.status(200).json(updatedProduct);
     } catch (error) {
-      return res
-        .status(500)
-        .json({ status: 500, error: "Could not update the product" });
+      res.status(500).json({ message: "Error updating product", error });
     }
   },
 
   deleteProducts: async (req, res) => {
     try {
-      const deletedProduct = await Products.findByIdAndRemove(req.params.id);
-      if (!deletedProduct) {
-        return res.status(404).json({ error: "Product not found" });
-      }
-      return res.json({ status: 200, message: "Product Deleted Successfully" });
+      const deletedProduct = await Products.findByIdAndDelete(req.params.id);
+      if (!deletedProduct)
+        return res.status(404).json({ message: "Product not found" });
+      res.status(200).json({ message: "Product deleted successfully" });
     } catch (error) {
-      return res.status(500).json({ error: "Could not delete the product" });
+      res.status(500).json({ message: "Error deleting product", error });
+    }
+  },
+  updateVarient: async (req, res) => {
+    try {
+      const productId = req.params.productId;
+      const { varientId, varientData } = req.body;
+      console.log(productId, varientId, varientData);
+      if (varientId) {
+        await Products.updateOne(
+          { _id: productId, "varient._id": varientId },
+          { $set: { "varient.$": varientData } }
+        );
+      } else {
+        await Products.updateOne(
+          { _id: productId },
+          { $push: { varient: varientData } }
+        );
+      }
+
+      res.status(200).json({ message: "Varient updated/added successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Error updating/adding varient", error });
+    }
+  },
+
+  updateSKU: async (req, res) => {
+    try {
+      const productId = req.params.productId;
+      const { skuId, skuData } = req.body;
+
+      if (skuId) {
+        await Products.updateOne(
+          { _id: productId, "sku._id": skuId },
+          { $set: { "sku.$": skuData } }
+        );
+      } else {
+        await Products.updateOne(
+          { _id: productId },
+          { $push: { sku: skuData } }
+        );
+      }
+
+      res.status(200).json({ message: "SKU updated/added successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Error updating/adding SKU", error });
+    }
+  },
+
+  deleteVarient: async (req, res) => {
+    try {
+      const { productId, varientId } = req.body;
+
+      await Products.updateOne(
+        { _id: productId },
+        { $pull: { varient: { _id: varientId } } }
+      );
+
+      res.status(200).json({ message: "Varient deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Error deleting varient", error });
+    }
+  },
+
+  deleteSKU: async (req, res) => {
+    try {
+      const { productId, skuId } = req.body;
+
+      await Products.updateOne(
+        { _id: productId },
+        { $pull: { sku: { _id: skuId } } }
+      );
+
+      res.status(200).json({ message: "SKU deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Error deleting SKU", error });
     }
   },
 };
