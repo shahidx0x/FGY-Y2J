@@ -28,16 +28,16 @@ const CategoryController = {
       const skip = (page - 1) * limit;
 
       const brandId = req.query.brand_id || req.params.brand_id;
-      if (!brandId) {
-        return res.status(400).json({ message: "brand_id is required" });
+
+      let query;
+      if (brandId) {
+        query = { brand_id: brandId };
+      } else {
+        query = {};
       }
 
-      const totalCategory = await Category.countDocuments({
-        brand_id: brandId,
-      });
-      const categories = await Category.find({ brand_id: brandId })
-        .skip(skip)
-        .limit(limit);
+      const totalCategory = await Category.countDocuments(query);
+      const categories = await Category.find(query).skip(skip).limit(limit);
 
       const total_page = Math.ceil(totalCategory / limit);
       res.status(200).json({
