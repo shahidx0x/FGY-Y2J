@@ -13,12 +13,8 @@ const serverMaintain = require("../middleware/serverMaintain");
 const multer_router = require("./multer/multer.router");
 const products_router = require("./main/products/products.router");
 const app = express();
-const corsOptions = {
-  origin: "https://app.gobd.xyz",
-  optionsSuccessStatus: 200,
-};
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.options("*", cors());
 app.use("/uploads", express.static("uploads"));
 app.use("/", multer_router);
