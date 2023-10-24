@@ -7,13 +7,19 @@ const ProductsController = {
       let limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
 
+      const brandId = req.query.brand_id || req.params.brand_id;
+      let query = {};
+      if (brandId) {
+        query = { brand_id: brandId };
+      }
+      const totalProducts = await Products.countDocuments(query);
+
       let products;
-      const totalProducts = await Products.countDocuments();
       if (limit === -1) {
-        products = await Products.find();
+        products = await Products.find(query);
         limit = totalProducts;
       } else {
-        products = await Products.find().skip(skip).limit(limit);
+        products = await Products.find(query).skip(skip).limit(limit);
       }
 
       const totalPages = Math.ceil(totalProducts / limit);
