@@ -24,7 +24,7 @@ const CategoryController = {
   getAllCategories: async (req, res) => {
     try {
       const page = parseInt(req.query.page, 10) || 1;
-      const limit = parseInt(req.query.limit, 10) || 10;
+      let limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
 
       const brandId = req.query.brand_id || req.params.brand_id;
@@ -37,7 +37,14 @@ const CategoryController = {
       }
 
       const totalCategory = await Category.countDocuments(query);
-      const categories = await Category.find(query).skip(skip).limit(limit);
+
+      let categories;
+      if (limit === -1) {
+        categories = await Category.find(query);
+        limit = totalCategory;
+      } else {
+        categories = await Category.find(query).skip(skip).limit(limit);
+      }
 
       const total_page = Math.ceil(totalCategory / limit);
       res.status(200).json({
