@@ -8,8 +8,11 @@ const ProductsController = {
       const skip = (page - 1) * limit;
 
       const brandId = req.query.brand_id || req.params.brand_id;
+      const productId = req.query.product_id;
       let query = {};
-      if (brandId) {
+      if (productId) {
+        query = { _id: productId };
+      } else if (brandId) {
         query = { brand_id: brandId };
       }
       const totalProducts = await Products.countDocuments(query);
