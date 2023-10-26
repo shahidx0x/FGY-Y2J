@@ -10,7 +10,6 @@ module.exports = mongoose.model(
     },
     brand_slug: {
       type: String,
-      required: true,
       lowercase: true,
       trim: true,
     },
