@@ -13,6 +13,7 @@ module.exports = mongoose.model(
       lowercase: true,
       trim: true,
     },
+    brand_description: String,
     brand_image: {
       type: String,
       default:
