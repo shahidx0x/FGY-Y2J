@@ -43,10 +43,11 @@ const brandsController = {
       const limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
       const brandName = req.query.brandName || "";
+      console.log(brandName);
 
       const searchCondition = brandName
         ? {
-            name: {
+            brand_label: {
               $regex: new RegExp(brandName, "i"),
             },
           }

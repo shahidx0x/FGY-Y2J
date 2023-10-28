@@ -18,7 +18,6 @@ brands_router.get(
 brands_router.get(
   "/get/all/brands/search",
   authenticate,
-
   brandsController.getAllBrandsSearch
 );
 brands_router.get(
