@@ -37,6 +37,40 @@ const brandsController = {
       res.status(500).json({ message: "Error fetching brands", error });
     }
   },
+  getAllBrandsSearch: async (req, res) => {
+    try {
+      const page = parseInt(req.query.page, 10) || 1;
+      const limit = parseInt(req.query.limit, 10) || 10;
+      const skip = (page - 1) * limit;
+      const brandName = req.query.brandName || "";
+
+      const searchCondition = brandName
+        ? {
+            name: {
+              $regex: new RegExp(brandName, "i"),
+            },
+          }
+        : {};
+
+      const brands = await Brands.find(searchCondition).skip(skip).limit(limit);
+      const totalBrands = await Brands.countDocuments(searchCondition);
+      const total_page = Math.ceil(totalBrands / limit);
+
+      res.status(200).json({
+        status: 200,
+        meta: {
+          total_brands: totalBrands,
+          total_page: total_page,
+          current_page: page,
+          per_page: limit,
+        },
+        data: brands,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching brands", error });
+    }
+  },
+
   getAllBrandsIdandName: async (req, res) => {
     try {
       const brands = await Brands.find();
