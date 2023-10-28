@@ -6,11 +6,12 @@ module.exports = mongoose.model(
     {
       category_label: {
         type: String,
-        required: true,
       },
       category_type: {
         type: String,
-        required: true,
+      },
+      category_description: {
+        type: String,
       },
       isActive: Boolean,
       image: String,
