@@ -16,6 +16,7 @@ module.exports = mongoose.model(
       isActive: Boolean,
       image: String,
       brand_id: String,
+      brand_name: String,
       subCategories: [
         new mongoose.Schema(
           {
