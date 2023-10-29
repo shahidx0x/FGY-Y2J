@@ -3,7 +3,14 @@ const Category = require("./categories.model");
 const CategoryController = {
   createCategory: async (req, res) => {
     try {
-      const { category_label, category_type, image, brand_id,brand_name,category_description } = req.body;
+      const {
+        category_label,
+        category_type,
+        image,
+        brand_id,
+        brand_name,
+        category_description,
+      } = req.body;
       const newCategory = new Category({
         category_label,
         category_type,
@@ -80,32 +87,66 @@ const CategoryController = {
         .json({ message: "Error fetching category", error: error.message });
     }
   },
+  // updateCategory: async (req, res) => {
+  //   try {
+  //     const categoryId = req.params.id;
+
+  //     const {
+  //       category_label,
+  //       category_type,
+  //       image,
+  //       brand_id,
+  //       brand_name,
+  //       category_description,
+  //     } = req.body;
+
+  //     const category = await Category.findById(categoryId);
+  //     console.log(category);
+  //     if (!category) {
+  //       return res
+  //         .status(404)
+  //         .json({ message: "Category not found", categoryId });
+  //     }
+
+  //     if (category_label) category.category_label = category_label;
+  //     if (category_type) category.category_type = category_type;
+  //     if (image) category.image = image;
+  //     if (brand_id) category.brand_id = brand_id;
+  //     if (brand_name) category.brand_name = brand_name;
+  //     if (category_description)
+  //       category.category_description = category_description;
+
+  //     await category.save();
+
+  //     res
+  //       .status(200)
+  //       .json({ message: "Category updated successfully", data: category });
+  //   } catch (error) {
+  //     res
+  //       .status(500)
+  //       .json({ message: "Error updating category", error: error.message });
+  //   }
+  // },
   updateCategory: async (req, res) => {
     try {
-      const categoryId = req.params.id;
-      const { category_label, category_type, image, brand_id } = req.body;
-
-      const category = await Category.findById(categoryId);
-      if (!category) {
+      const updatedCategory = await Category.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+      );
+      if (!updatedCategory) {
         return res.status(404).json({ message: "Category not found" });
       }
-
-      if (category_label) category.category_label = category_label;
-      if (category_type) category.category_type = category_type;
-      if (image) category.image = image;
-      if (brand_id) category.brand_id = brand_id;
-
-      await category.save();
-
-      res
-        .status(200)
-        .json({ message: "Category updated successfully", data: category });
+      res.status(200).json({
+        message: "Category updated successfully",
+        status: 200,
+        brand: updatedCategory,
+      });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error updating category", error: error.message });
+      res.status(500).json({ message: "Error updating category", error });
     }
   },
+
   deleteCategory: async (req, res) => {
     try {
       const categoryId = req.params.id;
