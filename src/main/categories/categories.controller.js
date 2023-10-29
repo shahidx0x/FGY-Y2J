@@ -7,8 +7,10 @@ const CategoryController = {
       const newCategory = new Category({
         category_label,
         category_type,
+        category_description,
         image,
         brand_id,
+        brand_name,
       });
       await newCategory.save();
       res
