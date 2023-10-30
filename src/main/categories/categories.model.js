@@ -35,7 +35,6 @@ module.exports = mongoose.model(
             image: String,
             slug: {
               type: String,
-              required: true,
             },
             description: String,
           },
