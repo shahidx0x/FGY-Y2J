@@ -86,6 +86,10 @@ const SubCategoryController = {
       const { categoryId, subCategoryId } = req.params;
       const subCategoryData = req.body;
 
+      if (!subCategoryData.subcategory_name || !subCategoryData.description) {
+        return res.status(400).json({ message: "Invalid subcategory data" });
+      }
+
       const category = await Category.findById(categoryId);
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
@@ -99,14 +103,17 @@ const SubCategoryController = {
       Object.assign(subCategory, subCategoryData);
       await category.save();
 
-      res
-        .status(200)
-        .json({ message: "Subcategory updated successfully", subCategory });
+      res.status(200).json({
+        message: "Subcategory updated successfully",
+        data: subCategory,
+      });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({
+        message: error.message,
+        data: null,
+      });
     }
   },
-
   deleteSubCategory: async (req, res) => {
     try {
       const { categoryId, subCategoryId } = req.params;
@@ -116,7 +123,12 @@ const SubCategoryController = {
         return res.status(404).json({ message: "Category not found" });
       }
 
-      category.subCategories.id(subCategoryId).remove();
+      const subcategory = category.subCategories.id(subCategoryId);
+      if (!subcategory) {
+        return res.status(404).json({ message: "Subcategory not found" });
+      }
+
+      category.subCategories.pull(subCategoryId);
       await category.save();
 
       res.status(200).json({ message: "Subcategory deleted successfully" });
