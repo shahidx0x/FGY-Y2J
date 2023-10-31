@@ -6,6 +6,7 @@ const SubCategoryController = {
       const { categoryId } = req.params;
       const page = parseInt(req.query.page, 10) || 1;
       let limit = parseInt(req.query.limit, 10) || 10;
+      const search = req.query.search || "";
 
       const category = await Category.findById(categoryId);
 
@@ -13,25 +14,35 @@ const SubCategoryController = {
         return res.status(404).json({ message: "Category not found" });
       }
 
+      let filteredSubCategories = category.subCategories;
+
+      if (search) {
+        filteredSubCategories = filteredSubCategories.filter((subCategory) =>
+          subCategory.subcategory_name
+            .toLowerCase()
+            .includes(search.toLowerCase())
+        );
+      }
+
       let paginatedSubCategories;
       let totalPages;
 
       if (limit === -1) {
-        paginatedSubCategories = category.subCategories;
+        paginatedSubCategories = filteredSubCategories;
         totalPages = 1;
       } else {
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-        paginatedSubCategories = category.subCategories.slice(
+        paginatedSubCategories = filteredSubCategories.slice(
           startIndex,
           endIndex
         );
-        totalPages = Math.ceil(category.subCategories.length / limit);
+        totalPages = Math.ceil(filteredSubCategories.length / limit);
       }
 
       res.status(200).json({
         meta: {
-          total_subcategories: category.subCategories.length,
+          total_subcategories: filteredSubCategories.length,
           total_page: totalPages,
           current_page: page,
           per_page: limit,
