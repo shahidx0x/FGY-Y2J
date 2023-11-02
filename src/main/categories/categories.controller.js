@@ -35,14 +35,16 @@ const CategoryController = {
       const page = parseInt(req.query.page, 10) || 1;
       let limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
+      const search = req.query.search || "";
 
       const brandId = req.query.brand_id || req.params.brand_id;
 
-      let query;
+      let query = {};
       if (brandId) {
-        query = { brand_id: brandId };
-      } else {
-        query = {};
+        query.brand_id = brandId;
+      }
+      if (search) {
+        query.category_label = new RegExp(search, "i");
       }
 
       const totalCategory = await Category.countDocuments(query);
