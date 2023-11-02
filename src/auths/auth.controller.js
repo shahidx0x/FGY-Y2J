@@ -126,6 +126,7 @@ const authController = {
         "cardNumber",
         "isAccountActive",
       ];
+      console.log(fieldsToUpdate);
       const { email, password } = req.body;
       const userToUpdate = await Signup.findOne({ email });
       if (!userToUpdate) {
