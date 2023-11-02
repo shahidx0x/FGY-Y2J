@@ -136,7 +136,7 @@ const authController = {
       }
 
       fieldsToUpdate.forEach((field) => {
-        if (req.body[field]) {
+        if (field in req.body) { 
           userToUpdate[field] = req.body[field];
         }
       });
