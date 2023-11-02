@@ -124,6 +124,7 @@ const authController = {
         "profilePicture",
         "phoneNumber",
         "cardNumber",
+        "isAccountActive",
       ];
       const { email, password } = req.body;
       const userToUpdate = await Signup.findOne({ email });
