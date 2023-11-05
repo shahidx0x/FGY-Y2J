@@ -21,10 +21,13 @@ const skuSchema = new mongoose.Schema({
 
 const productSchema = new mongoose.Schema({
   name: String,
-  des: String,
+  description: String,
   brand_id: String,
+  brand_name: String,
   category_id: String,
+  category_name: String,
   subcategory_id: String,
+  subcategory_name: String,
   product_image: String,
   discount: Number,
   base_price: Number,
