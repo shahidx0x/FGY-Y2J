@@ -1,10 +1,10 @@
 const os = require("os");
 const nodeDiskInfo = require("node-disk-info");
+const Dashboard = require("./dashbord.model");
 
 module.exports = dashboardController = {
   server_status: async (req, res) => {
     try {
-      // CPU Information
       const cpus = os.cpus();
       let totalIdleTime = 0;
       let totalTickTime = 0;
@@ -19,17 +19,14 @@ module.exports = dashboardController = {
       const totalUtilTime = totalTickTime - totalIdleTime;
       const cpuUsagePercent = Math.round((100 * totalUtilTime) / totalTickTime);
 
-      // Memory Information
       const totalMemory = os.totalmem();
       const freeMemory = os.freemem();
       const memoryUsagePercent = Math.round(
         (100 * (totalMemory - freeMemory)) / totalMemory
       );
 
-      // Disk Information
       const diskInfo = await nodeDiskInfo.getDiskInfo();
       const diskSpace = diskInfo.find((disk) => disk.mounted === "/");
-      // If the library provides used space directly, you should use it; otherwise, calculate it
       const usedDiskSpace = diskSpace.blocks - diskSpace.available;
       const diskUsagePercent = Math.round(
         (100 * usedDiskSpace) / diskSpace.blocks
@@ -42,6 +39,41 @@ module.exports = dashboardController = {
       });
     } catch (error) {
       res.status(500).json({ error: error.message });
+    }
+  },
+  incrementCount: async (req, res, next) => {
+    const userAgent = req.get("User-Agent").toLowerCase();
+    const ignoredUserAgents = ["postman", "insomnia"];
+    if (ignoredUserAgents.some((ua) => userAgent.includes(ua))) {
+      return next();
+    }
+
+    let update = {};
+    const webBrowsers = ["chrome", "safari", "firefox"];
+
+    if (userAgent.includes("android")) {
+      update = { $inc: { android_user: 1 } };
+    } else if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
+      update = { $inc: { ios_user: 1 } };
+    } else if (webBrowsers.some((browser) => userAgent.includes(browser))) {
+      update = { $inc: { web_user: 1 } };
+    } else {
+      return next();
+    }
+
+    try {
+      await Dashboard.findOneAndUpdate({}, update, { upsert: true, new: true });
+      next();
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  },
+  getPieData: async (req, res) => {
+    try {
+      const dashboardData = await Dashboard.findOne({});
+      res.json(dashboardData);
+    } catch (error) {
+      res.status(500).send(error.message);
     }
   },
 };

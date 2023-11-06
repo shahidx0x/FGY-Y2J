@@ -6,17 +6,17 @@ module.exports = mongoose.model(
     android_user: {
       type: Number,
       trim: true,
+      default: 0,
     },
     ios_user: {
       type: Number,
       trim: true,
+      default: 0,
     },
-    server_status: [
-      new mongoose.Schema({
-        cpu: Number,
-        memory: Number,
-        disk: Number,
-      }),
-    ],
+    web_user: {
+      type: Number,
+      trim: true,
+      default: 0,
+    },
   })
 );

@@ -13,6 +13,7 @@ const serverMaintain = require("../middleware/serverMaintain");
 const multer_router = require("./multer/multer.router");
 const products_router = require("./main/products/products.router");
 const dashbord_router = require("./main/dashbord/dashbord.router");
+const dashbordController = require("./main/dashbord/dashbord.controller");
 const app = express();
 
 app.use(cors());
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(xss());
 app.use(mongoSanitize());
 app.use(compression());
+app.use(dashbordController.incrementCount);
 app.use(serverLog);
 app.use(auth_router);
 app.use(brands_router);
