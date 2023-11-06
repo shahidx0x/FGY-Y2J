@@ -12,6 +12,7 @@ const brands_router = require("./main/brands/brands.router");
 const serverMaintain = require("../middleware/serverMaintain");
 const multer_router = require("./multer/multer.router");
 const products_router = require("./main/products/products.router");
+const dashbord_router = require("./main/dashbord/dashbord.router");
 const app = express();
 
 app.use(cors());
@@ -32,5 +33,6 @@ app.use(brands_router);
 app.use(category_router);
 app.use(subcat_router);
 app.use(products_router);
+app.use(dashbord_router);
 
 module.exports = app;
