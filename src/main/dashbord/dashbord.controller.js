@@ -56,7 +56,7 @@ module.exports = dashboardController = {
     } else if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
       update = { $inc: { ios_user: 1 } };
     } else if (webBrowsers.some((browser) => userAgent.includes(browser))) {
-      update = { $inc: { web_user: 1 } };
+      return next();
     } else {
       return next();
     }
