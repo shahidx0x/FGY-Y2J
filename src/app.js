@@ -14,6 +14,7 @@ const multer_router = require("./multer/multer.router");
 const products_router = require("./main/products/products.router");
 const dashbord_router = require("./main/dashbord/dashbord.router");
 const dashbordController = require("./main/dashbord/dashbord.controller");
+const carts_router = require("./main/carts/carts.router");
 const app = express();
 
 app.use(cors());
@@ -36,5 +37,6 @@ app.use(category_router);
 app.use(subcat_router);
 app.use(products_router);
 app.use(dashbord_router);
+app.use(carts_router);
 
 module.exports = app;

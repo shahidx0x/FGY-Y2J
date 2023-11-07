@@ -49,14 +49,11 @@ module.exports = dashboardController = {
     }
 
     let update = {};
-    const webBrowsers = ["chrome", "safari", "firefox"];
 
     if (userAgent.includes("android")) {
       update = { $inc: { android_user: 1 } };
     } else if (userAgent.includes("iphone") || userAgent.includes("ipad")) {
       update = { $inc: { ios_user: 1 } };
-    } else if (webBrowsers.some((browser) => userAgent.includes(browser))) {
-      return next();
     } else {
       return next();
     }
