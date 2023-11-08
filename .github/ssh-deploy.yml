@@ -1,0 +1,30 @@
+name: Deploy via SSH
+
+on:
+  push:
+    branches:
+      - main # Set your default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$SSH_SERVER" >> ~/.ssh/known_hosts
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_SERVER: ${{ secrets.SSH_SERVER }}
+
+      - name: Execute remote SSH commands
+        run: |
+          ssh -p 22 $SSH_USERNAME@$SSH_SERVER 'bash -s' < /home/appgobd/update
+        env:
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_SERVER: ${{ secrets.SSH_SERVER }}

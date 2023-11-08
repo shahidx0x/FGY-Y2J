@@ -1,6 +1,9 @@
 const os = require("os");
 const nodeDiskInfo = require("node-disk-info");
 const Dashboard = require("./dashbord.model");
+const Users = require("../../auths/auth.model");
+const Products = require("../products/products.model");
+const Company = require("../brands/brands.model");
 
 module.exports = dashboardController = {
   server_status: async (req, res) => {
@@ -69,6 +72,18 @@ module.exports = dashboardController = {
     try {
       const dashboardData = await Dashboard.findOne({});
       res.json(dashboardData);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  },
+  getInventoryInfo: async (req, res) => {
+    try {
+      const totalUsers = await Users.countDocuments();
+      const totalProducts = await Products.countDocuments();
+      const totalCompany = await Company.countDocuments();
+      res
+        .status(200)
+        .json({ meta: { totalUsers, totalCompany, totalProducts } });
     } catch (error) {
       res.status(500).send(error.message);
     }
