@@ -24,7 +24,7 @@ jobs:
 
       - name: Execute remote SSH commands
         run: |
-          ssh -p 22 $SSH_USERNAME@$SSH_SERVER 'bash -s' < /home/appgobd/update.sh
+          ssh -p 22 $SSH_USERNAME@$SSH_SERVER "pwd"
         env:
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
           SSH_SERVER: ${{ secrets.SSH_SERVER }}
