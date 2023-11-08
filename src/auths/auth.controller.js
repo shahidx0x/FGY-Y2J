@@ -354,7 +354,7 @@ const authController = {
       const resetToken = Math.floor(Math.random() * 900000) + 100000;
       user.resetPasswordToken = resetToken;
       await user.save();
-      console.log(config.email.user, config.email.password);
+
       const transporter = nodemailer.createTransport({
         host: config.email.host,
         // service: "hotmail",

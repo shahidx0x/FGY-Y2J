@@ -36,7 +36,6 @@ const cartSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
     items: [cartItemSchema],
     total: {
       type: Number,
