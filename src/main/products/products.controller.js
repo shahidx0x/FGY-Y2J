@@ -7,14 +7,24 @@ const ProductsController = {
       let limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
 
-      const brandId = req.query.brand_id || req.params.brand_id;
-      const productId = req.query.product_id;
+      const brandName = req.query.brand_name;
+      const categoryName = req.query.category_name;
+      const subCategoryName = req.query.sub_category_name;
+
       let query = {};
-      if (productId) {
-        query = { _id: productId };
-      } else if (brandId) {
-        query = { brand_id: brandId };
+      if (req.query.product_id) {
+        query._id = req.query.product_id;
       }
+      if (brandName) {
+        query.brand_name = brandName;
+      }
+      if (categoryName) {
+        query.category_name = categoryName;
+      }
+      if (subCategoryName) {
+        query.subcategory_name = subCategoryName;
+      }
+
       const totalProducts = await Products.countDocuments(query);
 
       let products;
@@ -25,7 +35,7 @@ const ProductsController = {
         products = await Products.find(query).skip(skip).limit(limit);
       }
 
-      const totalPages = Math.ceil(totalProducts / limit);
+      const totalPages = Math.ceil(totalProducts / (limit === 0 ? 1 : limit));
 
       return res.status(200).json({
         status: 200,
