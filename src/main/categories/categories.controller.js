@@ -36,35 +36,34 @@ const CategoryController = {
       let limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
       const search = req.query.search || "";
-
-      const brandId = req.query.brand_id || req.params.brand_id;
+      const brandName = req.query.brand_name;
 
       let query = {};
-      if (brandId) {
-        query.brand_id = brandId;
+      if (brandName) {
+        query.brand_name = brandName;
       }
+
       if (search) {
         query.category_label = new RegExp(search, "i");
       }
-
       const totalCategory = await Category.countDocuments(query);
-
       let categories;
+
       if (limit === -1) {
         categories = await Category.find(query);
-        limit = totalCategory;
       } else {
         categories = await Category.find(query).skip(skip).limit(limit);
       }
 
-      const total_page = Math.ceil(totalCategory / limit);
+      const total_page = limit === -1 ? 1 : Math.ceil(totalCategory / limit);
+
       res.status(200).json({
         status: 200,
         meta: {
           total_categories: totalCategory,
           total_page: total_page,
           current_page: page,
-          per_page: limit,
+          per_page: limit === -1 ? totalCategory : limit,
         },
         data: categories,
       });
