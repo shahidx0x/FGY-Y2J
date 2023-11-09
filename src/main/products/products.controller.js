@@ -6,6 +6,7 @@ const ProductsController = {
       const page = parseInt(req.query.page, 10) || 1;
       let limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
+      const search = req.query.search || "";
 
       const brandName = req.query.brand_name;
       const categoryName = req.query.category_name;
@@ -23,6 +24,10 @@ const ProductsController = {
       }
       if (subCategoryName) {
         query.subcategory_name = subCategoryName;
+      }
+
+      if (search) {
+        query.name = new RegExp(search, "i");
       }
 
       const totalProducts = await Products.countDocuments(query);
