@@ -79,26 +79,25 @@ const authController = {
           }
         );
 
-        refreshToken = jwt.sign(
-          { email: registered.email, id: registered._id },
-          config.refressToken.secret,
-          { expiresIn: config.refressToken.accessExpire }
-        );
+        // refreshToken = jwt.sign(
+        //   { email: registered.email, id: registered._id },
+        //   config.refressToken.secret,
+        //   { expiresIn: config.refressToken.accessExpire }
+        // );
 
-        result.refreshToken = refreshToken;
-        await result.save();
+        // result.refreshToken = refreshToken;
+        // await result.save();
       }
 
       let resultObject = result.toObject();
       delete resultObject.password;
       delete resultObject.cardNumber;
-      delete resultObject.refreshToken;
-      s;
+      // delete resultObject.refreshToken;
+
       res.status(200).json({
         message: "Signup successful",
         status: 200,
         jwt: accessToken,
-        refreshToken,
         data: resultObject,
       });
     } catch (error) {
