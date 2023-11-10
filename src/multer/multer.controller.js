@@ -46,12 +46,15 @@ exports.uploadFile = async (req, res) => {
 exports.deleteImage = (req, res) => {
   const imageName = req.params.imageName;
   const imagePath = path.join(__dirname, "..", "..", "uploads", imageName);
-
-  fs.unlink(imagePath, (err) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("Error deleting the image");
-    }
-    res.send("Image successfully deleted");
-  });
+  try {
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send("error deleting the image");
+      }
+      res.status(200).json({ message: "image deleted successfully" });
+    });
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
 };
