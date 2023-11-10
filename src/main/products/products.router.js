@@ -12,6 +12,10 @@ products_router.patch(
   "/update/products/:id",
   ProductsController.updateProducts
 );
+products_router.patch(
+  "/update/products/fet-img/:productId",
+  ProductsController.updateFetImage
+);
 products_router.delete(
   "/delete/products/:id",
   ProductsController.deleteProducts

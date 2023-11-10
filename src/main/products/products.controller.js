@@ -119,6 +119,24 @@ const ProductsController = {
       res.status(500).json({ message: "Error updating product", error });
     }
   },
+  updateFetImage: async (req, res) => {
+    const { productId } = req.params;
+    const { imageUrl } = req.query;
+
+    const product = await Products.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "not found" });
+    }
+    if (imageUrl) {
+      product.fet_image = product.fet_image.filter(
+        (image) => image !== imageUrl
+      );
+    }
+    await product.save();
+    res.status(200).json({ message: "image deleted" });
+
+    res.json(product);
+  },
 
   deleteProducts: async (req, res) => {
     try {
