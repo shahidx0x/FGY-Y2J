@@ -3,6 +3,7 @@ const sharp = require("sharp");
 const config = require("../../configs/config");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single("file");
@@ -26,7 +27,7 @@ exports.uploadFile = async (req, res) => {
 
     try {
       await sharp(req.file.buffer)
-        .resize(800)
+        .resize(400)
         .jpeg({ quality: 80 })
         .toFile(outputPath);
 
@@ -40,5 +41,17 @@ exports.uploadFile = async (req, res) => {
         .status(500)
         .json({ message: "Error processing image", error: sharpErr.message });
     }
+  });
+};
+exports.deleteImage = (req, res) => {
+  const imageName = req.params.imageName;
+  const imagePath = path.join(__dirname, "..", "..", "uploads", imageName);
+
+  fs.unlink(imagePath, (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Error deleting the image");
+    }
+    res.send("Image successfully deleted");
   });
 };
