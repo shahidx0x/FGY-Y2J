@@ -18,19 +18,26 @@ const notifySchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    pickup_time: String,
+    additional_information: String,
     order_device: String,
     orders: [
-      new mongoose.Schema({
-        product_name: String,
-        product_image: String,
-        product_quantity: Number,
-        product_price: Number,
-        product_id: String,
-        order_status: {
-          type: String,
-          default: "0",
+      new mongoose.Schema(
+        {
+          product_name: String,
+          product_image: String,
+          product_quantity: Number,
+          product_price: Number,
+          product_id: String,
+          order_status: {
+            type: String,
+            default: "0",
+          },
         },
-      }),
+        {
+          timestamps: true,
+        }
+      ),
     ],
   },
   {

@@ -50,13 +50,26 @@ const notify_controller = {
   },
   createNotify: async function (req, res) {
     try {
-      const { user_email, order_status, user_name, user_address, orders } =
-        req.body;
+      const {
+        user_email,
+        pickup_time,
+        additional_information,
+        order_status,
+        user_name,
+        user_address,
+        orders,
+      } = req.body;
 
       const notification = await Notify.findOneAndUpdate(
         { user_email: user_email },
         {
-          $set: { user_name, user_address, order_status },
+          $set: {
+            user_name,
+            user_address,
+            order_status,
+            pickup_time,
+            additional_information,
+          },
           $push: { orders: { $each: orders } },
         },
         { new: true, upsert: true, setDefaultsOnInsert: true }
