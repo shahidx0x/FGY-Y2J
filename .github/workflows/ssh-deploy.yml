@@ -1,30 +1,22 @@
-name: Deploy via SSH
+name: SSH Deployment
 
-on:
-  push:
-    branches:
-      - main # Set your default branch
+on: [push] # Trigger on push, or any other event you prefer
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Choose an appropriate runner
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H "$SSH_SERVER" >> ~/.ssh/known_hosts
-        env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_SERVER: ${{ secrets.SSH_SERVER }}
+    - name: Installing sshpass
+      run: sudo apt-get install -y sshpass
 
-      - name: Execute remote SSH commands
-        run: |
-          ssh -p 22 $SSH_USERNAME@$SSH_SERVER "pwd"
-        env:
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          SSH_SERVER: ${{ secrets.SSH_SERVER }}
+    - name: SSH Connection and Execute Script
+      env:
+        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+      run: |
+        sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST './update.sh'
