@@ -35,6 +35,7 @@ const productSchema = new mongoose.Schema({
   min_purchease: Number,
   max_purchease: Number,
   price: Number,
+  product_information: String,
   varient: [varientSchema],
   sku: [skuSchema],
 });
