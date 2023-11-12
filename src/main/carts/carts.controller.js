@@ -1,17 +1,17 @@
 const Cart = require("./carts.model");
+const Products = require("../products/products.model");
 const cartController = {
   addItem: async (req, res) => {
     try {
-      const {
-        user_email,
-        product_image,
-        product_name,
-        product_id,
-        quantity,
-        price,
-      } = req.body;
+      const { product_id, quantity } = req.body;
+      const user_email = req.userEmail;
+      const product = await Products.findById(product_id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      const { name, price, product_image } = product;
+      let product_name = name;
       let cart = await Cart.findOne({ user_email });
-
       if (!cart) {
         cart = new Cart({
           user_email,
