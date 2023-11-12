@@ -109,7 +109,6 @@ const authController = {
         .json({ message: "Internal server error", status: 500 });
     }
   },
-
   updateUser: async (req, res) => {
     try {
       const fieldsToUpdate = [
@@ -174,7 +173,6 @@ const authController = {
         .json({ message: "Internal server error", status: 500 });
     }
   },
-
   getAllUsers: async (req, res) => {
     try {
       const page = parseInt(req.query.page, 10) || 1;
@@ -200,7 +198,6 @@ const authController = {
       res.status(500).json({ message: "Error fetching users", error });
     }
   },
-
   getUserByEmail: async (req, res) => {
     try {
       const user = await Signup.findOne({ email: req.query.email });
@@ -212,7 +209,6 @@ const authController = {
       res.status(500).json({ message: "Error fetching user", error });
     }
   },
-
   signInUser: async (req, res) => {
     let registered;
     let accessToken, refreshToken;
@@ -276,7 +272,6 @@ const authController = {
         .json({ message: "Internal server error", status: 500 });
     }
   },
-
   forgot_password: async (req, res) => {
     const email = req.params.email;
     try {
@@ -297,7 +292,7 @@ const authController = {
 
       user.resetPasswordToken = resetToken;
       user.resetPasswordExpires = resetExpires;
-      const result = await user.save();
+      await user.save();
 
       const transporter = nodemailer.createTransport({
         // host: config.email.host,
@@ -467,7 +462,6 @@ const authController = {
       res.status(500).json({ message: "internal server error" });
     }
   },
-
   verify_refresh_token: async (req, res) => {
     const refreshToken = req.body.token;
     if (!refreshToken) return res.status(400).send("Refresh token is required");
