@@ -30,6 +30,7 @@ const authController = {
         phoneNumber,
         cardNumber,
         password,
+        firebaseFCM,
       } = req.body;
 
       const existingUser = await Signup.findOne({ email });
@@ -65,6 +66,7 @@ const authController = {
         phoneNumber,
         paymentMethod,
         cardNumber,
+        firebaseFCM,
         password: passwordHash,
       });
 
@@ -72,7 +74,7 @@ const authController = {
 
       if (result) {
         accessToken = jwt.sign(
-          { email: result.email, id: result._id },
+          { email: result.email, id: result._id, fcm: firebaseFCM },
           config.jwt.secret,
           {
             expiresIn: config.jwt.accessExpire,
@@ -124,6 +126,7 @@ const authController = {
         "phoneNumber",
         "cardNumber",
         "isAccountActive",
+        "firebaseFCM",
       ];
 
       const { email, password } = req.body;
@@ -286,21 +289,21 @@ const authController = {
 
       const resetToken = Math.floor(Math.random() * 900000) + 100000;
       const resetExpires = new Date(Date.now() + 5 * 60 * 1000);
-      // const hours = Math.floor((resetExpires - Date.now()) / 3600000);
-      // const minutes = Math.floor(
-      //   ((resetExpires - Date.now()) % 3600000) / 60000
-      // );
-      // const expiresIn = `${hours} hour(s) and ${minutes} minute(s)`;
+      const hours = Math.floor((resetExpires - Date.now()) / 3600000);
+      const minutes = Math.floor(
+        ((resetExpires - Date.now()) % 3600000) / 60000
+      );
+      const expiresIn = `${hours} hour(s) and ${minutes} minute(s)`;
 
       user.resetPasswordToken = resetToken;
       user.resetPasswordExpires = resetExpires;
-      await user.save();
+      const result = await user.save();
 
       const transporter = nodemailer.createTransport({
-        host: config.email.host,
-        // service: "hotmail",
-        port: 465,
-        secure: true,
+        // host: config.email.host,
+        service: "hotmail",
+        // port: 465,
+        // secure: true,
         auth: {
           user: config.email.user,
           pass: config.email.password,
@@ -317,7 +320,8 @@ const authController = {
           } else {
             const mailOptions = {
               to: user.email,
-              from: config.email.admin,
+              // from: config.email.admin,
+              from: config.email.user,
               subject: `Password Reset Code : ${resetToken}`,
               html: html,
             };
@@ -340,6 +344,28 @@ const authController = {
     } catch (err) {
       logger.error(err);
     }
+  },
+  verify_otp: async (req, res) => {
+    const { email, token } = req.body;
+    try {
+      const user = await Signup.findOne({ email: email });
+      if (!user) {
+        return res
+          .status(400)
+          .json({ msg: "No user found with that email address" });
+      }
+      if (user.resetPasswordToken === token) {
+        user.resetPasswordToken = 0;
+        user.resetPasswordExpires = 0;
+        await user.save();
+        res.status(200).json({ message: "otp varified" });
+      } else if (user.resetPasswordToken === 0) {
+        res
+          .status(404)
+          .json({ message: "otp already been used or invalid otp" });
+      }
+      res.status(404).json({ message: "invalid otp" });
+    } catch (error) {}
   },
   send_verify_email: async (req, res) => {
     const email = req.params.email;

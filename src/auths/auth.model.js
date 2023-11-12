@@ -42,6 +42,7 @@ module.exports = mongoose.model(
       subscription: String,
       paymentMethod: String,
       cardNumber: String,
+      firebaseFCM: String,
       resetPasswordToken: Number,
       resetPasswordExpires: Number,
       refreshToken: String,

@@ -21,6 +21,10 @@ const skuSchema = new mongoose.Schema({
 
 const productSchema = new mongoose.Schema({
   name: String,
+  isDisable: {
+    type: Boolean,
+    default: false,
+  },
   description: String,
   brand_id: String,
   brand_name: String,
