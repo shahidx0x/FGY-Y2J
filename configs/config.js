@@ -4,7 +4,8 @@ dotenv.config({ path: path.join(__dirname, "../.env") });
 let host, domain;
 if (process.env.ENV === "DEV") {
   host = "0.0.0.0";
-  domain = `http://localhost:${process.env.PORT}`;
+  // domain = `http://localhost:${process.env.PORT}`;
+  domain = process.env.SERVER_DOMAIN;
 } else {
   host = process.env.SERVER_IP;
   domain = process.env.SERVER_DOMAIN;

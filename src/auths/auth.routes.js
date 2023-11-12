@@ -25,9 +25,9 @@ auth_router.post(
   authController.forgot_password
 );
 auth_router.post(
-  "/verify/email/:email",
+  "/send/verification",
   authLimiter,
-  authController.send_verify_email
+  authController.send_verification_email
 );
 auth_router.post("/verify/otp", authLimiter, authController.verify_otp);
 auth_router.get("/check/session", authenticate, authController.checkSession);

@@ -367,8 +367,8 @@ const authController = {
       res.status(404).json({ message: "invalid otp" });
     } catch (error) {}
   },
-  send_verify_email: async (req, res) => {
-    const email = req.params.email;
+  send_verification_email: async (req, res) => {
+    const { email } = req.body;
     try {
       const user = await Signup.findOne({ email: email });
       if (!user) {
@@ -381,9 +381,9 @@ const authController = {
       await user.save();
 
       const transporter = nodemailer.createTransport({
-        host: config.email.host,
-        // service: "hotmail",
-        port: 465,
+        // host: config.email.host,
+        service: "hotmail",
+        // port: 465,
         auth: {
           user: config.email.user,
           pass: config.email.password,
@@ -403,7 +403,8 @@ const authController = {
           } else {
             const mailOptions = {
               to: user.email,
-              from: config.email.admin,
+              // from: config.email.admin,
+              from: config.email.user,
               subject: `Verify Your Email`,
               html: html,
             };
@@ -427,35 +428,46 @@ const authController = {
       console.log(err);
     }
   },
-  verify_email: async (req, res, next) => {
-    if (req.params < 10) next();
+  verify_email: async (req, res) => {
     const { cypher } = req.params;
-    let de_cypher = Decryption(cypher);
+    const de_cypher = Decryption(cypher);
+    const email = de_cypher.split("/")[1];
+    const token = Number(de_cypher.split("/")[0]);
+    const user = await Signup.findOne({ email: email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ msg: "No user found with that email address" });
+    }
 
     try {
-      const user = await Signup.findOne({ email: de_cypher.split("/")[1] });
+      const user = await Signup.findOne({ email: email });
 
-      if (user.resetPasswordToken === Number(de_cypher.split("/")[0])) {
+      if (user.resetPasswordToken === token) {
+        user.resetPasswordToken = 0;
+        user.isEmailVerified = true;
+        await user.save();
         fs.readFile(
           path.join(__dirname, "email_var_success.view.html"),
           "utf8",
           (err, data) => {
             if (err) {
-              console.error("Error reading the HTML file:", err);
-              res.status(500).send("Internal Server Error");
+              res.status(500).json({ message: "internal server error", err });
               return;
             }
             res.send(data);
           }
         );
+      } else if (user.isEmailVerified === true) {
+        res.status(200).send({ message: "email already verified" });
       } else {
-        res.status(400).send("Invalid token or email.");
+        res.status(400).json({ message: "invalid token or url" });
       }
     } catch (error) {
-      console.error("Error verifying email:", error);
-      res.status(500).send("Internal Server Error");
+      res.status(500).json({ message: "internal server error" });
     }
   },
+
   verify_refresh_token: async (req, res) => {
     const refreshToken = req.body.token;
     if (!refreshToken) return res.status(400).send("Refresh token is required");
