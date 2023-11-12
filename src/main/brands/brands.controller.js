@@ -1,4 +1,6 @@
 const Brands = require("./brands.model");
+const Category = require("../categories/categories.model");
+const Products = require("../products/products.model");
 
 const brandsController = {
   createBrand: async (req, res) => {
@@ -109,13 +111,30 @@ const brandsController = {
 
   deleteBrandById: async (req, res) => {
     try {
-      const brand = await Brands.findByIdAndDelete(req.params.id);
+      const brandId = req.params.id;
+      console.log(brandId);
+      const brand = await Brands.findByIdAndDelete(brandId);
       if (!brand) {
         return res.status(404).json({ message: "Brand not found" });
       }
-      res.status(200).json({ message: "Brand deleted successfully" });
+      const categoryDeletionResult = await Category.deleteMany({
+        brand_id: brandId,
+      });
+      const productDeletionResult = await Products.deleteMany({
+        brand_id: brandId,
+      });
+      console.log(categoryDeletionResult, productDeletionResult);
+
+      res.status(200).json({
+        message:
+          "Brand and related categories and products deleted successfully",
+        categoryDeletionResult,
+        productDeletionResult,
+      });
     } catch (error) {
-      res.status(500).json({ message: "Error deleting brand", error });
+      res
+        .status(500)
+        .json({ message: "Error deleting brand and related entities", error });
     }
   },
 

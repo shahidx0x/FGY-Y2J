@@ -9,8 +9,8 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   const ip = config.host;
   const port = process.env.PORT || 3000;
 
-  server = app.listen(port, ip, () => {
-    logger.info(`Server is running on http://${ip}:${port}`);
+  server = app.listen(port, () => {
+    logger.info(`Server is running on ${port}`);
   });
 });
 
