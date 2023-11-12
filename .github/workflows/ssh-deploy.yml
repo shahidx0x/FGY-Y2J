@@ -1,22 +1,22 @@
 name: SSH Deployment
 
-on: [push] # Trigger on push, or any other event you prefer
+on: [push]
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest # Choose an appropriate runner
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Installing sshpass
-      run: sudo apt-get install -y sshpass
+      - name: Installing sshpass
+        run: sudo apt-get install -y sshpass
 
-    - name: SSH Connection and Execute Script
-      env:
-        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-        SSH_USER: ${{ secrets.SSH_USER }}
-        SSH_HOST: ${{ secrets.SSH_HOST }}
-      run: |
-        sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST './update.sh'
+      - name: SSH Connection and Execute Script
+        env:
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST './update.sh'
