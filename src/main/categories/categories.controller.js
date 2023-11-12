@@ -37,10 +37,14 @@ const CategoryController = {
       const skip = (page - 1) * limit;
       const search = req.query.search || "";
       const brandName = req.query.brand_name;
+      const brandId = req.query.brand_id;
 
       let query = {};
       if (brandName) {
         query.brand_name = brandName;
+      }
+      if (brandId) {
+        query.brand_id = brandId;
       }
 
       if (search) {
