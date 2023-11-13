@@ -123,7 +123,6 @@ const brandsController = {
       const productDeletionResult = await Products.deleteMany({
         brand_id: brandId,
       });
-      console.log(categoryDeletionResult, productDeletionResult);
 
       res.status(200).json({
         message:
