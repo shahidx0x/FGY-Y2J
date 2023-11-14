@@ -1,4 +1,5 @@
 const Category = require("../categories.model");
+const Products = require("../../products/products.model");
 
 const SubCategoryController = {
   getAllSubCategories: async (req, res) => {
@@ -138,7 +139,7 @@ const SubCategoryController = {
       if (!subcategory) {
         return res.status(404).json({ message: "Subcategory not found" });
       }
-
+      await Products.deleteMany({ subcategory_id: categoryId });
       category.subCategories.pull(subCategoryId);
       await category.save();
 

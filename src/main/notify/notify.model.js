@@ -21,7 +21,7 @@ const notifySchema = new mongoose.Schema(
     pickup_time: String,
     additional_information: String,
     order_device: String,
-    orders: [
+    items: [
       new mongoose.Schema(
         {
           product_name: String,

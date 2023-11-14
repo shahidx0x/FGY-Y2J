@@ -57,7 +57,7 @@ const notify_controller = {
         order_status,
         user_name,
         user_address,
-        orders,
+        items,
       } = req.body;
 
       const notification = await Notify.findOneAndUpdate(
