@@ -139,7 +139,7 @@ const SubCategoryController = {
       if (!subcategory) {
         return res.status(404).json({ message: "Subcategory not found" });
       }
-      await Products.deleteMany({ subcategory_id: categoryId });
+      await Products.deleteMany({ subcategory_id: subCategoryId });
       category.subCategories.pull(subCategoryId);
       await category.save();
 
