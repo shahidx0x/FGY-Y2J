@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const notifySchema = new mongoose.Schema(
+const OrderSchema = new mongoose.Schema(
   {
     user_email: {
       type: String,
@@ -29,10 +29,6 @@ const notifySchema = new mongoose.Schema(
           product_quantity: Number,
           product_price: Number,
           product_id: String,
-          order_status: {
-            type: String,
-            default: "0",
-          },
         },
         {
           timestamps: true,
@@ -45,5 +41,5 @@ const notifySchema = new mongoose.Schema(
   }
 );
 
-const Notify = mongoose.model("Notify", notifySchema);
-module.exports = Notify;
+const Orders = mongoose.model("Orders", OrderSchema);
+module.exports = Orders;

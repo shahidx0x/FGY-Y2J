@@ -15,7 +15,7 @@ const products_router = require("./main/products/products.router");
 const dashbord_router = require("./main/dashbord/dashbord.router");
 const dashbordController = require("./main/dashbord/dashbord.controller");
 const carts_router = require("./main/carts/carts.router");
-const notify_router = require("./main/notify/notify.router");
+const orders_router = require("./main/orders/orders.router");
 const app = express();
 
 app.use(cors());
@@ -39,6 +39,5 @@ app.use(subcat_router);
 app.use(products_router);
 app.use(dashbord_router);
 app.use(carts_router);
-app.use(notify_router);
-
+app.use(orders_router);
 module.exports = app;
