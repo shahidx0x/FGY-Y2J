@@ -295,10 +295,10 @@ const authController = {
       await user.save();
 
       const transporter = nodemailer.createTransport({
-        // host: config.email.host,
-        service: "hotmail",
-        // port: 465,
-        // secure: true,
+        host: config.email.host,
+        // service: "hotmail",
+        port: 465,
+        secure: true,
         auth: {
           user: config.email.user,
           pass: config.email.password,
@@ -315,8 +315,8 @@ const authController = {
           } else {
             const mailOptions = {
               to: user.email,
-              // from: config.email.admin,
-              from: config.email.user,
+              from: config.email.admin,
+              // from: config.email.user,
               subject: `Password Reset Code : ${resetToken}`,
               html: html,
             };
@@ -376,9 +376,9 @@ const authController = {
       await user.save();
 
       const transporter = nodemailer.createTransport({
-        // host: config.email.host,
-        service: "hotmail",
-        // port: 465,
+        host: config.email.host,
+        // service: "hotmail",
+        port: 465,
         auth: {
           user: config.email.user,
           pass: config.email.password,
@@ -398,8 +398,8 @@ const authController = {
           } else {
             const mailOptions = {
               to: user.email,
-              // from: config.email.admin,
-              from: config.email.user,
+              from: config.email.admin,
+              // from: config.email.user,
               subject: `Verify Your Email`,
               html: html,
             };
