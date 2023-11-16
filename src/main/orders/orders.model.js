@@ -30,16 +30,25 @@ const OrderSchema = new mongoose.Schema(
           product_price: Number,
           product_id: String,
         },
+
         {
           timestamps: true,
         }
       ),
     ],
+    totalCost: { type: Number, default: 0 },
   },
+
   {
     timestamps: true,
   }
 );
+OrderSchema.pre("save", function (next) {
+  this.totalCost = this.items.reduce((total, item) => {
+    return total + item.product_quantity * item.product_price;
+  }, 0);
+  next();
+});
 
 const Orders = mongoose.model("Orders", OrderSchema);
 module.exports = Orders;
