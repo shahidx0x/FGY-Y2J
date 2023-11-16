@@ -1,3 +1,5 @@
+const config = require("../../../configs/config");
+
 const invoiceController = {
   gen_invoice: async (req, res) => {
     const email = req.params.email;
