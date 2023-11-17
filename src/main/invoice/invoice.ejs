@@ -5,12 +5,11 @@
     <title>FGY-Y2J</title>
     <style>
       .invoice-box {
-        max-width: 800px;
+        max-width: 1000px;
         margin: auto;
-        padding: 30px;
-        border: 1px solid #eee;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-        font-size: 16px;
+        padding: 20px;
+        /* border: 1px solid #eee; */
+        font-size: 10px;
         line-height: 24px;
         font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
         color: #555;
@@ -76,9 +75,11 @@
 
       .client-name {
         font-weight: bold;
+        font-size: 10px;
       }
       .company-address {
-        font-size: 14px; /* Smaller font size */
+        margin-top: -10px;
+        font-size: 10px; /* Smaller font size */
         font-weight: bold;
       }
 
@@ -118,9 +119,9 @@
           <td colspan="2">
             <table>
               <tr>
-                <td class="client-name">
-                  <%= clientName %><br />
-                  <%= clientEmail %>
+                <td>
+                  <span class="client-name"> <%= clientName %></span><br />
+                  <span> <%= clientEmail %></span>
                 </td>
               </tr>
             </table>
