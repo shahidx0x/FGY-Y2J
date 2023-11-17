@@ -174,11 +174,13 @@
 
         <% items.forEach(function(item, index) { %>
         <tr class="item <%= index === items.length - 1 ? 'last' : '' %>">
-          <td style="font-size: 15px" class="item-name">
-            <%= item.name %> x<%= item.quantity %>
+          <td class="item-name">
+            <span style="font-size: 10px"
+              ><%= item.name %> x<%= item.quantity %></span
+            >
           </td>
-          <td style="font-size: 15px" class="item-price">
-            $<%= item.price.toFixed(2) %>
+          <td class="item-price">
+            <span style="font-size: 10px"> $<%= item.price.toFixed(2) %></span>
           </td>
         </tr>
         <% }); %>
