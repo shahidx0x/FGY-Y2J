@@ -52,10 +52,7 @@ const productSchema = new mongoose.Schema({
       },
     ],
   },
-  sku: {
-    type: [skuSchema],
-    default: [{ booked: 0, ongoing: 0, available: 0, stock: 0 }],
-  },
+  sku: skuSchema,
 });
 
 module.exports = mongoose.model("Products", productSchema);

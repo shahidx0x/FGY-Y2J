@@ -96,28 +96,8 @@ const ProductsController = {
 
   createProduct: async (req, res) => {
     try {
-      const { varient = [], sku = [], ...rest } = req.body;
-
-      const product = new Products({
-        varient: varient.length
-          ? varient
-          : [
-              {
-                base_price: 0,
-                discount: 0,
-                price: 0,
-                min_purchease: 0,
-                max_purchease: 0,
-              },
-            ],
-        sku: sku.length
-          ? sku
-          : [{ booked: 0, ongoing: 0, available: 0, stock: 0 }],
-        ...rest,
-      });
-
+      const product = new Products(req.body);
       await product.save();
-
       res
         .status(201)
         .json({ message: "Product Created Successfully", product });
