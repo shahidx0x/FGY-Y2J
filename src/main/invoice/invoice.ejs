@@ -118,13 +118,17 @@
                 <td class="title">FGY-Y2J</td>
 
                 <td class="">
-                  Invoice #:
-                  <span style="font-size: 10px"><%= invoiceNumber %></span
+                  <span style="font-size: 10px">
+                    Invoice #:<%= invoiceNumber %></span
                   ><br />
-                  Created:
-                  <span style="font-size: 10px"><%= createdDate %></span><br />
-                  Pickup Date:
-                  <span style="font-size: 10px"><%= dueDate %></span>
+
+                  <span style="font-size: 10px">
+                    Created:<%= createdDate %></span
+                  ><br />
+
+                  <span style="font-size: 10px">
+                    Pickup Date:<%= dueDate %></span
+                  >
                 </td>
               </tr>
             </table>
@@ -135,7 +139,7 @@
           <td colspan="2">
             <table>
               <tr>
-                <td>
+                <td style="font-size: 15px">
                   Name : <%= clientName %><br />
                   Address : <%= clientAddress %><br />
                   Email: <%= clientEmail %>
@@ -146,9 +150,9 @@
         </tr>
 
         <tr class="heading">
-          <td>Payment Method</td>
+          <td style="font-size: 15px">Payment Method</td>
 
-          <td>Cash on delivery</td>
+          <td style="font-size: 15px">Cash on delivery</td>
         </tr>
         <tr class="">
           <td></td>
@@ -166,8 +170,12 @@
 
         <% items.forEach(function(item, index) { %>
         <tr class="item <%= index === items.length - 1 ? 'last' : '' %>">
-          <td class="item-name"><%= item.name %> x<%= item.quantity %></td>
-          <td class="item-price">$<%= item.price.toFixed(2) %></td>
+          <td style="font-size: 15px" class="item-name">
+            <%= item.name %> x<%= item.quantity %>
+          </td>
+          <td style="font-size: 15px" class="item-price">
+            $<%= item.price.toFixed(2) %>
+          </td>
         </tr>
         <% }); %>
 
