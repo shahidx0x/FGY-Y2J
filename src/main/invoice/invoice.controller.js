@@ -8,6 +8,7 @@ const htmlPdf = require("html-pdf");
 const invoiceController = {
   gen_invoice: async (req, res) => {
     const email = req.params.email;
+    console.log(req.body);
     try {
       // Demo user data
       const user = {
