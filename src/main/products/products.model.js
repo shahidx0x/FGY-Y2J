@@ -12,6 +12,7 @@ const varientSchema = new mongoose.Schema({
 });
 
 const skuSchema = new mongoose.Schema({
+  ref_id: String,
   booked: Number,
   ongoing: Number,
   available: Number,
@@ -63,5 +64,13 @@ const productSchema = new mongoose.Schema({
     ],
   },
 });
-
+productSchema.pre("save", function (next) {
+  const product = this;
+  if (product.isNew) {
+    product.sku.forEach((sku) => {
+      sku.ref_id = product._id.toString();
+    });
+  }
+  next();
+});
 module.exports = mongoose.model("Products", productSchema);
