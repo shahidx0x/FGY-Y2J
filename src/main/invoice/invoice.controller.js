@@ -577,7 +577,7 @@ const invoiceController = {
                                 "
                             >
                                 <p style="margin: 0">
-                                You are receiving this email because your order has been updated to the folowing status :
+                               Thank you for your order . your order has been updated to the folowing status :
                                 </p>
                                 <p style="margin-top: 10">
 
