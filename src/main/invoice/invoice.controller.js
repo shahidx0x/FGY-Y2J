@@ -717,23 +717,17 @@ const invoiceController = {
                 </html>
 
                 `,
-        attachments: [
-          {
-            filename: "invoice.pdf",
-            path: pdfPath,
-          },
-        ],
       };
       transporter.sendMail(mailOptions, (mailErr) => {
         if (mailErr) {
           console.error(mailErr);
           return res
             .status(500)
-            .json({ message: "Error sending invoice email" });
+            .json({ message: "Error sending status email" });
         }
         return res
           .status(200)
-          .json({ message: "Invoice email sent successfully" });
+          .json({ message: "Status email sent successfully" });
       });
     } catch (err) {
       console.error(err);
