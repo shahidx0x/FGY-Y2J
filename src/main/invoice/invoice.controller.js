@@ -593,7 +593,12 @@ const invoiceController = {
                                         <tr>
                                         <td
                                             align="center"
-                                            bgcolor="#1a82e2"
+                                            bgcolor=${
+                                              status === "pending"
+                                                ? "#FFFF00"
+                                                : status === "cancled" &&
+                                                  "#FF0000"
+                                            }
                                             style="border-radius: 6px"
                                         >
                                             <div
@@ -603,16 +608,24 @@ const invoiceController = {
                                                 font-family: 'Source Sans Pro', Helvetica, Arial,
                                                 sans-serif;
                                                 font-size: 16px;
-                                                color: ${
-                                                  status === "pending"
-                                                    ? "#FFFF00"
-                                                    : "#ffffff"
-                                                };
+                                                color: #ffffff;
                                                 text-decoration: none;
                                                 border-radius: 6px;
                                             "
                                             >
-                                            ${status}
+                                            ${
+                                              status === "pending" ? (
+                                                <span style="font-weight:bold">
+                                                  Pending
+                                                </span>
+                                              ) : (
+                                                status === "pending" && (
+                                                  <span style="font-weight:bold">
+                                                    Cancled
+                                                  </span>
+                                                )
+                                              )
+                                            }
                                             </div>
                                         </td>
                                         </tr>
