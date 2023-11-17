@@ -213,10 +213,11 @@ const ProductsController = {
     try {
       const { productId, skuId } = req.body;
 
-      await Products.updateOne(
+      const resp = await Products.updateOne(
         { _id: productId },
         { $pull: { sku: { _id: skuId } } }
       );
+      console.log(resp);
 
       res.status(200).json({ message: "SKU deleted successfully" });
     } catch (error) {

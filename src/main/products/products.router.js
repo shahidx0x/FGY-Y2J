@@ -24,8 +24,8 @@ products_router.post(
   "/create/varient/in/product/:productId",
   ProductsController.updateVarient
 );
-products_router.post(
-  "/create/sku/in/product/:productId",
+products_router.patch(
+  "/update/sku/in/product/:productId",
   ProductsController.updateSKU
 );
 products_router.delete(
