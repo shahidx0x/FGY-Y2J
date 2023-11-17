@@ -13,10 +13,10 @@ const varientSchema = new mongoose.Schema({
 
 const skuSchema = new mongoose.Schema({
   var_id: String,
-  booked: Number,
-  ongoing: Number,
-  available: Number,
-  stock: Number,
+  booked: { type: Number, default: 0 },
+  ongoing: { type: Number, default: 0 },
+  available: { type: Number, default: 0 },
+  stock: { type: Number, default: 0 },
 });
 
 const productSchema = new mongoose.Schema({
