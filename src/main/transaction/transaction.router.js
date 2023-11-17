@@ -2,7 +2,7 @@ const transactionController = require("./transaction.controller");
 const transaction_router = require("express").Router();
 transaction_router.post(
   "/create/transaction",
-  transactionController.crate_transaction
+  transactionController.create_transaction
 );
 transaction_router.get("/transaction", transactionController.transaction_list);
 transaction_router.patch(

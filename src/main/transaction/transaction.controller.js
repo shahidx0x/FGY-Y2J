@@ -1,7 +1,7 @@
 const Transaction = require("./transaction.model");
 
 const transactionController = {
-  crate_transaction: async (req, res) => {
+  create_transaction: async (req, res) => {
     try {
       const newTransaction = new Transaction(req.body);
       const savedTransaction = await newTransaction.save();
