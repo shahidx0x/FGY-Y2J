@@ -27,18 +27,11 @@
         vertical-align: top;
       }
 
-      .invoice-box table tr td:nth-child(2) {
-        text-align: right;
-      }
-
-      .invoice-box table tr.top table td {
-        padding-bottom: 20px;
-      }
-
       .invoice-box table tr.top table td.title {
         font-size: 45px;
         line-height: 45px;
         color: #333;
+        font-weight: bold;
       }
 
       .invoice-box table tr.information table td {
@@ -68,33 +61,34 @@
         font-weight: bold;
       }
 
-      @media only screen and (max-width: 600px) {
-        .invoice-box table tr.top table td {
-          width: 100%;
-          display: block;
-          text-align: center;
-        }
+      .item-name {
+        text-align: left;
+      }
 
+      .item-price {
+        text-align: right;
+      }
+
+      .total-text {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .client-name {
+        font-weight: bold;
+      }
+      .company-address {
+        font-size: 14px; /* Smaller font size */
+        font-weight: bold;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .invoice-box table tr.top table td,
         .invoice-box table tr.information table td {
           width: 100%;
           display: block;
           text-align: center;
         }
-      }
-
-      /** RTL **/
-      .invoice-box.rtl {
-        direction: rtl;
-        font-family: Tahoma, "Helvetica Neue", "Helvetica", Helvetica, Arial,
-          sans-serif;
-      }
-
-      .invoice-box.rtl table {
-        text-align: right;
-      }
-
-      .invoice-box.rtl table tr td:nth-child(2) {
-        text-align: left;
       }
     </style>
   </head>
@@ -106,10 +100,11 @@
             <table>
               <tr>
                 <td class="title">
-                  <p><%= companyName %></p>
+                  <%= companyName %><br />
+                  <span class="company-address"> <%= companyAddress %></span>
                 </td>
 
-                <td>
+                <td class="item-price">
                   Invoice #: <%= invoiceNumber %><br />
                   Created: <%= createdDate %><br />
                   Due: <%= dueDate %>
@@ -123,9 +118,7 @@
           <td colspan="2">
             <table>
               <tr>
-                <td><%= companyAddress %></td>
-
-                <td>
+                <td class="client-name">
                   <%= clientName %><br />
                   <%= clientEmail %>
                 </td>
@@ -134,18 +127,21 @@
           </td>
         </tr>
 
-        <!-- ... Other static parts ... -->
+        <tr class="heading">
+          <td>Product Name</td>
+          <td class="item-price">Price</td>
+        </tr>
 
-        <% items.forEach(function(item) { %>
-        <tr class="item<%= item === items[items.length - 1] ? ' last' : '' %>">
-          <td><%= item.name %></td>
-          <td>$<%= item.price.toFixed(2) %></td>
+        <% items.forEach(function(item, index) { %>
+        <tr class="item <%= index === items.length - 1 ? 'last' : '' %>">
+          <td class="item-name"><%= item.name %></td>
+          <td class="item-price">$<%= item.price.toFixed(2) %></td>
         </tr>
         <% }); %>
 
-        <tr class="total">
-          <td></td>
-          <td>Total: $<%= total.toFixed(2) %></td>
+        <tr class="total heading">
+          <td class="total-text">Total:</td>
+          <td class="total-text item-price">$<%= total.toFixed(2) %></td>
         </tr>
       </table>
     </div>

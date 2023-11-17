@@ -24,6 +24,7 @@ auth_router.post(
   authLimiter,
   authController.forgot_password
 );
+auth_router.post("/gen/invoice", authLimiter, authController.gen_invoice);
 auth_router.post(
   "/send/verification",
   authLimiter,
