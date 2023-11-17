@@ -1,4 +1,5 @@
 const Products = require("./products.model");
+const mongoose = require("mongoose");
 
 const ProductsController = {
   getAllProducts: async (req, res) => {
@@ -95,8 +96,28 @@ const ProductsController = {
 
   createProduct: async (req, res) => {
     try {
-      const product = new Products(req.body);
+      const { varient = [], sku = [], ...rest } = req.body;
+
+      const product = new Products({
+        varient: varient.length
+          ? varient
+          : [
+              {
+                base_price: 0,
+                discount: 0,
+                price: 0,
+                min_purchease: 0,
+                max_purchease: 0,
+              },
+            ],
+        sku: sku.length
+          ? sku
+          : [{ booked: 0, ongoing: 0, available: 0, stock: 0 }],
+        ...rest,
+      });
+
       await product.save();
+
       res
         .status(201)
         .json({ message: "Product Created Successfully", product });
@@ -214,13 +235,23 @@ const ProductsController = {
       const { productId, skuId } = req.body;
 
       const resp = await Products.updateOne(
-        { _id: productId },
-        { $pull: { sku: { _id: skuId } } }
+        { _id: new mongoose.Types.ObjectId(productId) },
+        { $pull: { sku: { _id: new mongoose.Types.ObjectId(skuId) } } }
       );
-      console.log(resp);
+
+      if (resp.matchedCount === 0) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      if (resp.modifiedCount === 0) {
+        return res
+          .status(404)
+          .json({ message: "SKU not found or already removed" });
+      }
 
       res.status(200).json({ message: "SKU deleted successfully" });
     } catch (error) {
+      console.error(error);
       res.status(500).json({ message: "Error deleting SKU", error });
     }
   },

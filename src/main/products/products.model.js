@@ -40,8 +40,22 @@ const productSchema = new mongoose.Schema({
   max_purchease: Number,
   price: Number,
   product_information: String,
-  varient: [varientSchema],
-  sku: [skuSchema],
+  varient: {
+    type: [varientSchema],
+    default: [
+      {
+        base_price: 0,
+        discount: 0,
+        price: 0,
+        min_purchease: 0,
+        max_purchease: 0,
+      },
+    ],
+  },
+  sku: {
+    type: [skuSchema],
+    default: [{ booked: 0, ongoing: 0, available: 0, stock: 0 }],
+  },
 });
 
 module.exports = mongoose.model("Products", productSchema);
