@@ -608,7 +608,7 @@ const invoiceController = {
                                                 font-family: 'Source Sans Pro', Helvetica, Arial,
                                                 sans-serif;
                                                 font-size: 16px;
-                                                color: #ffffff;
+                                                color: #000000;
                                                 text-decoration: none;
                                                 border-radius: 6px;
                                             "
