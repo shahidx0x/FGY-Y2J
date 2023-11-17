@@ -619,7 +619,7 @@ const invoiceController = {
                                                   Pending
                                                 </span>
                                               ) : (
-                                                status === "pending" && (
+                                                status === "cancled" && (
                                                   <span style="font-weight:bold">
                                                     Cancled
                                                   </span>
