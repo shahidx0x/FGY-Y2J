@@ -15,6 +15,12 @@ const invoiceController = {
       quantity: item.product_quantity,
       price: item.product_price,
     }));
+    let dateTimeString = info.rowData.createdAt;
+    let date = new Date(dateTimeString);
+
+    let formattedDate = date.toLocaleDateString();
+    let formattedTime = date.toLocaleTimeString();
+
     try {
       // Demo user data
       const user = {
@@ -27,7 +33,7 @@ const invoiceController = {
         companyName: "FGY-Y2J",
         companyAddress: "South New York,New Iceland,USA",
         invoiceNumber: info.rowData._id,
-        createdDate: info.rowData.createdAt,
+        createdDate: formattedDate + " " + formattedTime,
         dueDate: info.rowData.pickup_time || "Not Provided",
         clientName: user.name,
         clientEmail: user.email,
