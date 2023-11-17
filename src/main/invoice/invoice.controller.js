@@ -614,17 +614,10 @@ const invoiceController = {
                                             "
                                             >
                                             ${
-                                              status === "pending" ? (
-                                                <span style="font-weight:bold">
-                                                  Pending
-                                                </span>
-                                              ) : (
-                                                status === "cancled" && (
-                                                  <span style="font-weight:bold">
-                                                    Cancled
-                                                  </span>
-                                                )
-                                              )
+                                              status === "pending"
+                                                ? "Pending"
+                                                : status === "cancled" &&
+                                                  "Cancled"
                                             }
                                             </div>
                                         </td>
