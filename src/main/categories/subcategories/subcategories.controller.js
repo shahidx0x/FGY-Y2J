@@ -9,7 +9,9 @@ const SubCategoryController = {
       let limit = parseInt(req.query.limit, 10) || 10;
       const search = req.query.search || "";
 
-      const category = await Category.findById(categoryId);
+      const category = await Category.findById(categoryId).sort({
+        createdAt: -1,
+      });
 
       if (!category) {
         return res.status(404).json({ message: "Category not found" });

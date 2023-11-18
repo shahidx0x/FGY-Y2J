@@ -21,7 +21,10 @@ const brandsController = {
       const limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
 
-      const brands = await Brands.find().skip(skip).limit(limit);
+      const brands = await Brands.find()
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 });
       const totalBrands = await Brands.countDocuments();
       const total_page = Math.ceil(totalBrands / limit);
 

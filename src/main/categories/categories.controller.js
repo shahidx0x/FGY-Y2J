@@ -55,9 +55,12 @@ const CategoryController = {
       let categories;
 
       if (limit === -1) {
-        categories = await Category.find(query);
+        categories = await Category.find(query).sort({ createdAt: -1 });
       } else {
-        categories = await Category.find(query).skip(skip).limit(limit);
+        categories = await Category.find(query)
+          .skip(skip)
+          .limit(limit)
+          .sort({ createdAt: -1 });
       }
 
       const total_page = limit === -1 ? 1 : Math.ceil(totalCategory / limit);

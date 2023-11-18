@@ -39,9 +39,12 @@ const transactionController = {
       let transaction;
 
       if (limit === -1) {
-        transaction = await Transaction.find(query);
+        transaction = await Transaction.find(query).sort({ createdAt: -1 });
       } else {
-        transaction = await Transaction.find(query).skip(skip).limit(limit);
+        transaction = await Transaction.find(query)
+          .skip(skip)
+          .limit(limit)
+          .sort({ createdAt: -1 });
       }
 
       const total_page = limit === -1 ? 1 : Math.ceil(totalTransaction / limit);

@@ -35,10 +35,13 @@ const ProductsController = {
 
       let products;
       if (limit === -1) {
-        products = await Products.find(query);
+        products = await Products.find(query).sort({ createdAt: -1 });
         limit = totalProducts;
       } else {
-        products = await Products.find(query).skip(skip).limit(limit);
+        products = await Products.find(query)
+          .skip(skip)
+          .limit(limit)
+          .sort({ createdAt: -1 });
       }
 
       const totalPages = Math.ceil(totalProducts / (limit === 0 ? 1 : limit));
@@ -177,21 +180,19 @@ const ProductsController = {
     const { booked, ongoing, available, stock } = req.body;
 
     try {
-    
       const product = await Products.findById(productId);
 
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
 
-    
       if (
         booked !== undefined ||
         ongoing !== undefined ||
         available !== undefined ||
         stock !== undefined
       ) {
-        const sku = product.sku[0]; 
+        const sku = product.sku[0];
 
         if (booked !== undefined) {
           sku.booked = booked;
@@ -209,7 +210,7 @@ const ProductsController = {
           sku.stock = stock;
         }
 
-        await product.save(); 
+        await product.save();
       }
 
       res.json({ message: "SKU information updated successfully", product });
