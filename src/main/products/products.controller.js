@@ -173,25 +173,51 @@ const ProductsController = {
   },
 
   updateSKU: async (req, res) => {
-    try {
-      const productId = req.params.productId;
-      const { skuId, skuData } = req.body;
+    const productId = req.params.productId;
+    const { booked, ongoing, available, stock } = req.body;
 
-      if (skuId) {
-        await Products.updateOne(
-          { _id: productId, "sku._id": skuId },
-          { $set: { "sku.$": skuData } }
-        );
-      } else {
-        await Products.updateOne(
-          { _id: productId },
-          { $push: { sku: skuData } }
-        );
+    try {
+    
+      const product = await Products.findById(productId);
+
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
       }
 
-      res.status(200).json({ message: "SKU updated/added successfully" });
+    
+      if (
+        booked !== undefined ||
+        ongoing !== undefined ||
+        available !== undefined ||
+        stock !== undefined
+      ) {
+        const sku = product.sku[0]; 
+
+        if (booked !== undefined) {
+          sku.booked = booked;
+        }
+
+        if (ongoing !== undefined) {
+          sku.ongoing = ongoing;
+        }
+
+        if (available !== undefined) {
+          sku.available = available;
+        }
+
+        if (stock !== undefined) {
+          sku.stock = stock;
+        }
+
+        await product.save(); 
+      }
+
+      res.json({ message: "SKU information updated successfully", product });
     } catch (error) {
-      res.status(500).json({ message: "Error updating/adding SKU", error });
+      console.error(error);
+      res
+        .status(500)
+        .json({ message: "Error updating SKU information", error });
     }
   },
 
