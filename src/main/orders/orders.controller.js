@@ -1,48 +1,6 @@
 const Orders = require("./orders.model");
 
 const orders_controller = {
-  // get_all_orders: async function (req, res) {
-  //   try {
-  //     const page = parseInt(req.query.page, 10) || 1;
-  //     let limit = parseInt(req.query.limit, 10) || 10;
-  //     const search = req.query.search;
-  //     const orderStatus = req.query.order_status;
-
-  //     let query = {};
-
-  //     if (search) {
-  //       query.user_email = search;
-  //     }
-  //     if (orderStatus) {
-  //       query.order_status = orderStatus;
-  //     }
-  //     if (limit === -1) {
-  //       const orders = await Orders.find(query);
-  //       return res.status(200).json({ data: orders });
-  //     }
-
-  //     const skip = (page - 1) * limit;
-  //     const orders = await Orders.find(query).skip(skip).limit(limit);
-  //     const totalOrders = await Orders.countDocuments(query);
-
-  //     const paginationInfo = {
-  //       totalOrders,
-  //       limit,
-  //       currentPage: page,
-  //       totalPages: Math.ceil(totalOrders / limit),
-  //     };
-
-  //     res.status(200).json({
-  //       meta: paginationInfo,
-  //       data: orders,
-  //     });
-  //   } catch (error) {
-  //     res.status(500).json({
-  //       message: "Error retrieving orders",
-  //       error: error.message,
-  //     });
-  //   }
-  // },
   get_all_orders: async function (req, res) {
     try {
       const page = parseInt(req.query.page, 10) || 1;

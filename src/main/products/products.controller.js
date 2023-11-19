@@ -262,6 +262,70 @@ const ProductsController = {
       res.status(500).json({ message: "Error deleting SKU", error });
     }
   },
+  update_sku: async (req, res) => {
+    const { productId } = req.params;
+    const { ongoing_inc, ongoing_dec, booked_inc, booked_dec } = req.query;
+
+    try {
+      const product = await Products.findById(productId);
+
+      if (!product || product.sku.length === 0) {
+        return res.status(404).json({ message: "Product or SKU not found" });
+      }
+
+      const sku = product.sku[0];
+
+      if (ongoing_inc) {
+        const increment = parseInt(ongoing_inc, 10);
+        if (sku.ongoing + increment <= sku.stock) {
+          sku.ongoing += increment;
+        } else {
+          return res.status(400).json({ message: "Exceeds stock limit" });
+        }
+      }
+
+      if (ongoing_dec) {
+        const decrement = parseInt(ongoing_dec, 10);
+        if (sku.ongoing - decrement >= 0) {
+          sku.ongoing -= decrement;
+        } else {
+          return res.status(400).json({ message: "Cannot go below zero" });
+        }
+      }
+
+      if (booked_inc) {
+        const increment = parseInt(booked_inc, 10);
+        if (sku.booked + increment <= sku.stock) {
+          sku.booked += increment;
+        } else {
+          return res.status(400).json({ message: "Exceeds stock limit" });
+        }
+      }
+
+      if (booked_dec) {
+        const decrement = parseInt(booked_dec, 10);
+        if (sku.booked - decrement >= 0) {
+          sku.booked -= decrement;
+        } else {
+          return res.status(400).json({ message: "Cannot go below zero" });
+        }
+      }
+
+      if (sku.ongoing === sku.stock) {
+        product.isDisable = true;
+      } else {
+        product.isDisable = false;
+      }
+
+      await product.save();
+
+      res.status(200).json({ message: "SKU updated successfully", product });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Error updating SKU", error: error.message });
+    }
+  },
 };
 
 module.exports = ProductsController;

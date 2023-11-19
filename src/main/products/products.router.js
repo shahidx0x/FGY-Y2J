@@ -36,5 +36,6 @@ products_router.delete(
   "/products/:productId/sku/:skuId",
   ProductsController.deleteSKU
 );
+products_router.patch("/update-sku/:productId", ProductsController.update_sku);
 
 module.exports = products_router;
