@@ -8,6 +8,7 @@ auth_router.get("/get/users", authenticate, authController.getAllUsers);
 auth_router.get("/get/user", authenticate, authController.getUserByEmail);
 auth_router.post("/signup", authLimiter, authController.createUser);
 auth_router.post("/signin", authLimiter, authController.signInUser);
+auth_router.post("/reset-password", authLimiter, authController.resetPassword);
 auth_router.post(
   "/verify/refresh/token",
   authLimiter,

@@ -531,6 +531,42 @@ const authController = {
       );
     } catch (err) {}
   },
+  resetPassword: async (req, res) => {
+    try {
+      const { email } = req.query;
+      const { password } = req.query;
+
+      if (!email || !password) {
+        return res
+          .status(400)
+          .json({ message: "Email and password are required" });
+      }
+
+      const user = await Signup.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const salt = crypto.randomBytes(16).toString("hex");
+      const iterations = 10000;
+      const hashBuffer = crypto.pbkdf2Sync(
+        password,
+        salt,
+        iterations,
+        32,
+        "sha512"
+      );
+      const hashedPassword = `${salt}:${hashBuffer.toString("hex")}`;
+
+      user.password = hashedPassword;
+      await user.save();
+
+      return res.status(200).json({ message: "Password reset successfully" });
+    } catch (error) {
+      console.error("Reset Password Error: ", error);
+      return res.status(500).json({ message: "Error resetting password" });
+    }
+  },
 };
 
 module.exports = authController;
