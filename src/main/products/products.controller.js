@@ -72,6 +72,7 @@ const ProductsController = {
       const brandName = req.query.brand_name;
       const categoryName = req.query.category_name;
       const subCategoryName = req.query.sub_category_name;
+      const disable = req.query.disable;
 
       let query = {};
       if (req.query.product_id) {
@@ -86,9 +87,14 @@ const ProductsController = {
       if (subCategoryName) {
         query.subcategory_name = subCategoryName;
       }
-
       if (search) {
         query.name = new RegExp(search, "i");
+      }
+
+      if (disable === "true") {
+        query.isDisable = true;
+      } else {
+        query.isDisable = { $ne: true };
       }
 
       const totalProducts = await Products.countDocuments(query);
