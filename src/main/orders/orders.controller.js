@@ -17,6 +17,19 @@ const orders_controller = {
         query.order_status = orderStatus;
       }
 
+      if (req.query.order_list === "today") {
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+
+        const todayEnd = new Date();
+        todayEnd.setHours(23, 59, 59, 999);
+
+        query.createdAt = {
+          $gte: todayStart,
+          $lte: todayEnd,
+        };
+      }
+
       if (limit === -1) {
         const orders = await Orders.find(query).sort({ createdAt: -1 });
         return res.status(200).json({ data: orders });

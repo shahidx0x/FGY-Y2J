@@ -91,20 +91,6 @@ const ProductsController = {
         query.name = new RegExp(search, "i");
       }
 
-      // Filter for today's orders
-      if (req.query.order_list === "today") {
-        const todayStart = new Date();
-        todayStart.setHours(0, 0, 0, 0);
-
-        const todayEnd = new Date();
-        todayEnd.setHours(23, 59, 59, 999);
-
-        query.createdAt = {
-          $gte: todayStart,
-          $lte: todayEnd,
-        };
-      }
-
       const totalProducts = await Products.countDocuments(query);
 
       let products;
