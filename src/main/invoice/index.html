@@ -140,7 +140,7 @@
             <table>
               <tr>
                 <td>
-                  <span style="font-size: 15px">
+                  <span style="font-size: 10px">
                     Name : <%= clientName %><br />
                     Address : <%= clientAddress %><br />
                     Email: <%= clientEmail %></span
@@ -152,33 +152,19 @@
         </tr>
 
         <tr class="heading">
-          <td><span style="font-size: 10px">Payment Method </span></td>
-
-          <td style="">
-            <span style="font-size: 10px">Cash on delivery</span>
-          </td>
-        </tr>
-        <tr class="">
-          <td></td>
-          <td></td>
-        </tr>
-        <tr class="">
-          <td></td>
-          <td></td>
-        </tr>
-
-        <tr class="heading">
           <td>Item</td>
           <td>Price</td>
         </tr>
 
         <% items.forEach(function(item, index) { %>
         <tr class="item <%= index === items.length - 1 ? 'last' : '' %>">
-          <td style="font-size: 15px" class="item-name">
-            <%= item.name %> x<%= item.quantity %>
+          <td class="item-name">
+            <span style="font-size: 10px"
+              ><%= item.name %> x<%= item.quantity %></span
+            >
           </td>
-          <td style="font-size: 15px" class="item-price">
-            $<%= item.price.toFixed(2) %>
+          <td class="item-price">
+            <span style="font-size: 10px"> $<%= item.price.toFixed(2) %></span>
           </td>
         </tr>
         <% }); %>
