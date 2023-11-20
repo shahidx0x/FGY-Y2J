@@ -264,7 +264,7 @@ const invoiceController = {
                                                         border-radius: 6px;
                                                     "
                                                     >
-                                                    ${"pending"}
+                                                    ${"Approved"}
                                                     </div>
                                                 </td>
                                                 </tr>
@@ -602,8 +602,6 @@ const invoiceController = {
                                             bgcolor=${
                                               status === "pending"
                                                 ? "FFF000"
-                                                : status === "accept"
-                                                ? "FFFFFF"
                                                 : status === "cancled" &&
                                                   "FF0000"
                                             }
@@ -624,8 +622,6 @@ const invoiceController = {
                                             ${
                                               status === "pending"
                                                 ? "Pending"
-                                                : status === "accept"
-                                                ? "Accepted"
                                                 : status === "cancled" &&
                                                   "Cancled"
                                             }
