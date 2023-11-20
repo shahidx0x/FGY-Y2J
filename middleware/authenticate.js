@@ -8,7 +8,7 @@ const authenticate = (req, res, next) => {
     if (token) {
       token = token.split(" ")[1];
       let user = jwt.verify(token, config.jwt.secret);
-      req.userId = user._id;
+      req.userId = user.id;
       req.userEmail = user.email;
       next();
     } else {

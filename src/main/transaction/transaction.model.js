@@ -9,6 +9,7 @@ const transactionSchema = new mongoose.Schema(
     email: {
       type: String,
     },
+    user_id: String,
     address: {
       type: String,
     },

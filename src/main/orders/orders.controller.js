@@ -63,7 +63,9 @@ const orders_controller = {
 
   create_new_order: async function (req, res) {
     try {
+      let user_id = req.userId;
       const new_order = new Orders(req.body);
+      new_order.user_id = user_id;
       const order = await new_order.save();
       res.status(200).json({
         message: "Order successfully placed!",
