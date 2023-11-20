@@ -32,7 +32,7 @@ module.exports = mongoose.model(
       phoneNumber: String,
       isAccountActive: {
         type: Boolean,
-        default: true,
+        default: false,
       },
       profilePicture: String,
       location: String,
