@@ -15,17 +15,72 @@ const brandsController = {
     }
   },
 
+  // getAllBrands: async (req, res) => {
+  //   try {
+  //     const page = parseInt(req.query.page, 10) || 1;
+  //     const limit = parseInt(req.query.limit, 10) || 10;
+  //     const skip = (page - 1) * limit;
+
+  //     const brands = await Brands.find()
+  //       .skip(skip)
+  //       .limit(limit)
+  //       .sort({ createdAt: -1 });
+  //     const totalBrands = await Brands.countDocuments();
+  //     const total_page = Math.ceil(totalBrands / limit);
+
+  //     res.status(200).json({
+  //       status: 200,
+  //       meta: {
+  //         total_brands: totalBrands,
+  //         total_page: total_page,
+  //         current_page: page,
+  //         per_page: limit,
+  //       },
+  //       data: brands,
+  //     });
+  //   } catch (error) {
+  //     res.status(500).json({ message: "Error fetching brands", error });
+  //   }
+  // },
+
   getAllBrands: async (req, res) => {
     try {
       const page = parseInt(req.query.page, 10) || 1;
       const limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
 
+      // Fetch all brands with pagination
       const brands = await Brands.find()
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 });
+
       const totalBrands = await Brands.countDocuments();
+
+      // Aggregate to count the number of products for each brand
+      const productCounts = await Products.aggregate([
+        {
+          $group: {
+            _id: "$brand_id",
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
+      // Convert aggregation result to a map for easier access
+      const countMap = productCounts.reduce((map, item) => {
+        map[item._id] = item.count;
+        return map;
+      }, {});
+
+      // Add product count to each brand
+      const brandsWithProductCount = brands.map((brand) => {
+        return {
+          ...brand.toObject(),
+          productCount: countMap[brand._id] || 0,
+        };
+      });
+
       const total_page = Math.ceil(totalBrands / limit);
 
       res.status(200).json({
@@ -36,7 +91,7 @@ const brandsController = {
           current_page: page,
           per_page: limit,
         },
-        data: brands,
+        data: brandsWithProductCount,
       });
     } catch (error) {
       res.status(500).json({ message: "Error fetching brands", error });
