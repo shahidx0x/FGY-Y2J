@@ -56,6 +56,8 @@ const ProductsController = {
           if (product.discount > 0) {
             product.afterDiscount =
               product.price - (product.price * product.discount) / 100;
+          } else if (product.discount === 0) {
+            product.afterDiscount = product.price;
           }
           return product;
         });
