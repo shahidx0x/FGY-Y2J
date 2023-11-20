@@ -11,7 +11,9 @@ const ProductsController = {
 
       const brandName = req.query.brand_name;
       const categoryName = req.query.category_name;
-      const subCategoryName = req.query.sub_category_name;
+      const subCategoryName = req.query.sub_category_name
+        ? req.query.sub_category_name.trim()
+        : null;
       const disable = req.query.disable;
 
       let query = {};
@@ -19,13 +21,13 @@ const ProductsController = {
         query._id = req.query.product_id;
       }
       if (brandName) {
-        query.brand_name = brandName;
+        query.brand_name = new RegExp(brandName, "i");
       }
       if (categoryName) {
-        query.category_name = categoryName;
+        query.category_name = new RegExp(categoryName, "i");
       }
       if (subCategoryName) {
-        query.subcategory_name = subCategoryName;
+        query.subcategory_name = new RegExp(subCategoryName, "i");
       }
       if (search) {
         query.name = new RegExp(search, "i");

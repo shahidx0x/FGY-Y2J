@@ -49,7 +49,6 @@ const brandsController = {
       const limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
 
-      // Fetch all brands with pagination
       const brands = await Brands.find()
         .skip(skip)
         .limit(limit)
@@ -57,7 +56,6 @@ const brandsController = {
 
       const totalBrands = await Brands.countDocuments();
 
-      // Aggregate to count the number of products for each brand
       const productCounts = await Products.aggregate([
         {
           $group: {
@@ -67,13 +65,11 @@ const brandsController = {
         },
       ]);
 
-      // Convert aggregation result to a map for easier access
       const countMap = productCounts.reduce((map, item) => {
         map[item._id] = item.count;
         return map;
       }, {});
 
-      // Add product count to each brand
       const brandsWithProductCount = brands.map((brand) => {
         return {
           ...brand.toObject(),

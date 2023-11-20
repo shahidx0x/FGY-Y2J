@@ -47,13 +47,12 @@ const CategoryController = {
       if (brandId) {
         query.brand_id = brandId;
       }
-
       if (search) {
         query.category_label = new RegExp(search, "i");
       }
+
       const totalCategory = await Category.countDocuments(query);
       let categories;
-
       if (limit === -1) {
         categories = await Category.find(query).sort({ createdAt: -1 });
       } else {
@@ -62,6 +61,27 @@ const CategoryController = {
           .limit(limit)
           .sort({ createdAt: -1 });
       }
+
+      const productCounts = await Products.aggregate([
+        {
+          $group: {
+            _id: "$category_id",
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
+      const countMap = productCounts.reduce((map, item) => {
+        map[item._id.toString()] = item.count;
+        return map;
+      }, {});
+
+      const categoryWithProductCount = categories.map((category) => {
+        return {
+          ...category.toObject(),
+          productCount: countMap[category._id.toString()] || 0,
+        };
+      });
 
       const total_page = limit === -1 ? 1 : Math.ceil(totalCategory / limit);
 
@@ -73,7 +93,7 @@ const CategoryController = {
           current_page: page,
           per_page: limit === -1 ? totalCategory : limit,
         },
-        data: categories,
+        data: categoryWithProductCount,
       });
     } catch (error) {
       res
