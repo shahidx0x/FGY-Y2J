@@ -2,66 +2,6 @@ const Products = require("./products.model");
 const mongoose = require("mongoose");
 
 const ProductsController = {
-  // getAllProducts: async (req, res) => {
-  //   try {
-  //     const page = parseInt(req.query.page, 10) || 1;
-  //     let limit = parseInt(req.query.limit, 10) || 10;
-  //     const skip = (page - 1) * limit;
-  //     const search = req.query.search || "";
-
-  //     const brandName = req.query.brand_name;
-  //     const categoryName = req.query.category_name;
-  //     const subCategoryName = req.query.sub_category_name;
-
-  //     let query = {};
-  //     if (req.query.product_id) {
-  //       query._id = req.query.product_id;
-  //     }
-  //     if (brandName) {
-  //       query.brand_name = brandName;
-  //     }
-  //     if (categoryName) {
-  //       query.category_name = categoryName;
-  //     }
-  //     if (subCategoryName) {
-  //       query.subcategory_name = subCategoryName;
-  //     }
-
-  //     if (search) {
-  //       query.name = new RegExp(search, "i");
-  //     }
-
-  //     const totalProducts = await Products.countDocuments(query);
-
-  //     let products;
-  //     if (limit === -1) {
-  //       products = await Products.find(query).sort({ createdAt: -1 });
-  //       limit = totalProducts;
-  //     } else {
-  //       products = await Products.find(query)
-  //         .skip(skip)
-  //         .limit(limit)
-  //         .sort({ createdAt: -1 });
-  //     }
-
-  //     const totalPages = Math.ceil(totalProducts / (limit === 0 ? 1 : limit));
-
-  //     return res.status(200).json({
-  //       status: 200,
-  //       meta: {
-  //         current_page: page,
-  //         per_page: limit,
-  //         total_pages: totalPages,
-  //         total_products: totalProducts,
-  //       },
-  //       data: products,
-  //     });
-  //   } catch (error) {
-  //     return res
-  //       .status(500)
-  //       .json({ status: 500, error: "Could not fetch products" });
-  //   }
-  // },
   getAllProducts: async (req, res) => {
     try {
       const page = parseInt(req.query.page, 10) || 1;
@@ -93,8 +33,8 @@ const ProductsController = {
 
       if (disable === "true") {
         query.isDisable = true;
-      } else {
-        query.isDisable = { $ne: true };
+      } else if (disable === "false") {
+        query.isDisable = false;
       }
 
       const totalProducts = await Products.countDocuments(query);
