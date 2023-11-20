@@ -35,13 +35,54 @@ const transactionController = {
       if (search) {
         query.email = search;
       }
-      const totalTransaction = await Transaction.countDocuments(query);
-      let transaction;
 
+      const totalTransaction = await Transaction.countDocuments(query);
+
+      const now = new Date();
+      const startOfDay = new Date(now.setHours(0, 0, 0, 0));
+      const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+
+      const salesAggregation = await Transaction.aggregate([
+        {
+          $match: query,
+        },
+        {
+          $group: {
+            _id: null,
+            totalSell: { $sum: "$amount" },
+            todayTotalSell: {
+              $sum: {
+                $cond: [{ $gte: ["$createdAt", startOfDay] }, "$amount", 0],
+              },
+            },
+            weeklyTotalSell: {
+              $sum: {
+                $cond: [{ $gte: ["$createdAt", startOfWeek] }, "$amount", 0],
+              },
+            },
+            monthlyTotalSell: {
+              $sum: {
+                $cond: [{ $gte: ["$createdAt", startOfMonth] }, "$amount", 0],
+              },
+            },
+            yearlyTotalSell: {
+              $sum: {
+                $cond: [{ $gte: ["$createdAt", startOfYear] }, "$amount", 0],
+              },
+            },
+          },
+        },
+      ]);
+
+      let totals = salesAggregation[0] || {};
+
+      let transactions;
       if (limit === -1) {
-        transaction = await Transaction.find(query).sort({ createdAt: -1 });
+        transactions = await Transaction.find(query).sort({ createdAt: -1 });
       } else {
-        transaction = await Transaction.find(query)
+        transactions = await Transaction.find(query)
           .skip(skip)
           .limit(limit)
           .sort({ createdAt: -1 });
@@ -56,8 +97,9 @@ const transactionController = {
           total_page: total_page,
           current_page: page,
           per_page: limit === -1 ? totalTransaction : limit,
+          totals: totals, // Added totals here
         },
-        data: transaction,
+        data: transactions,
       });
     } catch (error) {
       res
