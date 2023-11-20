@@ -39,16 +39,13 @@ const cartController = {
           ],
         });
       } else {
-        // Check if product already exists in the cart
         const itemIndex = cart.items.findIndex(
           (item) => item.product_id === product_id
         );
 
         if (itemIndex > -1) {
-          // Product exists, increase quantity
           cart.items[itemIndex].quantity += quantity;
         } else {
-          // New product, add to cart
           cart.items.push({
             product_name: name,
             product_image,
@@ -61,7 +58,6 @@ const cartController = {
         }
       }
 
-      // Save the cart and return response
       await cart.save();
       res.status(201).json(cart);
     } catch (error) {
