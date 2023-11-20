@@ -9,13 +9,24 @@ const cartController = {
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
-      const { name, price, product_image } = product;
+      const { name, price, afterDiscount, discount, product_image } = product;
       let product_name = name;
+
       let cart = await Cart.findOne({ user_email });
       if (!cart) {
         cart = new Cart({
           user_email,
-          items: [{ product_name, product_image, product_id, quantity, price }],
+          items: [
+            {
+              product_name,
+              product_image,
+              product_id,
+              quantity,
+              price,
+              afterDiscount,
+              discount,
+            },
+          ],
         });
       } else {
         const itemIndex = cart.items.findIndex(
@@ -31,6 +42,8 @@ const cartController = {
             product_id,
             quantity,
             price,
+            afterDiscount,
+            discount,
           });
         }
       }
