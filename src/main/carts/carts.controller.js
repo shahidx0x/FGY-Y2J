@@ -5,12 +5,22 @@ const cartController = {
     try {
       const { product_id, quantity } = req.body;
       const user_email = req.userEmail;
-      const product = await Products.findById(product_id);
+
+      let product = await Products.findById(product_id);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
+
+      if (product.discount > 0) {
+        product.afterDiscount =
+          product.price - (product.price * product.discount) / 100;
+      } else if (product.discount === 0 || product.discount < 0) {
+        product.afterDiscount = product.price;
+      }
+
       const { name, price, afterDiscount, discount, product_image } = product;
-      let product_name = name;
+
+      console.log(afterDiscount, discount);
 
       let cart = await Cart.findOne({ user_email });
       if (!cart) {
@@ -18,7 +28,7 @@ const cartController = {
           user_email,
           items: [
             {
-              product_name,
+              product_name: name,
               product_image,
               product_id,
               quantity,
@@ -29,15 +39,18 @@ const cartController = {
           ],
         });
       } else {
+        // Check if product already exists in the cart
         const itemIndex = cart.items.findIndex(
           (item) => item.product_id === product_id
         );
 
         if (itemIndex > -1) {
+          // Product exists, increase quantity
           cart.items[itemIndex].quantity += quantity;
         } else {
+          // New product, add to cart
           cart.items.push({
-            product_name,
+            product_name: name,
             product_image,
             product_id,
             quantity,
@@ -48,6 +61,7 @@ const cartController = {
         }
       }
 
+      // Save the cart and return response
       await cart.save();
       res.status(201).json(cart);
     } catch (error) {

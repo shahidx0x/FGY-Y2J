@@ -20,6 +20,8 @@ const cartItemSchema = new mongoose.Schema(
     price: {
       type: Number,
     },
+    afterDiscount: Number,
+    discount: Number,
   },
   {
     timestamps: true,
