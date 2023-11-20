@@ -5,6 +5,7 @@ const transactionSchema = new mongoose.Schema(
     user: {
       type: String,
     },
+    invoice_id: String,
     email: {
       type: String,
     },
