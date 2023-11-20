@@ -24,10 +24,6 @@ const transactionSchema = new mongoose.Schema(
       type: String,
     },
   },
-  { totalSell: Number },
-  { todayTodaySell: Number },
-  { weeklyTotalSell: Number },
-  { yearlyTotalSell: Number },
   { timestamps: true }
 );
 

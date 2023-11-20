@@ -97,7 +97,7 @@ const transactionController = {
           total_page: total_page,
           current_page: page,
           per_page: limit === -1 ? totalTransaction : limit,
-          totals: totals, // Added totals here
+          totals: totals,
         },
         data: transactions,
       });
