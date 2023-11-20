@@ -601,9 +601,11 @@ const invoiceController = {
                                             align="center"
                                             bgcolor=${
                                               status === "pending"
-                                                ? "#FFFF00"
+                                                ? "FFF000"
+                                                : status === "accept"
+                                                ? "FFFFFF"
                                                 : status === "cancled" &&
-                                                  "#FF0000"
+                                                  "FF0000"
                                             }
                                             style="border-radius: 6px"
                                         >
@@ -622,6 +624,8 @@ const invoiceController = {
                                             ${
                                               status === "pending"
                                                 ? "Pending"
+                                                : status === "accept"
+                                                ? "Accepted"
                                                 : status === "cancled" &&
                                                   "Cancled"
                                             }
