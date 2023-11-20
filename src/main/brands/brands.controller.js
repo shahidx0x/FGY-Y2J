@@ -64,16 +64,30 @@ const brandsController = {
           },
         },
       ]);
+      const categoryCounts = await Category.aggregate([
+        {
+          $group: {
+            _id: "$brand_id",
+            count: { $sum: 1 },
+          },
+        },
+      ]);
 
       const countMap = productCounts.reduce((map, item) => {
         map[item._id] = item.count;
         return map;
       }, {});
 
-      const brandsWithProductCount = brands.map((brand) => {
+      const countMapCat = categoryCounts.reduce((map, item) => {
+        map[item._id] = item.count;
+        return map;
+      }, {});
+
+      const finalProducts = brands.map((brand) => {
         return {
           ...brand.toObject(),
           productCount: countMap[brand._id] || 0,
+          categoryCount: countMapCat[brand._id] || 0,
         };
       });
 
@@ -87,7 +101,7 @@ const brandsController = {
           current_page: page,
           per_page: limit,
         },
-        data: brandsWithProductCount,
+        data: finalProducts,
       });
     } catch (error) {
       res.status(500).json({ message: "Error fetching brands", error });
