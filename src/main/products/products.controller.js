@@ -51,6 +51,15 @@ const ProductsController = {
           .limit(limit)
           .sort({ createdAt: -1 });
       }
+      if (products) {
+        products = products.map((product) => {
+          if (product.discount > 0) {
+            product.afterDiscount =
+              product.price - (product.price * product.discount) / 100;
+          }
+          return product;
+        });
+      }
 
       const totalPages = Math.ceil(totalProducts / (limit === 0 ? 1 : limit));
 

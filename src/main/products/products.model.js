@@ -40,6 +40,7 @@ const productSchema = new mongoose.Schema(
     min_purchease: Number,
     max_purchease: Number,
     price: Number,
+    afterDiscount: Number,
     product_information: String,
     varient: {
       type: [varientSchema],
