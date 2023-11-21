@@ -49,19 +49,19 @@ const categorySchema = new mongoose.Schema(
     brand_id: String,
     brand_slug: String,
     brand_name: String,
-
     subCategories: [subCategorySchema],
   },
   { timestamps: true }
 );
 
 categorySchema.pre("save", async function (next) {
-  if (this.isModified("category_label")) {
-    this.category_slug = slugify(this.category_label, {
+  const Category = this.model("Category");
+
+  if (this.isModified("category_label") || this.isModified("brand_slug")) {
+    this.category_slug = `${this.brand_slug}-${slugify(this.category_label, {
       lower: true,
       strict: true,
-    });
-
+    })}`;
     const existingCategory = await Category.findOne({
       category_slug: this.category_slug,
     });
@@ -73,11 +73,12 @@ categorySchema.pre("save", async function (next) {
   if (this.isModified("subCategories")) {
     for (let subCategory of this.subCategories) {
       if (subCategory.isModified("subcategory_name")) {
-        subCategory.subcategory_slug = slugify(subCategory.subcategory_name, {
+        subCategory.subcategory_slug = `${this.brand_slug}-${
+          this.category_slug
+        }-${slugify(subCategory.subcategory_name, {
           lower: true,
           strict: true,
-        });
-
+        })}`;
         const existingSubCategory = await Category.findOne({
           "subCategories.subcategory_slug": subCategory.subcategory_slug,
         });
