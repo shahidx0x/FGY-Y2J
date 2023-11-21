@@ -150,6 +150,7 @@ const brandsController = {
         return {
           id: each._id,
           name: each.brand_label,
+          slug: each.brand_slug,
         };
       });
 
