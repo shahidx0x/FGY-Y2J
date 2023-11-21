@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 
 const varientSchema = new mongoose.Schema({
   name: String,
@@ -25,6 +26,30 @@ const productSchema = new mongoose.Schema(
     isDisable: {
       type: Boolean,
       default: false,
+    },
+    product_slug: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      unique: true,
+    },
+    category_slug: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      unique: true,
+    },
+    subcategory_slug: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      unique: true,
+    },
+    brand_slug: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      unique: true,
     },
     description: String,
     brand_id: String,
@@ -68,13 +93,35 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-productSchema.pre("save", function (next) {
-  const product = this;
-  if (product.isNew) {
-    product.sku.forEach((sku) => {
-      sku.ref_id = product._id.toString();
+productSchema.pre("save", async function (next) {
+  if (
+    this.isModified("name") ||
+    this.isModified("brand_slug") ||
+    this.isModified("category_slug") ||
+    this.isModified("subcategory_slug")
+  ) {
+    this.product_slug = slugify(
+      `${this.brand_slug}-${this.category_slug}-${this.subcategory_slug}-${this.name}`,
+      {
+        lower: true,
+        strict: true,
+      }
+    );
+
+    const existingProduct = await this.constructor.findOne({
+      product_slug: this.product_slug,
+    });
+    if (existingProduct) {
+      throw new Error("Product already registered");
+    }
+  }
+
+  if (this.isNew) {
+    this.sku.forEach((sku) => {
+      sku.ref_id = this._id.toString();
     });
   }
+
   next();
 });
 module.exports = mongoose.model("Products", productSchema);

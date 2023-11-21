@@ -124,7 +124,10 @@ const ProductsController = {
         .status(201)
         .json({ message: "Product Created Successfully", product });
     } catch (error) {
-      res.status(500).json({ message: "Error creating product", error });
+      if (error.message === "Product already registered") {
+        return res.status(409).json({ message: "Product already registered" });
+      }
+      res.status(500).json({ message: "Error creating Product", error });
     }
   },
 
