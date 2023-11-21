@@ -66,7 +66,7 @@ categorySchema.pre("save", async function (next) {
       category_slug: this.category_slug,
     });
     if (existingCategory) {
-      throw new Error("Category slug already exists");
+      throw new Error("Category already registered");
     }
   }
 
@@ -83,7 +83,7 @@ categorySchema.pre("save", async function (next) {
           "subCategories.subcategory_slug": subCategory.subcategory_slug,
         });
         if (existingSubCategory) {
-          throw new Error("Subcategory slug already exists");
+          throw new Error("Subcategory already registered");
         }
       }
     }
