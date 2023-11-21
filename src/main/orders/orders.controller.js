@@ -7,6 +7,7 @@ const orders_controller = {
       let limit = parseInt(req.query.limit, 10) || 10;
       const search = req.query.search;
       const orderStatus = req.query.order_status;
+      const shouldPopulateUser = req.query.populate === "user";
 
       let query = {};
 
@@ -30,16 +31,23 @@ const orders_controller = {
         };
       }
 
+      let ordersQuery = Orders.find(query);
+
+      if (shouldPopulateUser) {
+        ordersQuery = ordersQuery.populate({
+          path: "user_id",
+          select:
+            "cartNumber email company company_slug firstName lastName phoneNumber location zipCode",
+        });
+      }
+
       if (limit === -1) {
-        const orders = await Orders.find(query)
-          .populate("user_id")
-          .sort({ createdAt: -1 });
+        const orders = await ordersQuery.sort({ createdAt: -1 });
         return res.status(200).json({ data: orders });
       }
 
       const skip = (page - 1) * limit;
-      const orders = await Orders.find(query)
-        .populate("user_id")
+      const orders = await ordersQuery
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 });
