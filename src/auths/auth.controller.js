@@ -153,17 +153,17 @@ const authController = {
       const limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
       const totalUsers = await Signup.countDocuments();
-      const filterAdmin = (req.query.admin = "admin");
-      const filterUser = (req.query.user = "user");
+      const filterAdmin = req.query.admin === "admin";
+      const filterUser = req.query.user === "user";
       let query = {};
       if (filterAdmin) {
-        query.role = filterAdmin;
+        query.role = "admin";
       }
       if (filterUser) {
-        query.role = filterUser;
+        query.role = "user";
       }
 
-      const users = await Signup.find(filterAdmin)
+      const users = await Signup.find(query)
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 });
