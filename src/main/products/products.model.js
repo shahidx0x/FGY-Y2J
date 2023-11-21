@@ -101,7 +101,7 @@ productSchema.pre("save", async function (next) {
     this.isModified("subcategory_slug")
   ) {
     this.product_slug = slugify(
-      `${this.brand_slug}-${this.category_slug}-${this.subcategory_slug}-${this.name}`,
+      `${this.brand_slug}_${this.category_slug}_${this.subcategory_slug}_${this.name}`,
       {
         lower: true,
         strict: true,

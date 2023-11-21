@@ -58,7 +58,7 @@ categorySchema.pre("save", async function (next) {
   const Category = this.model("Category");
 
   if (this.isModified("category_label") || this.isModified("brand_slug")) {
-    this.category_slug = `${this.brand_slug}-${slugify(this.category_label, {
+    this.category_slug = `${this.brand_slug}_${slugify(this.category_label, {
       lower: true,
       strict: true,
     })}`;
@@ -73,9 +73,9 @@ categorySchema.pre("save", async function (next) {
   if (this.isModified("subCategories")) {
     for (let subCategory of this.subCategories) {
       if (subCategory.isModified("subcategory_name")) {
-        subCategory.subcategory_slug = `${this.brand_slug}-${
+        subCategory.subcategory_slug = `${this.brand_slug}_${
           this.category_slug
-        }-${slugify(subCategory.subcategory_name, {
+        }_${slugify(subCategory.subcategory_name, {
           lower: true,
           strict: true,
         })}`;
