@@ -71,7 +71,7 @@ const cartController = {
       const cart = await Cart.findOne({ user_email });
 
       if (!cart) {
-        return res.status(404).json({ message: "Cart not found" });
+        return res.status(404).json({ message: "Cart is empty" });
       }
 
       cart.items = cart.items.filter((item) => item.product_id !== product_id);
@@ -89,7 +89,7 @@ const cartController = {
       const cart = await Cart.findOne({ user_email });
 
       if (!cart) {
-        return res.status(404).json({ message: "Cart not found" });
+        return res.status(404).json({ message: "Cart is empty" });
       }
 
       res.status(200).json(cart);
@@ -104,7 +104,7 @@ const cartController = {
       const cart = await Cart.findOne({ user_email });
 
       if (!cart) {
-        return res.status(404).json({ message: "Cart not found" });
+        return res.status(404).json({ message: "Cart is empty" });
       }
 
       const itemIndex = cart.items.findIndex(
@@ -130,7 +130,7 @@ const cartController = {
       let cart = await Cart.findOne({ user_email });
 
       if (!cart) {
-        return res.status(404).json({ message: "Cart not found" });
+        return res.status(404).json({ message: "Cart is empty" });
       }
 
       cart.items = [];
