@@ -130,6 +130,7 @@ const authController = {
       }
 
       const result = await userToUpdate.save();
+      console.log(result);
 
       let resultObject = result.toObject();
       delete resultObject.password;
