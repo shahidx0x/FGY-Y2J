@@ -7,10 +7,11 @@ const brandsController = {
     try {
       const brand = new Brands(req.body);
       await brand.save();
-      res
-        .status(200)
-        .json({ message: "Brand created successfully", status: 200, brand });
+      res.status(200).json({ message: "Brand created successfully", brand });
     } catch (error) {
+      if (error.code === 11000) {
+        return res.status(409).json({ message: "Brand already exists" });
+      }
       res.status(500).json({ message: "Error creating brand", error });
     }
   },

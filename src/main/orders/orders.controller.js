@@ -31,12 +31,15 @@ const orders_controller = {
       }
 
       if (limit === -1) {
-        const orders = await Orders.find(query).sort({ createdAt: -1 });
+        const orders = await Orders.find(query)
+          .populate("user_id")
+          .sort({ createdAt: -1 });
         return res.status(200).json({ data: orders });
       }
 
       const skip = (page - 1) * limit;
       const orders = await Orders.find(query)
+        .populate("user_id")
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 });

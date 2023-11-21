@@ -15,23 +15,9 @@ const authController = {
   },
   createUser: async (req, res) => {
     let accessToken, refreshToken;
+
     try {
-      const {
-        email,
-        cartNumber,
-        company,
-        location,
-        zipCode,
-        firstName,
-        lastName,
-        subscription,
-        paymentMethod,
-        profilePicture,
-        phoneNumber,
-        cardNumber,
-        password,
-        firebaseFCM,
-      } = req.body;
+      const { email, password, firebaseFCM } = req.body;
 
       const existingUser = await Signup.findOne({ email });
       if (existingUser) {
@@ -54,19 +40,7 @@ const authController = {
       const passwordHash = `${salt}:${hashBuffer.toString("hex")}`;
 
       const newUser = new Signup({
-        cartNumber,
-        profilePicture,
-        email,
-        company,
-        location,
-        zipCode,
-        firstName,
-        lastName,
-        subscription,
-        phoneNumber,
-        paymentMethod,
-        cardNumber,
-        firebaseFCM,
+        ...req.body,
         password: passwordHash,
       });
 

@@ -17,6 +17,7 @@ module.exports = mongoose.model(
         required: true,
       },
       company: String,
+      company_slug: String,
       isAccountVerified: {
         type: Boolean,
         default: false,
@@ -39,10 +40,13 @@ module.exports = mongoose.model(
       zipCode: String,
       firstName: String,
       lastName: String,
-      subscription: String,
       paymentMethod: String,
       cardNumber: String,
-      firebaseFCM: String,
+      firebaseFCM: [],
+      companyAssignedBy: {
+        type: String,
+        default: "User",
+      },
       resetPasswordToken: Number,
       resetPasswordExpires: Number,
       refreshToken: String,
