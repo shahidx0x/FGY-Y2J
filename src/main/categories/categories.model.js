@@ -79,11 +79,14 @@ categorySchema.pre("save", async function (next) {
           lower: true,
           strict: true,
         })}`;
+
         const existingSubCategory = await Category.findOne({
+          _id: { $ne: this._id },
           "subCategories.subcategory_slug": subCategory.subcategory_slug,
         });
+
         if (existingSubCategory) {
-          throw new Error("Subcategory already registered");
+          throw new Error("Subcategory already registered in this category");
         }
       }
     }
