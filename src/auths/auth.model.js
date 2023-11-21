@@ -10,11 +10,17 @@ module.exports = mongoose.model(
       },
       email: {
         type: String,
+        trim: true,
         required: true,
       },
       password: {
         type: String,
         required: true,
+      },
+      ac_status: {
+        type: Number,
+        enum: [0, 1, -1],
+        default: 0,
       },
       company: String,
       company_slug: String,
