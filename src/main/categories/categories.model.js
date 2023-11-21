@@ -20,7 +20,6 @@ const subCategorySchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
-      unique: true,
     },
     description: String,
   },
@@ -71,6 +70,7 @@ categorySchema.pre("save", async function (next) {
   }
 
   if (this.isModified("subCategories")) {
+    const slugs = new Set();
     for (let subCategory of this.subCategories) {
       if (subCategory.isModified("subcategory_name")) {
         subCategory.subcategory_slug = `${this.brand_slug}_${
@@ -80,14 +80,12 @@ categorySchema.pre("save", async function (next) {
           strict: true,
         })}`;
 
-        const existingSubCategory = await Category.findOne({
-          _id: { $ne: this._id },
-          "subCategories.subcategory_slug": subCategory.subcategory_slug,
-        });
-
-        if (existingSubCategory) {
-          throw new Error("Subcategory already registered in this category");
+        if (slugs.has(subCategory.subcategory_slug)) {
+          throw new Error(
+            "Subcategory slug must be unique within the category"
+          );
         }
+        slugs.add(subCategory.subcategory_slug);
       }
     }
   }
