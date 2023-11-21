@@ -4,30 +4,16 @@ const Products = require("../products/products.model");
 const CategoryController = {
   createCategory: async (req, res) => {
     try {
-      const {
-        category_label,
-        category_type,
-        image,
-        brand_id,
-        brand_name,
-        category_description,
-      } = req.body;
-      const newCategory = new Category({
-        category_label,
-        category_type,
-        category_description,
-        image,
-        brand_id,
-        brand_name,
-      });
+      const newCategory = new Category(req.body);
       await newCategory.save();
       res
         .status(201)
         .json({ message: "Category created successfully", data: newCategory });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Error creating category", error: error.message });
+      if (error.message === "Category already registered") {
+        return res.status(409).json({ message: "Category already registered" });
+      }
+      res.status(500).json({ message: "Error creating Category", error });
     }
   },
 
