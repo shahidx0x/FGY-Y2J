@@ -154,10 +154,15 @@ const authController = {
       const skip = (page - 1) * limit;
       const totalUsers = await Signup.countDocuments();
       const filterAdmin = req.query.admin;
+      const filterUser = req.query.user;
       let query = {};
       if (filterAdmin) {
         query.role = filterAdmin;
       }
+      if (filterUser) {
+        query.role != "admin";
+      }
+
       const users = await Signup.find(filterAdmin)
         .skip(skip)
         .limit(limit)
