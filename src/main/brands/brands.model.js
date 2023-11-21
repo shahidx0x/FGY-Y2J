@@ -23,29 +23,19 @@ const brandSchema = new mongoose.Schema({
       "https://www.ivins.com/wp-content/uploads/2020/09/placeholder-1.png",
   },
 });
-
 brandSchema.pre("save", async function (next) {
   if (this.isModified("brand_label")) {
     const baseSlug = slugify(this.brand_label, { lower: true, strict: true });
     this.brand_slug = baseSlug;
 
-    let counter = 1;
-    while (true) {
-      try {
-        const existingBrand = await Brand.findOne({
-          brand_slug: this.brand_slug,
-        });
-        if (!existingBrand) {
-          break;
-        }
-        this.brand_slug = `${baseSlug}-${counter}`;
-        counter++;
-      } catch (err) {
-        return next(err);
-      }
+    const existingBrand = await Brands.findOne({ brand_slug: this.brand_slug });
+    if (existingBrand) {
+      throw new Error("Brand already registered");
     }
   }
   next();
 });
 
-module.exports = mongoose.model("Brands", brandSchema);
+const Brands = mongoose.model("Brands", brandSchema);
+
+module.exports = Brands;

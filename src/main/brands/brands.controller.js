@@ -9,13 +9,12 @@ const brandsController = {
       await brand.save();
       res.status(200).json({ message: "Brand created successfully", brand });
     } catch (error) {
-      if (error.code === 11000) {
-        return res.status(409).json({ message: "Brand already exists" });
+      if (error.message === "Brand already registered") {
+        return res.status(409).json({ message: "Brand already registered" });
       }
       res.status(500).json({ message: "Error creating brand", error });
     }
   },
-
   // getAllBrands: async (req, res) => {
   //   try {
   //     const page = parseInt(req.query.page, 10) || 1;
