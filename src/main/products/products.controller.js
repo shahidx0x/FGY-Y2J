@@ -2,14 +2,91 @@ const Products = require("./products.model");
 const mongoose = require("mongoose");
 
 const ProductsController = {
+  // getAllProducts: async (req, res) => {
+  //   try {
+  //     const page = parseInt(req.query.page, 10) || 1;
+  //     let limit = parseInt(req.query.limit, 10) || 10;
+  //     const skip = (page - 1) * limit;
+  //     const search = req.query.search || "";
+  //     const brandName = req.query.brand_name;
+  //     const categoryName = req.query.category_name;
+  //     const subCategoryName = req.query.sub_category_name
+  //       ? req.query.sub_category_name.trim()
+  //       : null;
+  //     const disable = req.query.disable;
+
+  //     let query = {};
+  //     if (req.query.product_id) {
+  //       query._id = req.query.product_id;
+  //     }
+  //     if (brandName) {
+  //       query.brand_name = new RegExp(brandName, "i");
+  //     }
+  //     if (categoryName) {
+  //       query.category_name = new RegExp(categoryName, "i");
+  //     }
+  //     if (subCategoryName) {
+  //       query.subcategory_name = new RegExp(subCategoryName, "i");
+  //     }
+  //     if (search) {
+  //       query.name = new RegExp(search, "i");
+  //     }
+
+  //     if (disable === "true") {
+  //       query.isDisable = true;
+  //     } else if (disable === "false") {
+  //       query.isDisable = false;
+  //     }
+
+  //     const totalProducts = await Products.countDocuments(query);
+
+  //     let products;
+  //     if (limit === -1) {
+  //       products = await Products.find(query).sort({ createdAt: -1 });
+  //       limit = totalProducts;
+  //     } else {
+  //       products = await Products.find(query)
+  //         .skip(skip)
+  //         .limit(limit)
+  //         .sort({ createdAt: -1 });
+  //     }
+  //     if (products) {
+  //       products = products.map((product) => {
+  //         if (product.discount > 0) {
+  //           product.afterDiscount =
+  //             product.price - (product.price * product.discount) / 100;
+  //         } else if (product.discount === 0 || product.discount < 0) {
+  //           product.afterDiscount = product.price;
+  //         }
+  //         return product;
+  //       });
+  //     }
+
+  //     const totalPages = Math.ceil(totalProducts / (limit === 0 ? 1 : limit));
+
+  //     return res.status(200).json({
+  //       status: 200,
+  //       meta: {
+  //         current_page: page,
+  //         per_page: limit,
+  //         total_pages: totalPages,
+  //         total_products: totalProducts,
+  //       },
+  //       data: products,
+  //     });
+  //   } catch (error) {
+  //     return res
+  //       .status(500)
+  //       .json({ status: 500, error: "Could not fetch products" });
+  //   }
+  // },
   getAllProducts: async (req, res) => {
     try {
       const page = parseInt(req.query.page, 10) || 1;
       let limit = parseInt(req.query.limit, 10) || 10;
       const skip = (page - 1) * limit;
       const search = req.query.search || "";
-
-      const brandName = req.query.brand_name;
+      const brandSlug = req.query.brand_slug;
       const categoryName = req.query.category_name;
       const subCategoryName = req.query.sub_category_name
         ? req.query.sub_category_name.trim()
@@ -20,8 +97,8 @@ const ProductsController = {
       if (req.query.product_id) {
         query._id = req.query.product_id;
       }
-      if (brandName) {
-        query.brand_name = new RegExp(brandName, "i");
+      if (brandSlug) {
+        query.brand_slug = brandSlug;
       }
       if (categoryName) {
         query.category_name = new RegExp(categoryName, "i");
@@ -53,12 +130,10 @@ const ProductsController = {
       }
       if (products) {
         products = products.map((product) => {
-          if (product.discount > 0) {
-            product.afterDiscount =
-              product.price - (product.price * product.discount) / 100;
-          } else if (product.discount === 0 || product.discount < 0) {
-            product.afterDiscount = product.price;
-          }
+          product.afterDiscount =
+            product.discount > 0
+              ? product.price - (product.price * product.discount) / 100
+              : product.price;
           return product;
         });
       }
