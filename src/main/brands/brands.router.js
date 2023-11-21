@@ -11,7 +11,6 @@ brands_router.post(
 );
 brands_router.get(
   "/get/all/brands",
-  authenticate,
 
   brandsController.getAllBrands
 );
