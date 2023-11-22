@@ -83,6 +83,75 @@ const authController = {
         .json({ message: "Internal server error", status: 500 });
     }
   },
+  // updateUser: async (req, res) => {
+  //   try {
+  //     const fieldsToUpdate = [
+  //       "cartNumber",
+  //       "role",
+  //       "company",
+  //       "ac_status",
+  //       "company_slug",
+  //       "companyAssignedBy",
+  //       "location",
+  //       "zipCode",
+  //       "firstName",
+  //       "lastName",
+  //       "subscription",
+  //       "paymentMethod",
+  //       "profilePicture",
+  //       "phoneNumber",
+  //       "cardNumber",
+  //       "isAccountActive",
+  //       "firebaseFCM",
+  //     ];
+
+  //     const { email, password } = req.body;
+  //     const userToUpdate = await Signup.findOne({ email });
+  //     if (!userToUpdate) {
+  //       return res
+  //         .status(404)
+  //         .json({ message: "User not found with this email" });
+  //     }
+
+  //     fieldsToUpdate.forEach((field) => {
+  //       if (field in req.body) {
+  //         userToUpdate[field] = req.body[field];
+  //       }
+  //     });
+
+  //     if (password) {
+  //       const salt = crypto.randomBytes(16).toString("hex");
+  //       const iterations = 10000;
+  //       const hashBuffer = crypto.pbkdf2Sync(
+  //         password,
+  //         salt,
+  //         iterations,
+  //         32,
+  //         "sha512"
+  //       );
+  //       userToUpdate.password = `${salt}:${hashBuffer.toString("hex")}`;
+  //     }
+
+  //     const result = await userToUpdate.save();
+  //     console.log(result);
+
+  //     let resultObject = result.toObject();
+  //     delete resultObject.password;
+  //     delete resultObject.cardNumber;
+
+  //     res.status(200).json({
+  //       message: "User updated successfully",
+  //       status: 200,
+  //       data: resultObject,
+  //     });
+  //   } catch (error) {
+  //     console.error(error);
+  //     return res
+  //       .status(500)
+  //       .json({ message: "Internal server error", status: 500 });
+  //   }
+  // },
+
   updateUser: async (req, res) => {
     try {
       const fieldsToUpdate = [
@@ -104,9 +173,9 @@ const authController = {
         "isAccountActive",
         "firebaseFCM",
       ];
-
-      const { email, password } = req.body;
+      const { email, password, firebaseFCM } = req.body;
       const userToUpdate = await Signup.findOne({ email });
+
       if (!userToUpdate) {
         return res
           .status(404)
@@ -132,6 +201,10 @@ const authController = {
         userToUpdate.password = `${salt}:${hashBuffer.toString("hex")}`;
       }
 
+      if (firebaseFCM && firebaseFCM.length > 0) {
+        userToUpdate.firebaseFCM = firebaseFCM;
+      }
+
       const result = await userToUpdate.save();
       console.log(result);
 
@@ -139,11 +212,13 @@ const authController = {
       delete resultObject.password;
       delete resultObject.cardNumber;
 
-      res.status(200).json({
-        message: "User updated successfully",
-        status: 200,
-        data: resultObject,
-      });
+      res
+        .status(200)
+        .json({
+          message: "User updated successfully",
+          status: 200,
+          data: resultObject,
+        });
     } catch (error) {
       console.error(error);
       return res
