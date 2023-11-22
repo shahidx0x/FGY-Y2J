@@ -21,6 +21,12 @@ module.exports = {
     user: process.env.EMAIL_USER,
     password: process.env.EMAIL_PASS,
   },
+  server_email: {
+    host: process.env.SERVER_EMAIL_HOST,
+    admin: process.env.SERVER_EMAIL_ADMIN,
+    user: process.env.SERVER_EMAIL_USER,
+    password: process.env.SERVER_EMAIL_PASS,
+  },
   mongoose: {
     url: process.env.MONGO_URL,
     cluster: process.env.MONGO_CLUSTER_URL,
