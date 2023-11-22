@@ -400,12 +400,12 @@ const invoiceController = {
     const email = req.query.email;
     const status = req.query.status;
     try {
-      // Demo user data
+ 
       const user = {
         email: email,
       };
 
-      // Demo invoice data
+
 
       const transporter = nodemailer.createTransport({
         host: config.email.host,
