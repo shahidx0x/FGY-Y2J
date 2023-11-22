@@ -33,4 +33,9 @@ auth_router.post(
 );
 auth_router.post("/verify/otp", authLimiter, authController.verify_otp);
 auth_router.get("/check/session", authenticate, authController.checkSession);
+auth_router.delete(
+  "/remove/user/:id",
+  authenticate,
+  authController.remove_user
+);
 module.exports = auth_router;

@@ -212,13 +212,11 @@ const authController = {
       delete resultObject.password;
       delete resultObject.cardNumber;
 
-      res
-        .status(200)
-        .json({
-          message: "User updated successfully",
-          status: 200,
-          data: resultObject,
-        });
+      res.status(200).json({
+        message: "User updated successfully",
+        status: 200,
+        data: resultObject,
+      });
     } catch (error) {
       console.error(error);
       return res
@@ -262,6 +260,16 @@ const authController = {
       });
     } catch (error) {
       res.status(500).json({ message: "Error fetching users", error });
+    }
+  },
+  remove_user: async (req, res) => {
+    try {
+      const deletedUser = await Signup.findByIdAndDelete(req.params.id);
+      if (!deletedUser)
+        return res.status(404).json({ message: "User not found" });
+      res.status(200).json({ message: "User removed successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Error removing user !", error });
     }
   },
   getUserByEmail: async (req, res) => {
