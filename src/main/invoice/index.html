@@ -1,180 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>A simple, clean, and responsive HTML invoice template</title>
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New User Registration Notification</title>
     <style>
-      .invoice-box {
-        max-width: 800px;
-        margin: auto;
-        padding: 30px;
-        border: 1px solid #eee;
-
-        font-size: 16px;
-        line-height: 24px;
-        font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-        color: #555;
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        text-align: center;
       }
 
-      .invoice-box table {
-        width: 100%;
-        line-height: inherit;
-        text-align: left;
+      .container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
 
-      .invoice-box table td {
-        padding: 5px;
-        vertical-align: top;
-      }
-
-      .invoice-box table tr td:nth-child(2) {
-        text-align: right;
-      }
-
-      .invoice-box table tr.top table td {
-        padding-bottom: 20px;
-      }
-
-      .invoice-box table tr.top table td.title {
-        font-size: 35px;
-        line-height: 25px;
+      h1 {
         color: #333;
       }
 
-      .invoice-box table tr.information table td {
-        padding-bottom: 40px;
+      p {
+        color: #555;
       }
 
-      .invoice-box table tr.heading td {
-        background: #eee;
-        border-bottom: 1px solid #ddd;
-        font-weight: bold;
-      }
-
-      .invoice-box table tr.details td {
-        padding-bottom: 20px;
-      }
-
-      .invoice-box table tr.item td {
-        border-bottom: 1px solid #eee;
-      }
-
-      .invoice-box table tr.item.last td {
-        border-bottom: none;
-      }
-
-      .invoice-box table tr.total td:nth-child(2) {
-        border-top: 2px solid #eee;
-        font-weight: bold;
-      }
-
-      @media print {
-        .invoice-box {
-          max-width: unset;
-          box-shadow: none;
-          border: 0px;
-        }
-      }
-
-      @media only screen and (max-width: 600px) {
-        .invoice-box table tr.top table td {
-          width: 100%;
-          display: block;
-          text-align: center;
-        }
-
-        .invoice-box table tr.information table td {
-          width: 100%;
-          display: block;
-          text-align: center;
-        }
-      }
-
-      /** RTL **/
-      .invoice-box.rtl {
-        direction: rtl;
-        font-family: Tahoma, "Helvetica Neue", "Helvetica", Helvetica, Arial,
-          sans-serif;
-      }
-
-      .invoice-box.rtl table {
-        text-align: right;
-      }
-
-      .invoice-box.rtl table tr td:nth-child(2) {
-        text-align: left;
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
       }
     </style>
   </head>
-
   <body>
-    <div class="invoice-box">
-      <table cellpadding="0" cellspacing="0">
-        <tr class="top">
-          <td colspan="2">
-            <table>
-              <tr>
-                <td class="title">FGY-Y2J</td>
+    <div class="container">
+      <h1>New User Registration Notification</h1>
+      <p>
+        Hello Admin, A new user has registered on our platform. Here are the
+        details:
+      </p>
 
-                <td class="">
-                  <span style="font-size: 10px">
-                    Invoice #:<%= invoiceNumber %></span
-                  ><br />
+      <ul style="list-style: none; padding: 0">
+        <li><strong>Name:</strong> [User Name]</li>
+        <li><strong>Email:</strong> [User Email]</li>
+      </ul>
 
-                  <span style="font-size: 10px">
-                    Created:<%= createdDate %></span
-                  ><br />
+      <p>Click the button below to review the registration:</p>
 
-                  <span style="font-size: 10px">
-                    Pickup Date:<%= dueDate %></span
-                  >
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+      <a href="[AdminLink]" class="button">Review Registration</a>
 
-        <tr class="information">
-          <td colspan="2">
-            <table>
-              <tr>
-                <td>
-                  <span style="font-size: 10px">
-                    Name : <%= clientName %><br />
-                    Address : <%= clientAddress %><br />
-                    Email: <%= clientEmail %></span
-                  >
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <tr class="heading">
-          <td>Item</td>
-          <td>Price</td>
-        </tr>
-
-        <% items.forEach(function(item, index) { %>
-        <tr class="item <%= index === items.length - 1 ? 'last' : '' %>">
-          <td class="item-name">
-            <span style="font-size: 10px"
-              ><%= item.name %> x<%= item.quantity %></span
-            >
-          </td>
-          <td class="item-price">
-            <span style="font-size: 10px"> $<%= item.price.toFixed(2) %></span>
-          </td>
-        </tr>
-        <% }); %>
-
-        <tr class="total">
-          <td></td>
-
-          <td>Total: $<%= total %></td>
-        </tr>
-      </table>
+      <p>Internal Mail From FGY-Y2J</p>
     </div>
   </body>
 </html>

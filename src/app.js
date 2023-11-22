@@ -19,6 +19,7 @@ const orders_router = require("./main/orders/orders.router");
 const invoice_router = require("./main/invoice/invoive.router");
 const transaction_router = require("./main/transaction/transaction.router");
 const notification_router = require("./main/notification/notification.router");
+const send_email_router = require("./main/sendEmail/sendemail.router");
 const app = express();
 
 app.use(cors());
@@ -46,4 +47,5 @@ app.use(orders_router);
 app.use(invoice_router);
 app.use(transaction_router);
 app.use(notification_router);
+app.use(send_email_router);
 module.exports = app;
