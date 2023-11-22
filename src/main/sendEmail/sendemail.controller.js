@@ -1,9 +1,5 @@
 const config = require("../../../configs/config");
-const ejs = require("ejs");
-const path = require("path");
 const nodemailer = require("nodemailer");
-const fs = require("fs");
-const htmlPdf = require("html-pdf");
 
 const send_email_controller = {
   new_user_registration_mail: async (req, res) => {
@@ -110,6 +106,183 @@ const send_email_controller = {
       });
     } catch (err) {
       console.error(err);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+  user_accept_reject_email: async (req, res) => {
+    const status = req.params.status;
+    const email = req.params.email;
+
+    try {
+      const user = {
+        email: email,
+      };
+
+      const transporter = nodemailer.createTransport({
+        host: config.email.host,
+        port: 465,
+        secure: true,
+        auth: {
+          user: config.email.user,
+          pass: config.email.password,
+        },
+      });
+
+      let subject, message;
+
+      if (status === "accept") {
+        subject = "Account Accepted";
+      } else if (status === "reject") {
+        subject = "Account Rejected";
+      } else {
+        return res.status(400).json({ message: "Invalid status parameter" });
+      }
+
+      const mailOptions = {
+        to: user.email,
+        from: config.email.user,
+        subject: subject,
+        html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Email Notification</title>
+          <style>
+            body {
+              font-family: 'Arial', sans-serif;
+              background-color: #f4f4f4;
+              margin: 0;
+              padding: 0;
+              text-align: center;
+            }
+        
+            .container {
+              max-width: 600px;
+              margin: 30px auto;
+              background-color: #ffffff;
+              padding: 20px;
+              border-radius: 10px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        
+            h1 {
+              color: #333;
+            }
+        
+            p {
+              color: #555;
+            }
+        
+            .button {
+              display: inline-block;
+              padding: 10px 20px;
+              background-color: #007bff;
+              color: #ffffff;
+              text-decoration: none;
+              border-radius: 5px;
+            }
+        
+            .accept {
+              background-color: #28a745;
+            }
+        
+            .reject {
+              background-color: #dc3545;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>Email Notification</h1>
+            <p>Hello User,</p>
+        
+            <p>
+              Your account status has been updated. Here are the details:
+            </p>
+        
+            <div class="message">
+              <p class="status-message">Status: 
+                <span class="status ${
+                  status === "accept" ? "accept" : "reject"
+                }">${status}</span>
+              </p>
+              <p class="details">
+                ${
+                  status === "accept"
+                    ? "Congratulations! Your account has been accepted. You can now log in."
+                    : "We regret to inform you that your account has been rejected. Please contact support for further assistance."
+                }
+              </p>
+            </div>
+        
+            <p>If you have any questions or concerns, please contact our support team.</p>
+        
+            <p>Best regards,<br> The Platform Team</p>
+          </div>
+        </body>
+        </html>
+        
+        `,
+      };
+
+      transporter.sendMail(mailOptions, (mailErr) => {
+        if (mailErr) {
+          console.error(mailErr);
+          return res
+            .status(500)
+            .json({ message: "Error sending status email" });
+        }
+        return res
+          .status(200)
+          .json({ message: "Status email sent successfully" });
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+  send_admin_information: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      const transporter = nodemailer.createTransport({
+        host: config.email.host,
+        port: 465,
+        secure: true,
+        auth: {
+          user: config.email.user,
+          pass: config.email.password,
+        },
+      });
+
+      const mailOptions = {
+        to: email,
+        from: config.email.user,
+        subject: "Admin Account Created",
+        html: `
+          <p>Your admin account has been created successfully. Here are your login credentials:</p>
+          <ul>
+            <li><strong>Email:</strong> ${email}</li>
+            <li><strong>Password:</strong> ${password}</li>
+          </ul>
+          <p>You can now use these credentials to log in to your admin account.</p>
+          <p>Best regards,<br>The Admin Team</p>
+        `,
+      };
+
+      transporter.sendMail(mailOptions, (mailErr) => {
+        if (mailErr) {
+          console.error(mailErr);
+          return res.status(500).json({ message: "Error sending email" });
+        }
+        return res
+          .status(200)
+          .json({ message: "Email sent with admin credentials." });
+      });
+    } catch (error) {
+      console.error(error);
       res.status(500).json({ message: "Internal Server Error" });
     }
   },
