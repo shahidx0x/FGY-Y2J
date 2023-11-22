@@ -12,5 +12,9 @@ send_email_router.post(
   "/notify/new/admin",
   sendEmailController.send_admin_information
 );
+send_email_router.post(
+  "/notify/user/pending/:email/:name",
+  sendEmailController.send_user_pending_email
+);
 
 module.exports = send_email_router;

@@ -286,5 +286,95 @@ const send_email_controller = {
       res.status(500).json({ message: "Internal Server Error" });
     }
   },
+  send_user_pending_email: async (req, res) => {
+    try {
+      const email = req.params.email;
+      const name = req.params.name;
+
+      const transporter = nodemailer.createTransport({
+        host: config.email.host,
+        port: 465,
+        secure: true,
+        auth: {
+          user: config.email.user,
+          pass: config.email.password,
+        },
+      });
+
+      const mailOptions = {
+        to: email,
+        from: config.email.user,
+        subject: "Registration Successful",
+        html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Registration Successful</title>
+          <style>
+            body {
+              font-family: 'Arial', sans-serif;
+              background-color: #f4f4f4;
+              margin: 0;
+              padding: 0;
+              text-align: center;
+            }
+        
+            .container {
+              max-width: 600px;
+              margin: 30px auto;
+              background-color: #ffffff;
+              padding: 20px;
+              border-radius: 10px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        
+            h1 {
+              color: #333;
+            }
+        
+            p {
+              color: #555;
+            }
+        
+            .signature {
+              margin-top: 20px;
+              color: #888;
+            }
+          </style>
+        </head>
+        
+        <body>
+          <div class="container">
+            <h1>Registration Successful</h1>
+            <p>
+              Hello ${name}, your registration on our platform was successful.
+              Please wait for admin confirmation. You will receive another email
+              once your account is confirmed.
+            </p>
+        
+            <p class="signature">Best regards,<br>FGY-Y2J Team</p>
+          </div>
+        </body>
+        
+        </html>
+        
+        `,
+      };
+
+      transporter.sendMail(mailOptions, (mailErr) => {
+        if (mailErr) {
+          console.error(mailErr);
+          return res.status(500).json({ message: "Error sending email" });
+        }
+        return res.status(200).json({ message: "Email sent to user." });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
 };
 module.exports = send_email_controller;

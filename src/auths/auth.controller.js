@@ -8,6 +8,7 @@ const ejs = require("ejs");
 const path = require("path");
 const fs = require("fs");
 const { Encryption, Decryption } = require("../../utils/Utils");
+const axios = require("axios");
 
 const authController = {
   checkSession: async (req, res) => {
@@ -17,7 +18,17 @@ const authController = {
     let accessToken, refreshToken;
 
     try {
-      const { email, password, firebaseFCM } = req.body;
+      const {
+        email,
+        password,
+        firebaseFCM,
+        firstName,
+        lastName,
+        company,
+        phoneNumber,
+        location,
+      } = req.body;
+      const user_name = firstName + " " + lastName;
 
       const existingUser = await Signup.findOne({ email });
       if (existingUser) {
@@ -54,6 +65,16 @@ const authController = {
             expiresIn: config.jwt.accessExpire,
           }
         );
+        axios.post(config.domain + "/notify/email/admin", {
+          name: user_name,
+          user_email: email,
+          address: location,
+          contact: phoneNumber,
+          company: company,
+        });
+        axios.post(
+          config.domain + `/notify/user/pending/${email}/${user_name}`
+        );
 
         // refreshToken = jwt.sign(
         //   { email: registered.email, id: registered._id },
@@ -80,7 +101,7 @@ const authController = {
       console.error(error);
       return res
         .status(500)
-        .json({ message: "Internal server error", status: 500 });
+        .json({ message: "Internal server error", status: 500, error });
     }
   },
   // updateUser: async (req, res) => {
