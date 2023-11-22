@@ -89,10 +89,7 @@ const send_email_controller = {
                
               </ul>
         
-              <p>Click the button below to review the registration:</p>
-        
-              <a href="[AdminLink]" class="button">Review Registration</a>
-        
+              <p>Please review the registration from dashbord</p>
               <p>Internal Mail From FGY-Y2J</p>
             </div>
           </body>
