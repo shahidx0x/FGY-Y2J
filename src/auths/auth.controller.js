@@ -69,7 +69,7 @@ const authController = {
           name: user_name,
           user_email: email,
           address: location,
-          contact: phoneNumber,
+          contact: phoneNumber || "Not Provided",
           company: company,
         });
         axios.post(
