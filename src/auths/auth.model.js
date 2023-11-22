@@ -58,7 +58,7 @@ module.exports = mongoose.model(
       refreshToken: String,
       role: {
         type: String,
-        enum: ["user", "admin", "super-admin"],
+        enum: ["user", "admin", "super-admin", "removed"],
         default: "user",
       },
     },
