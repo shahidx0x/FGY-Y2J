@@ -16,7 +16,10 @@ const notificationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  user_email: String,
+  user_email: {
+    type: String,
+    default: "not-required@app.com",
+  },
 
   category: {
     type: String,
