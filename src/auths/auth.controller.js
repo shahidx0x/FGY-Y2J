@@ -65,31 +65,30 @@ const authController = {
             expiresIn: config.jwt.accessExpire,
           }
         );
-        axios.post(config.domain + "/notify/email/admin", {
-          name: user_name,
-          user_email: email,
-          address: location,
-          contact: phoneNumber || "Not Provided",
-          company: company,
-        });
-        axios.post(
-          config.domain + `/notify/user/pending/${email}/${user_name}`
-        );
 
-        // refreshToken = jwt.sign(
-        //   { email: registered.email, id: registered._id },
-        //   config.refressToken.secret,
-        //   { expiresIn: config.refressToken.accessExpire }
-        // );
+        try {
+          await axios.post(config.domain + "/notify/email/admin", {
+            name: user_name,
+            user_email: email,
+            address: location,
+            contact: phoneNumber,
+            company: company,
+          });
 
-        // result.refreshToken = refreshToken;
-        // await result.save();
+          await axios.post(
+            config.domain + `/notify/user/pending/${email}/${user_name}`
+          );
+        } catch (axiosError) {
+          console.error("Axios error:", axiosError);
+
+          return res
+            .status(500)
+            .json({ message: "Error sending notifications" });
+        }
       }
-
       let resultObject = result.toObject();
       delete resultObject.password;
       delete resultObject.cardNumber;
-      // delete resultObject.refreshToken;
 
       res.status(200).json({
         message: "Signup successful",
