@@ -16,5 +16,9 @@ send_email_router.post(
   "/notify/user/pending/:email/:name",
   sendEmailController.send_user_pending_email
 );
+send_email_router.post(
+  "/notify/order/pending/:email/:name",
+  sendEmailController.send_order_pending_email
+);
 
 module.exports = send_email_router;

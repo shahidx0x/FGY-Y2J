@@ -392,5 +392,88 @@ const send_email_controller = {
       res.status(500).json({ message: "Internal Server Error" });
     }
   },
+  send_order_pending_email: async (req, res) => {
+    try {
+      const email = req.params.email;
+      const name = req.params.name;
+
+      const transporter = nodemailer.createTransport({
+        host: config.email.host,
+        port: 465,
+        secure: true,
+        auth: {
+          user: config.email.user,
+          pass: config.email.password,
+        },
+      });
+
+      const mailOptions = {
+        to: email,
+        from: config.email.user,
+        subject: "Thank You for Your Order",
+        html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Thank You for Your Order</title>
+          <style>
+            body {
+              font-family: 'Arial', sans-serif;
+              background-color: #f4f4f4;
+              margin: 0;
+              padding: 0;
+              text-align: center;
+            }
+        
+            .container {
+              max-width: 600px;
+              margin: 30px auto;
+              background-color: #ffffff;
+              padding: 20px;
+              border-radius: 10px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        
+            h1 {
+              color: #333;
+            }
+        
+            p {
+              color: #555;
+            }
+          </style>
+        </head>
+        
+        <body>
+          <div class="container">
+            <h1>Thank You for Your Order</h1>
+            <p>We have received your order and are processing it. You will be informed soon about the status of your order.</p>
+        
+            <p>If you have any questions or concerns, please feel free to contact our customer support.</p>
+        
+            <p>Thank you for choosing our services!</p>
+          </div>
+        </body>
+        
+        </html>
+        
+        `,
+      };
+
+      transporter.sendMail(mailOptions, (mailErr) => {
+        if (mailErr) {
+          console.error(mailErr);
+          return res.status(500).json({ message: "Error sending email" });
+        }
+        return res.status(200).json({ message: "Email sent to user." });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
 };
 module.exports = send_email_controller;
