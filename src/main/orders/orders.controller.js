@@ -88,7 +88,12 @@ const orders_controller = {
           userId: user_id,
           link: "/dashbord/manage/orders",
         });
-        await axios.post(config.domain + `notify/order/pending/${user_email}/${user_name}`)
+        await axios.post(
+          config.domain + `notify/order/pending/${user_email}/${user_name}`
+        );
+        console.log(
+          config.domain + `notify/order/pending/${user_email}/${user_name}`
+        );
       } catch (AxiosError) {
         console.log(AxiosError);
       }
