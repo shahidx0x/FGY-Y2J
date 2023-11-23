@@ -75,9 +75,23 @@ const orders_controller = {
   create_new_order: async function (req, res) {
     try {
       let user_id = req.userId;
+      const { user_name } = req.body;
       const new_order = new Orders(req.body);
       new_order.user_id = user_id;
       const order = await new_order.save();
+      try {
+        await axios.post(config.domain + `/notifications`, {
+          message: `New Order Pending from ${user_name}`,
+          user_email: email,
+          userId: user_id,
+          link: "/dashbord/manage/orders",
+        });
+      } catch (error) {
+        res.status(500).json({
+          message: "Failed to update notification",
+          error: error.message,
+        });
+      }
       res.status(200).json({
         message: "Order successfully placed!",
         order,
