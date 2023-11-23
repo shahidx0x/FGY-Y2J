@@ -25,7 +25,7 @@ const notificationController = {
       const totalNotifications = await Notification.countDocuments(query);
       let notifications;
       if (limit === -1) {
-        notifications = await Notification.find(query).sort({ createdAt: -1 });
+        notifications = await Notification.find().sort({ createdAt: -1 });
         limit = totalNotifications;
       } else {
         notifications = await Notification.find(query)
