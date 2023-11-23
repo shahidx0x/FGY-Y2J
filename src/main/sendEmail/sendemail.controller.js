@@ -145,6 +145,7 @@ const send_email_controller = {
         html: `
         <!DOCTYPE html>
         <html lang="en">
+        
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -184,6 +185,18 @@ const send_email_controller = {
               border-radius: 5px;
             }
         
+            .accept,
+            .reject {
+              padding: 10px;
+              color: #ffffff;
+              font-weight: bold;
+              border-radius: 5px;
+              display: inline-block;
+              width: 100px; /* Adjust the width as needed */
+              text-align: center;
+              margin: 10px;
+            }
+        
             .accept {
               background-color: #28a745;
             }
@@ -193,6 +206,7 @@ const send_email_controller = {
             }
           </style>
         </head>
+        
         <body>
           <div class="container">
             <h1>Email Notification</h1>
@@ -203,7 +217,7 @@ const send_email_controller = {
             </p>
         
             <div class="message">
-              <p class="status-message">Status: 
+              <p class="status-message">Status:
                 <span class="status ${
                   status === "accept" ? "accept" : "reject"
                 }">${status}</span>
@@ -222,7 +236,9 @@ const send_email_controller = {
             <p>Best regards,<br> The Platform Team</p>
           </div>
         </body>
+        
         </html>
+        
         
         `,
       };
