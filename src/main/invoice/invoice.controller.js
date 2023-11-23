@@ -419,106 +419,107 @@ const invoiceController = {
         from: config.email.admin,
         subject: `Order Status Mail`,
         html: `
+      
         <!DOCTYPE html>
-        <html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Status Update</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
 
-        <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <title>Order Status</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style type="text/css">
-            body {
-            font-family: 'Arial', sans-serif;
-            background-color: #e9ecef;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-            .container {
-            max-width: 600px;
-            margin: 30px auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
+      h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+      }
 
-            h1 {
-            margin: 0;
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            line-height: 48px;
-            color: #333;
-            }
+      p {
+        font-size: 16px;
+        color: #555;
+        line-height: 1.5;
+      }
 
-            p {
-            margin: 0;
-            font-size: 16px;
-            line-height: 24px;
-            color: #555;
-            }
+      .status-badge {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
 
-            .status-badge {
-            display: inline-block;
-            padding: 16px 36px;
-            font-size: 16px;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 6px;
-            }
+      .status-accept {
+        background-color: #28a745;
+      }
 
-            .pending {
-            background-color: #FFF000;
-            }
+      .status-reject {
+        background-color: #dc3545;
+      }
 
-            .canceled {
-            background-color: #FF0000;
-            }
+      .signature {
+        margin-top: 30px;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+        font-size: 14px;
+        color: #777;
+      }
 
-            .signature {
-            padding: 24px;
-            font-size: 16px;
-            line-height: 24px;
-            border-bottom: 3px solid #d4dadf;
-            }
+      .unsubscribe {
+        color: #3498db;
+        text-decoration: none;
+      }
+    </style>
+  </head>
 
-            .footer-text {
-            padding: 12px 24px;
-            font-size: 14px;
-            line-height: 20px;
-            color: #666;
-            }
+  <body>
+    <div class="container">
+      <h1>Order Status Update</h1>
+      <p>Thank you for your order. Your order status has been updated:</p>
 
-            .unsubscribe-link {
-            color: #1a82e2;
-            text-decoration: none;
-            }
-        </style>
-        </head>
+      <div
+        class="status-badge"
+        style="background-color: ${
+          status === "pending"
+            ? "#28a745"
+            : status === "cancled"
+            ? "#dc3545"
+            : ""
+        }"
+      >
+        ${
+          status === "accept"
+            ? "Accepted"
+            : status === "reject"
+            ? "Rejected"
+            : ""
+        }
+      </div>
 
-        <body>
-        <div class="container">
-            <h1>Order Information</h1>
-            <p>Thank you for your order. Your order status has been updated:</p>
+      <div class="signature">
+        <p>Best regards,<br />FGY-Y2J</p>
+      </div>
+    </div>
+  </body>
+</html>
 
-            <div class="status-badge ${
-              status === "pending" ? "pending" : "canceled"
-            }">${status === "pending" ? "Pending" : "Canceled"}</div>
-
-            <div class="signature">
-            <p>Cheers,<br />FGI-Y2J</p>
-            </div>
-
-            <div class="footer-text">
-            <p>To stop receiving these emails, you can <a href="#" class="unsubscribe-link">unsubscribe</a> at any time.</p>
-            </div>
-        </div>
-        </body>
-
-        </html>
 
                 `,
       };
