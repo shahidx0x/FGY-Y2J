@@ -45,106 +45,87 @@ const invoiceController = {
       <!DOCTYPE html>
       <html>
       <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Invoice</title>
-      <style>
-        body {
-          font-family: "Arial", sans-serif;
-          background-color: #f7f7f7;
-          margin: 0;
-          padding: 0;
-          text-align: center;
-        }
-  
-        .container {
-          max-width: 600px;
-          margin: 20px auto;
-          background-color: #ffffff;
-          padding: 20px;
-          border-radius: 10px;
-        }
-  
-        h1 {
-          margin: 0;
-          font-size: 28px;
-          font-weight: bold;
-          color: #333;
-        }
-  
-        p {
-          font-size: 16px;
-          color: #555;
-          line-height: 1.5;
-          margin: 10px 0;
-        }
-  
-        table {
-          width: 100%;
-          margin-top: 20px;
-          border-collapse: collapse;
-        }
-  
-        th,
-        td {
-          border: 1px solid #ddd;
-          padding: 10px;
-          text-align: left;
-        }
-  
-        th {
-          background-color: #f2f2f2;
-        }
-  
-        .signature {
-          margin-top: 30px;
-          border-top: 1px solid #ddd;
-          padding-top: 20px;
-          font-size: 14px;
-          color: #777;
-        }
-        .company {
-          display: flex;
-          font-size: 1rem;
-        }
-        .subcompany {
-          font-weight: 100;
-          margin-left: 4px;
-        }
-      </style>
-    </head>
+          <style>
+              body {
+                  font-family: Arial, sans-serif;
+                  margin: 0;
+                  padding: 0;
+                  font-size: 10px;
+              }
+              .container {
+                  width: 100%;
+                  margin: 0 auto;
+                  padding: 20px;
+                  box-sizing: border-box;
+              }
+              .header {
+                  text-align: center;
+                  margin-bottom: 20px;
+              }
+              table {
+                  width: 100%;
+                  border-collapse: collapse;
+              }
+              th, td {
+                  border: 1px solid black;
+                  padding: 5px;
+              }
+              th {
+                  background-color: #f2f2f2;
+              }
+              .total {
+                  text-align: right;
+                  margin-top: 20px;
+              }
+          </style>
+      </head>
       <body>
-        <div class="container">
-          <h1>Invoice</h1>
-          <p>${invoiceData.companyName}</p>
-          <p>${invoiceData.companyAddress}</p>
-          <!-- ... other invoice details ... -->
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>`;
+          <div class="container">
+              <div class="header">
+                  <h1>Invoice</h1>
+                  <p><strong>${invoiceData.companyName}</strong></p>
+                  <p>${invoiceData.companyAddress}</p>
+              </div>
+      
+              <p>Invoice Number: ${invoiceData.invoiceNumber}</p>
+              <p>Date: ${invoiceData.createdDate}</p>
+              <p>Due Date: ${invoiceData.dueDate}</p>
+              <p>Client Name: ${invoiceData.clientName}</p>
+              <p>Client Email: ${invoiceData.clientEmail}</p>
+              <p>Client Address: ${invoiceData.clientAddress}</p>
+      
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Item</th>
+                          <th>Quantity</th>
+                          <th>Price</th>
+                      </tr>
+                  </thead>
+                  <tbody>`;
 
       invoiceData.items.forEach((item) => {
         htmlInvoice += `
-                <tr>
-                  <td>${item.name}</td>
-                  <td>${item.quantity}</td>
-                  <td>$${item.price.toFixed(2)}</td>
-                </tr>`;
+                      <tr>
+                          <td>${item.name}</td>
+                          <td>${item.quantity}</td>
+                          <td>$${item.price.toFixed(2)}</td>
+                      </tr>`;
       });
 
       htmlInvoice += `
-            </tbody>
-          </table>
-          <p>Total: $${invoiceData.total.toFixed(2)}</p>
-        </div>
+                  </tbody>
+              </table>
+      
+              <div class="total">
+                  <p><strong>Total:</strong> $${invoiceData.total.toFixed(
+                    2
+                  )}</p>
+              </div>
+          </div>
       </body>
       </html>`;
+
       const transporter = nodemailer.createTransport({
         host: config.email.host,
         port: 465,
@@ -157,16 +138,27 @@ const invoiceController = {
 
       const pdfPath = "./invoice.pdf";
       console.log(pdfPath);
-      htmlPdf.create(htmlInvoice).toFile(pdfPath, (pdfErr, pdfRes) => {
-        if (pdfErr) {
-          console.error(pdfErr);
-          return res.status(500).json({ msg: "Error creating PDF" });
-        } else {
-          const mailOptions = {
-            to: user.email,
-            from: config.email.admin,
-            subject: `Invoice Mail From FGY-Y2J`,
-            html: `
+      const pdfOptions = {
+        format: "Letter",
+        border: {
+          top: "0.5in",
+          right: "0.5in",
+          bottom: "0.5in",
+          left: "0.5in",
+        },
+      };
+      htmlPdf
+        .create(htmlInvoice, pdfOptions)
+        .toFile(pdfPath, (pdfErr, pdfRes) => {
+          if (pdfErr) {
+            console.error(pdfErr);
+            return res.status(500).json({ msg: "Error creating PDF" });
+          } else {
+            const mailOptions = {
+              to: user.email,
+              from: config.email.admin,
+              subject: `Invoice Mail From FGY-Y2J`,
+              html: `
                     <!DOCTYPE html>
                     <html>
                     <head>
@@ -464,26 +456,26 @@ const invoiceController = {
                     </html>
 
                     `,
-            attachments: [
-              {
-                filename: "invoice.pdf",
-                path: pdfPath,
-              },
-            ],
-          };
-          transporter.sendMail(mailOptions, (mailErr) => {
-            if (mailErr) {
-              console.error(mailErr);
+              attachments: [
+                {
+                  filename: "invoice.pdf",
+                  path: pdfPath,
+                },
+              ],
+            };
+            transporter.sendMail(mailOptions, (mailErr) => {
+              if (mailErr) {
+                console.error(mailErr);
+                return res
+                  .status(500)
+                  .json({ message: "Error sending invoice email" });
+              }
               return res
-                .status(500)
-                .json({ message: "Error sending invoice email" });
-            }
-            return res
-              .status(200)
-              .json({ message: "Invoice email sent successfully" });
-          });
-        }
-      });
+                .status(200)
+                .json({ message: "Invoice email sent successfully" });
+            });
+          }
+        });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Internal Server Error" });
