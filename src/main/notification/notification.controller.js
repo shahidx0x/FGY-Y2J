@@ -25,13 +25,13 @@ const notificationController = {
       const totalNotifications = await Notification.countDocuments(query);
       let notifications;
       if (limit === -1) {
-        notifications = await Notification.find(query).sort({ createdAt: -1 });
+        notifications = await Notification.find(query).sort({ date: -1 });
         limit = totalNotifications;
       } else {
         notifications = await Notification.find(query)
           .skip(skip)
           .limit(limit)
-          .sort({ createdAt: -1 });
+          .sort({ date: -1 });
       }
 
       const totalPages = Math.ceil(totalNotifications / limit);
