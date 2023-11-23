@@ -89,10 +89,7 @@ const orders_controller = {
           link: "/dashbord/manage/orders",
         });
       } catch (AxiosError) {
-        res.status(500).json({
-          message: "Failed to update notification",
-          error: AxiosError.message,
-        });
+        console.log(AxiosError);
       }
       res.status(200).json({
         message: "Order successfully placed!",
