@@ -78,6 +78,10 @@ const authController = {
           await axios.post(
             config.domain + `/notify/user/pending/${email}/${user_name}`
           );
+          await axios.post(config.domain + `/notifications`, {
+            message: `${user_name} user registerd !`,
+            user_email: email,
+          });
         } catch (axiosError) {
           console.error("Axios error:", axiosError);
 

@@ -10,7 +10,6 @@ notification_router.get(
 );
 notification_router.post(
   "/notifications",
-  authenticate,
   notification_controller.createNotification
 );
 notification_router.patch(
