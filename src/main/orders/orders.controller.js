@@ -1,4 +1,6 @@
+const { default: axios } = require("axios");
 const Orders = require("./orders.model");
+const config = require("../../../configs/config");
 
 const orders_controller = {
   get_all_orders: async function (req, res) {
@@ -86,10 +88,10 @@ const orders_controller = {
           userId: user_id,
           link: "/dashbord/manage/orders",
         });
-      } catch (error) {
+      } catch (AxiosError) {
         res.status(500).json({
           message: "Failed to update notification",
-          error: error.message,
+          error: AxiosError.message,
         });
       }
       res.status(200).json({
