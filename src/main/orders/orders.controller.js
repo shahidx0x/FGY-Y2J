@@ -89,11 +89,9 @@ const orders_controller = {
           link: "/dashbord/manage/orders",
         });
         await axios.post(
-          config.domain + `notify/order/pending/${user_email}/${user_name}`
+          config.domain + `/notify/order/pending/${user_email}/${user_name}`
         );
-        console.log(
-          config.domain + `notify/order/pending/${user_email}/${user_name}`
-        );
+     
       } catch (AxiosError) {
         console.log(AxiosError);
       }
