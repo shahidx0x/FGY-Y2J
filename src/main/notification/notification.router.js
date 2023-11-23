@@ -5,7 +5,6 @@ const notification_router = express.Router();
 
 notification_router.get(
   "/notifications",
-  authenticate,
   notification_controller.getAllNotifications
 );
 notification_router.post(
@@ -14,7 +13,6 @@ notification_router.post(
 );
 notification_router.patch(
   "/notifications",
-  authenticate,
   notification_controller.updateNotificationById
 );
 module.exports = notification_router;
