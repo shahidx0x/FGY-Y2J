@@ -400,12 +400,9 @@ const invoiceController = {
     const email = req.query.email;
     const status = req.query.status;
     try {
- 
       const user = {
         email: email,
       };
-
-
 
       const transporter = nodemailer.createTransport({
         host: config.email.host,
@@ -420,313 +417,108 @@ const invoiceController = {
       const mailOptions = {
         to: user.email,
         from: config.email.admin,
-        subject: `Order Status Mail From FGY-Y2J`,
+        subject: `Order Status Mail`,
         html: `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="utf-8" />
-                    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-                    <title>Password Reset</title>
-                    <meta name="viewport" content="width=device-width, initial-scale=1" />
-                    <style type="text/css">
-                    /**
-                 * Google webfonts. Recommended to include the .woff version for cross-client compatibility.
-                 */
-                    @media screen {
-                        @font-face {
-                        font-family: "Source Sans Pro";
-                        font-style: normal;
-                        font-weight: 400;
-                        src: local("Source Sans Pro Regular"), local("SourceSansPro-Regular"),
-                            url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff)
-                            format("woff");
-                        }
+        <!DOCTYPE html>
+        <html>
 
-                        @font-face {
-                        font-family: "Source Sans Pro";
-                        font-style: normal;
-                        font-weight: 700;
-                        src: local("Source Sans Pro Bold"), local("SourceSansPro-Bold"),
-                            url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff)
-                            format("woff");
-                        }
-                    }
+        <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Order Status</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style type="text/css">
+            body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            }
 
-                    body,
-                    table,
-                    td,
-                    a {
-                        -ms-text-size-adjust: 100%;
-                        /* 1 */
-                        -webkit-text-size-adjust: 100%;
-                        /* 2 */
-                    }
+            .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
 
-                    /**
-                 * Remove extra space added to tables and cells in Outlook.
-                 */
-                    table,
-                    td {
-                        mso-table-rspace: 0pt;
-                        mso-table-lspace: 0pt;
-                    }
+            h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 48px;
+            color: #333;
+            }
 
-                    /**
-                 * Better fluid images in Internet Explorer.
-                 */
-                    img {
-                        -ms-interpolation-mode: bicubic;
-                    }
+            p {
+            margin: 0;
+            font-size: 16px;
+            line-height: 24px;
+            color: #555;
+            }
 
-                    div[style*="margin: 16px 0;"] {
-                        margin: 0 !important;
-                    }
+            .status-badge {
+            display: inline-block;
+            padding: 16px 36px;
+            font-size: 16px;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            }
 
-                    body {
-                        width: 100% !important;
-                        height: 100% !important;
-                        padding: 0 !important;
-                        margin: 0 !important;
-                    }
+            .pending {
+            background-color: #FFF000;
+            }
 
-                    table {
-                        border-collapse: collapse !important;
-                    }
+            .canceled {
+            background-color: #FF0000;
+            }
 
-                    a {
-                        color: #1a82e2;
-                    }
+            .signature {
+            padding: 24px;
+            font-size: 16px;
+            line-height: 24px;
+            border-bottom: 3px solid #d4dadf;
+            }
 
-                    img {
-                        height: auto;
-                        line-height: 100%;
-                        text-decoration: none;
-                        border: 0;
-                        outline: none;
-                    }
-                    </style>
-                </head>
+            .footer-text {
+            padding: 12px 24px;
+            font-size: 14px;
+            line-height: 20px;
+            color: #666;
+            }
 
-                <body style="background-color: #e9ecef">
-                    <!-- start preheader -->
-                    <div
-                    class="preheader"
-                    style="
-                        display: none;
-                        max-width: 0;
-                        max-height: 0;
-                        overflow: hidden;
-                        font-size: 1px;
-                        line-height: 1px;
-                        color: #fff;
-                        opacity: 0;
-                    "
-                    ></div>
-                    <!-- end preheader -->
+            .unsubscribe-link {
+            color: #1a82e2;
+            text-decoration: none;
+            }
+        </style>
+        </head>
 
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                        <td align="center" bgcolor="#e9ecef">
-                        <table
-                            border="0"
-                            cellpadding="0"
-                            cellspacing="0"
-                            width="100%"
-                            style="max-width: 600px"
-                        >
-                            <tr>
-                            <td
-                                align="left"
-                                bgcolor="#ffffff"
-                                style="
-                                padding: 36px 24px 0;
-                                font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                                border-top: 3px solid #d4dadf;
-                                "
-                            >
-                                <h1
-                                style="
-                                    margin: 0;
-                                    font-size: 32px;
-                                    font-weight: 700;
-                                    letter-spacing: -1px;
-                                    line-height: 48px;
-                                "
-                                >
-                                Order Information
-                                </h1>
-                            </td>
-                            </tr>
-                        </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" bgcolor="#e9ecef">
-                        <table
-                            border="0"
-                            cellpadding="0"
-                            cellspacing="0"
-                            width="100%"
-                            style="max-width: 600px"
-                        >
-                            <!-- start copy -->
-                            <tr>
-                            <td
-                                align="left"
-                                bgcolor="#ffffff"
-                                style="
-                                padding: 24px;
-                                font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                                font-size: 16px;
-                                line-height: 24px;
-                                "
-                            >
-                                <p style="margin: 0">
-                               Thank you for your order . your order has been updated to the folowing status :
-                                </p>
-                                <p style="margin-top: 10">
+        <body>
+        <div class="container">
+            <h1>Order Information</h1>
+            <p>Thank you for your order. Your order status has been updated:</p>
 
-                                </p>
-                            </td>
-                            </tr>
-                            <tr>
-                            <td align="left" bgcolor="#ffffff">
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                <tr>
-                                    <td align="center" bgcolor="#ffffff" style="padding: 12px">
-                                    <table border="0" cellpadding="0" cellspacing="0">
-                                        <tr>
-                                        <td
-                                            align="center"
-                                            bgcolor=${
-                                              status === "pending"
-                                                ? "FFF000"
-                                                : status === "cancled" &&
-                                                  "FF0000"
-                                            }
-                                            style="border-radius: 6px"
-                                        >
-                                            <div
-                                            style="
-                                                display: inline-block;
-                                                padding: 16px 36px;
-                                                font-family: 'Source Sans Pro', Helvetica, Arial,
-                                                sans-serif;
-                                                font-size: 16px;
-                                                color: #000000;
-                                                text-decoration: none;
-                                                border-radius: 6px;
-                                            "
-                                            >
-                                            ${
-                                              status === "pending"
-                                                ? "Pending"
-                                                : status === "cancled" &&
-                                                  "Cancled"
-                                            }
-                                            </div>
-                                        </td>
-                                        </tr>
+            <div class="status-badge ${
+              status === "pending" ? "pending" : "canceled"
+            }">${status === "pending" ? "Pending" : "Canceled"}</div>
 
-                                    </table>
-                                    </td>
-                                </tr>
-                                </table>
-                            </td>
-                            </tr>
+            <div class="signature">
+            <p>Cheers,<br />FGI-Y2J</p>
+            </div>
 
-                            <tr>
-                            <td
-                                align="left"
-                                bgcolor="#ffffff"
-                                style="
-                                padding: 24px;
-                                font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                                font-size: 16px;
-                                line-height: 24px;
-                                "
-                            >
-                                <p style="margin: 0">
+            <div class="footer-text">
+            <p>To stop receiving these emails, you can <a href="#" class="unsubscribe-link">unsubscribe</a> at any time.</p>
+            </div>
+        </div>
+        </body>
 
-                                </p>
-                            </td>
-                            </tr>
-
-                            <tr>
-                            <td
-                                align="left"
-                                bgcolor="#ffffff"
-                                style="
-                                padding: 24px;
-                                font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                                font-size: 16px;
-                                line-height: 24px;
-                                border-bottom: 3px solid #d4dadf;
-                                "
-                            >
-                                <p style="margin: 0">
-                                Cheers,<br />
-                                FGI-Y2J
-                                </p>
-                            </td>
-                            </tr>
-                        </table>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td align="center" bgcolor="#e9ecef" style="padding: 24px">
-                        <table
-                            border="0"
-                            cellpadding="0"
-                            cellspacing="0"
-                            width="100%"
-                            style="max-width: 600px"
-                        >
-                            <tr>
-                            <td
-                                align="center"
-                                bgcolor="#e9ecef"
-                                style="
-                                padding: 12px 24px;
-                                font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                                font-size: 14px;
-                                line-height: 20px;
-                                color: #666;
-                                "
-                            >
-                                <p style="margin: 0">
-
-                                </p>
-                            </td>
-                            </tr>
-                            <tr>
-                            <td
-                                align="center"
-                                bgcolor="#e9ecef"
-                                style="
-                                padding: 12px 24px;
-                                font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                                font-size: 14px;
-                                line-height: 20px;
-                                color: #666;
-                                "
-                            >
-                                <p style="margin: 0">
-                                To stop receiving these emails, you can
-                                <a>unsubscribe</a>
-                                at any time.
-                                </p>
-                                <p style="margin: 0"></p>
-                            </td>
-                            </tr>
-                        </table>
-                        </td>
-                    </tr>
-                    </table>
-                </body>
-                </html>
+        </html>
 
                 `,
       };
