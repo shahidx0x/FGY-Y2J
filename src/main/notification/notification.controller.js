@@ -25,7 +25,7 @@ const notificationController = {
       const totalNotifications = await Notification.countDocuments(query);
       let notifications;
       if (limit === -1) {
-        notifications = await Notification.find().sort({ createdAt: -1 });
+        notifications = await Notification.find(query).sort({ createdAt: -1 });
         limit = totalNotifications;
       } else {
         notifications = await Notification.find(query)
@@ -34,9 +34,7 @@ const notificationController = {
           .sort({ createdAt: -1 });
       }
 
-      const totalPages = Math.ceil(
-        totalNotifications / (limit === 0 ? 1 : limit)
-      );
+      const totalPages = Math.ceil(totalNotifications / limit);
 
       res.status(200).json({
         status: 200,
