@@ -34,6 +34,14 @@ const notificationController = {
           .sort({ date: -1 });
       }
 
+      const tenMinutesAgo = new Date(Date.now() - 10 * 60000);
+      notifications = notifications.map((notification) => {
+        return {
+          ...notification.toObject(),
+          isRecent: notification.date > tenMinutesAgo,
+        };
+      });
+
       const totalPages = Math.ceil(totalNotifications / limit);
 
       res.status(200).json({

@@ -8,6 +8,7 @@ const notificationSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  isRecent: Boolean,
   read: {
     type: Boolean,
     default: false,
