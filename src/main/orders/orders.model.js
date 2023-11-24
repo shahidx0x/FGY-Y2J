@@ -51,6 +51,7 @@ OrderSchema.pre("save", function (next) {
   this.totalCost = this.items.reduce((total, item) => {
     return total + item.product_quantity * item.product_price;
   }, 0);
+  this.totalCost = parseFloat(this.totalCost.toFixed(2));
   next();
 });
 
