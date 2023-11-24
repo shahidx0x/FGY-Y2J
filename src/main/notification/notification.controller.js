@@ -62,7 +62,7 @@ const notificationController = {
 
   updateNotificationById: async (req, res) => {
     try {
-      const updatedNotification = await Notifications.findByIdAndUpdate(
+      const updatedNotification = await Notification.findByIdAndUpdate(
         req.params.id,
         req.body,
         { new: true }

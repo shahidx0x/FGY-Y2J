@@ -12,7 +12,7 @@ notification_router.post(
   notification_controller.createNotification
 );
 notification_router.patch(
-  "/notifications",
+  "/notifications/:id",
   notification_controller.updateNotificationById
 );
 module.exports = notification_router;
