@@ -20,7 +20,6 @@ const cartController = {
 
       const { name, price, afterDiscount, discount, product_image } = product;
 
-      console.log(afterDiscount, discount);
 
       let cart = await Cart.findOne({ user_email });
       if (!cart) {

@@ -55,6 +55,7 @@ cartSchema.pre("save", function (next) {
     (acc, item) => acc + item.quantity * item.price,
     0
   );
+  this.total = parseFloat(this.total.toFixed(2));
   next();
 });
 
