@@ -39,7 +39,7 @@ const orders_controller = {
         ordersQuery = ordersQuery.populate({
           path: "user_id",
           select:
-            "cartNumber email company company_slug firstName lastName phoneNumber location zipCode",
+            "cartNumber email company company_slug firstName lastName phoneNumber location zipCode firebaseFCM",
         });
       }
 
@@ -91,7 +91,6 @@ const orders_controller = {
         await axios.post(
           config.domain + `/notify/order/pending/${user_email}/${user_name}`
         );
-     
       } catch (AxiosError) {
         console.log(AxiosError);
       }
