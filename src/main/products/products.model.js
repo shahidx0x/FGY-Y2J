@@ -56,11 +56,20 @@ const productSchema = new mongoose.Schema(
     subcategory_id: String,
     subcategory_name: String,
     product_image: String,
-    discount: Number,
+    discount: {
+      type: Number,
+      default : 0
+    },
     base_price: Number,
     fet_image: [],
-    min_purchease: Number,
-    max_purchease: Number,
+    min_purchease: {
+      type: Number,
+      default : 0
+    },
+    max_purchease: {
+      type: Number,
+      default : 0
+    },
     price: Number,
     afterDiscount: Number,
     product_information: String,
