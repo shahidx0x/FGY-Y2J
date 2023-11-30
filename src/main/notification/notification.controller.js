@@ -18,9 +18,13 @@ const notificationController = {
       let limit = parseInt(req.query.limit, 10) || 10;
       let skip = (page - 1) * limit;
       let qemail = req.query.email;
+      let notify_filter = req.query.notification;
       let query = {};
       if (qemail) {
         query.user_email = qemail;
+      }
+      if (notify_filter) {
+        query.category = notify_filter;
       }
       const totalNotifications = await Notification.countDocuments(query);
       let notifications;
