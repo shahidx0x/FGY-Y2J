@@ -20,14 +20,17 @@ const notificationController = {
       let qemail = req.query.email;
       let notify_filter = req.query.notification;
       let query = {};
+      
       if (qemail) {
         query.user_email = qemail;
       }
+
       if (notify_filter) {
         query.category = notify_filter;
       }
       const totalNotifications = await Notification.countDocuments(query);
       let notifications;
+
       if (limit === -1) {
         notifications = await Notification.find(query).sort({ date: -1 });
         limit = totalNotifications;

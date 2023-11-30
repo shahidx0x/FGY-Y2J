@@ -87,6 +87,8 @@ const ProductsController = {
       const skip = (page - 1) * limit;
       const search = req.query.search || "";
       const brandSlug = req.query.brand_slug;
+      const catSlug = req.query.cat_slug;
+      const subCatSlug = req.query.subcat_slug;
       const categoryName = req.query.category_name;
       const subCategoryName = req.query.sub_category_name
         ? req.query.sub_category_name.trim()
@@ -99,6 +101,12 @@ const ProductsController = {
       }
       if (brandSlug) {
         query.brand_slug = brandSlug;
+      }
+      if (catSlug) {
+        query.category_slug = catSlug;
+      }
+      if (subCatSlug) {
+        query.subcategory_slug = subCatSlug;
       }
       if (categoryName) {
         query.category_name = new RegExp(categoryName, "i");
