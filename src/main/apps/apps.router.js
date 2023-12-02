@@ -1,6 +1,6 @@
 const express = require('express');
 const apps_router = express.Router();
-const appSettingsController = require('../controllers/appSettingsController');
+const appSettingsController = require('./apps.controller');
 
 
 apps_router.post('/app/settings', appSettingsController.createAppSettings);
