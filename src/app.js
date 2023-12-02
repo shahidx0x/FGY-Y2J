@@ -20,6 +20,7 @@ const invoice_router = require("./main/invoice/invoive.router");
 const transaction_router = require("./main/transaction/transaction.router");
 const notification_router = require("./main/notification/notification.router");
 const send_email_router = require("./main/sendEmail/sendemail.router");
+const apps_router = require("./main/apps/apps.router");
 const app = express();
 
 app.use(cors());
@@ -37,6 +38,7 @@ app.use(compression());
 app.use(dashbordController.incrementCount);
 app.use(serverLog);
 app.use(auth_router);
+app.use(apps_router);
 app.use(brands_router);
 app.use(category_router);
 app.use(subcat_router);
