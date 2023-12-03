@@ -70,6 +70,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default : 0
     },
+    product_unit_type: {
+      type: String,
+      default : 'pices'
+    },
     price: Number,
     afterDiscount: Number,
     product_information: String,
