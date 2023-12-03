@@ -72,7 +72,7 @@ const productSchema = new mongoose.Schema(
     },
     product_unit_type: {
       type: String,
-      default : 'pices'
+      default : 'Pices'
     },
     price: Number,
     afterDiscount: Number,
