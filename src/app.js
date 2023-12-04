@@ -21,6 +21,7 @@ const transaction_router = require("./main/transaction/transaction.router");
 const notification_router = require("./main/notification/notification.router");
 const send_email_router = require("./main/sendEmail/sendemail.router");
 const apps_router = require("./main/apps/apps.router");
+const unitRouter = require("./main/uniteType/ut.router");
 const app = express();
 
 app.use(cors());
@@ -50,4 +51,5 @@ app.use(invoice_router);
 app.use(transaction_router);
 app.use(notification_router);
 app.use(send_email_router);
+app.use(unitRouter);
 module.exports = app;
