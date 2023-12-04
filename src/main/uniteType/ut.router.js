@@ -16,7 +16,7 @@ unitRouter.post("/unit-types", async (req, res) => {
   try {
     const newUnitType = new UnitType({ label, value });
     const savedUnitType = await newUnitType.save();
-    res.status(200).json({message : 'Unit Created Successfully',status:200,savedUnitType});
+    res.status(200).json({message : 'Unit Created Successfully',status:200,data:savedUnitType});
   } catch (error) {
     if (error.message === "Unit already registered") {
       return res.status(409).json({ message: "Unit already registered" });
