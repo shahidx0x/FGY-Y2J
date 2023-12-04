@@ -19,6 +19,7 @@ const ProductsController = {
       const disable = req.query.disable;
       const pices = req.query.pices;
       const box = req.query.box;
+      console.log(pices, box);
 
       let query = {};
       if (req.query.product_id) {
