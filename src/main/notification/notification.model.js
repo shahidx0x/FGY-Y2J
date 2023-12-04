@@ -1,9 +1,23 @@
 const mongoose = require("mongoose");
 
+const dataSchema = new mongoose.Schema({
+  imageUrl: String,
+  appUrl:String
+})
+const actionSchema = new mongoose.Schema({
+  actionType: String,
+  otherData:String
+})
 const notificationSchema = new mongoose.Schema({
   message: {
     type: String,
   },
+  title: String,
+  data: dataSchema,
+  color: String,
+  bgColor: String,
+  priority: String,
+  action:actionSchema,
   date: {
     type: Date,
     default: Date.now,

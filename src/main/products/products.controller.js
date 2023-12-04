@@ -17,6 +17,8 @@ const ProductsController = {
         ? req.query.sub_category_name.trim()
         : null;
       const disable = req.query.disable;
+      const pices = req.query.pices;
+      const box = req.query.box;
 
       let query = {};
       if (req.query.product_id) {
@@ -25,6 +27,13 @@ const ProductsController = {
       if (brandSlug) {
         query.brand_slug = brandSlug;
       }
+      if (pices) {
+        query.product_unit_type = 'Pices';
+      }
+      if (box) {
+        query.product_unit_type = {$ne: 'Pices'}
+      }
+  
       if (catSlug) {
         query.category_slug = catSlug;
       }
