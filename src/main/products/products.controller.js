@@ -6,199 +6,107 @@ const ProductsController = {
 
   getAllProducts: async (req, res) => {
     try {
-      const page = parseInt(req.query.page, 10) || 1;
-      let limit = parseInt(req.query.limit, 10) || 10;
-      const skip = (page - 1) * limit;
-      const search = req.query.search || "";
-      const brandSlug = req.query.brand_slug;
-      const catSlug = req.query.cat_slug;
-      const subCatSlug = req.query.subcat_slug;
-      const categoryName = req.query.category_name;
-      const subCategoryName = req.query.sub_category_name
-        ? req.query.sub_category_name.trim()
-        : null;
-      const disable = req.query.disable;
-      const box = req.query.box;
-      const pices = req.query.pices;
+        const page = parseInt(req.query.page, 10) || 1;
+        let limit = parseInt(req.query.limit, 10) || 10;
+        const skip = (page - 1) * limit;
+        const search = req.query.search || "";
+        const brandSlug = req.query.brand_slug;
+        const catSlug = req.query.cat_slug;
+        const subCatSlug = req.query.subcat_slug;
+        const categoryName = req.query.category_name;
+        const subCategoryName = req.query.sub_category_name
+            ? req.query.sub_category_name.trim()
+            : null;
+        const disable = req.query.disable;
 
-      const p = 'Pices'
-  
-      let query = {};
-      if (req.query.product_id) {
-        query._id = req.query.product_id;
-      }
-      if (brandSlug) {
-        query.brand_slug = brandSlug;
-      }
-  
-      if (box) {
-        query.product_unit_type = !p;
-      }
-      if (pices) {
-        query.product_unit_type = pices;
-      }
-  
-      if (catSlug) {
-        query.category_slug = catSlug;
-      }
-      if (subCatSlug) {
-        query.subcategory_slug = subCatSlug;
-      }
-      if (categoryName) {
-        query.category_name = new RegExp(categoryName, "i");
-      }
-      if (subCategoryName) {
-        query.subcategory_name = new RegExp(subCategoryName, "i");
-      }
-      if (search) {
-        query.name = new RegExp(search, "i");
-      }
-  
-      if (disable === "true") {
-        query.isDisable = true;
-      } else if (disable === "false") {
-        query.isDisable = false;
-      }
-  
-      console.log(query);
-  
-      const totalProducts = await Products.countDocuments(query);
-  
-      let products;
-      if (limit === -1) {
-        products = await Products.find(query).sort({ createdAt: -1 });
-        limit = totalProducts;
-      } else {
-        products = await Products.find(query)
-          .skip(skip)
-          .limit(limit)
-          .sort({ createdAt: -1 });
-      }
-      if (products) {
-        products = products.map((product) => {
-          product.afterDiscount =
-            product.discount > 0
-              ? product.price - (product.price * product.discount) / 100
-              : product.price;
-          return product;
-        });
-      }
-  
-      const totalPages = Math.ceil(totalProducts / (limit === 0 ? 1 : limit));
-  
-      return res.status(200).json({
-        status: 200,
-        meta: {
-          current_page: page,
-          per_page: limit,
-          total_pages: totalPages,
-          total_products: totalProducts,
-        },
-        data: products,
-      });
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ status: 500, error: "Could not fetch products" });
-    }
-  },
-  
+        let query = {};
+        if (req.query.product_id) {
+            query._id = req.query.product_id;
+        }
+        if (brandSlug) {
+            query.brand_slug = brandSlug;
+        }
+
+        if (catSlug) {
+            query.category_slug = catSlug;
+        }
+        if (subCatSlug) {
+            query.subcategory_slug = subCatSlug;
+        }
+        if (categoryName) {
+            query.category_name = new RegExp(categoryName, "i");
+        }
+        if (subCategoryName) {
+            query.subcategory_name = new RegExp(subCategoryName, "i");
+        }
+        if (search) {
+            query.name = new RegExp(search, "i");
+        }
+
+        if (disable === "true") {
+            query.isDisable = true;
+        } else if (disable === "false") {
+            query.isDisable = false;
+        }
+
+        const unitFlag = parseInt(req.query.unit_flag, 10);
+        if (unitFlag === 0 || unitFlag === 1) {
+            query.unit_flag = unitFlag;
+        }
+
+        const boxParam = req.query.box === "true";
+        const piecesParam = req.query.pieces === "true";
+
+        if (boxParam && piecesParam) {
  
-  // getAllProducts: async (req, res) => {
-  //   try {
-  //     const page = parseInt(req.query.page, 10) || 1;
-  //     let limit = parseInt(req.query.limit, 10) || 10;
-  //     const skip = (page - 1) * limit;
-  //     const search = req.query.search || "";
-  //     const brandSlug = req.query.brand_slug;
-  //     const catSlug = req.query.cat_slug;
-  //     const subCatSlug = req.query.subcat_slug;
-  //     const categoryName = req.query.category_name;
-  //     const subCategoryName = req.query.sub_category_name
-  //       ? req.query.sub_category_name.trim()
-  //       : null;
-  //     const disable = req.query.disable;
-  //     const box = req.query.box === "true";
-  //     const pices = req.query.pices === "true";
-  //     console.log(pices, box);
+        } else if (boxParam) {
+            query.unit_flag = 0;
+        } else if (piecesParam) {
+            query.unit_flag = 1;
+        }
 
-  //     let query = {};
-  //     if (req.query.product_id) {
-  //       query._id = req.query.product_id;
-  //     }
-  //     if (brandSlug) {
-  //       query.brand_slug = brandSlug;
-  //     }
-  //     if (box) {
-  //       query.product_unit_type = { $ne: 'Pices' };
-  //     }
-  //     if (pices) {
-  //       query.product_unit_type = 'Pices';
-  //     }
-  
-  //     if (catSlug) {
-  //       query.category_slug = catSlug;
-  //     }
-  //     if (subCatSlug) {
-  //       query.subcategory_slug = subCatSlug;
-  //     }
-  //     if (categoryName) {
-  //       query.category_name = new RegExp(categoryName, "i");
-  //     }
-  //     if (subCategoryName) {
-  //       query.subcategory_name = new RegExp(subCategoryName, "i");
-  //     }
-  //     if (search) {
-  //       query.name = new RegExp(search, "i");
-  //     }
+        console.log(query);
 
-  //     if (disable === "true") {
-  //       query.isDisable = true;
-  //     } else if (disable === "false") {
-  //       query.isDisable = false;
-  //     }
-  //     console.log(query)
+        const totalProducts = await Products.countDocuments(query);
 
-  //     const totalProducts = await Products.countDocuments(query);
+        let products;
+        if (limit === -1) {
+            products = await Products.find(query).sort({ createdAt: -1 });
+            limit = totalProducts;
+        } else {
+            products = await Products.find(query)
+                .skip(skip)
+                .limit(limit)
+                .sort({ createdAt: -1 });
+        }
 
-  //     let products;
-  //     if (limit === -1) {
-  //       products = await Products.find(query).sort({ createdAt: -1 });
-  //       limit = totalProducts;
-  //     } else {
-  //       products = await Products.find(query)
-  //         .skip(skip)
-  //         .limit(limit)
-  //         .sort({ createdAt: -1 });
-  //     }
-  //     if (products) {
-  //       products = products.map((product) => {
-  //         product.afterDiscount =
-  //           product.discount > 0
-  //             ? product.price - (product.price * product.discount) / 100
-  //             : product.price;
-  //         return product;
-  //       });
-  //     }
+        if (products) {
+            products = products.map((product) => {
+                product.afterDiscount =
+                    product.discount > 0
+                        ? product.price - (product.price * product.discount) / 100
+                        : product.price;
+                return product;
+            });
+        }
 
-  //     const totalPages = Math.ceil(totalProducts / (limit === 0 ? 1 : limit));
+        const totalPages = Math.ceil(totalProducts / (limit === 0 ? 1 : limit));
 
-  //     return res.status(200).json({
-  //       status: 200,
-  //       meta: {
-  //         current_page: page,
-  //         per_page: limit,
-  //         total_pages: totalPages,
-  //         total_products: totalProducts,
-  //       },
-  //       data: products,
-  //     });
-  //   } catch (error) {
-  //     return res
-  //       .status(500)
-  //       .json({ status: 500, error: "Could not fetch products" });
-  //   }
-  // },
+        return res.status(200).json({
+            status: 200,
+            meta: {
+                current_page: page,
+                per_page: limit,
+                total_pages: totalPages,
+                total_products: totalProducts,
+            },
+            data: products,
+        });
+    } catch (error) {
+        return res.status(500).json({ status: 500, error: "Could not fetch products" });
+    }
+},
+
 
   getAllProductsByBrandId: async (req, res) => {
     try {
