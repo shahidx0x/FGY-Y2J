@@ -1,2 +1,0 @@
-sshpass -f key ssh -o StrictHostKeyChecking=no appgobd@173.208.242.170 -p 22 ./fupdate.sh 
-
