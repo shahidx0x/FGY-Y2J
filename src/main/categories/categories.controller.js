@@ -114,13 +114,13 @@ const CategoryController = {
       const totalCategory = await Category.countDocuments(query);
       let categories;
       if (limit === -1) {
-        categories = await Category.find(query).populate('brand_label','brand_slug').sort({ createdAt: -1 })
+        categories = await Category.find(query).populate('brand_slug').sort({ createdAt: -1 })
         limit = totalCategory;
       } else {
         categories = await Category.find(query)
           .skip(skip)
           .limit(limit)
-          .populate('brand_label','brand_slug')
+          .populate('brand_slug')
           .sort({ createdAt: -1 });
       }
 
