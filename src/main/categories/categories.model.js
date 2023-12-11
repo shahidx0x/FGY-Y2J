@@ -45,6 +45,7 @@ const categorySchema = new mongoose.Schema(
     },
     isActive: Boolean,
     image: String,
+    brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brands' },
     brand_id: String,
     brand_slug: String,
     brand_name: String,

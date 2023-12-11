@@ -50,6 +50,8 @@ const productSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brands' },
+    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     description: String,
     brand_id: String,
     brand_name: String,

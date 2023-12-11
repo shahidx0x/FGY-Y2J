@@ -17,7 +17,7 @@ const CategoryController = {
     }
   },
 
-  // getAllCategories: async (req, res) => {
+ 
   //   try {
   //     const page = parseInt(req.query.page, 10) || 1;
   //     let limit = parseInt(req.query.limit, 10) || 10;
@@ -114,7 +114,7 @@ const CategoryController = {
       const totalCategory = await Category.countDocuments(query);
       let categories;
       if (limit === -1) {
-        categories = await Category.find(query).sort({ createdAt: -1 });
+        categories = await Category.find(query).sort({ createdAt: -1 })
         limit = totalCategory;
       } else {
         categories = await Category.find(query)
