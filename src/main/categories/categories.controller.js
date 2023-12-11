@@ -160,7 +160,23 @@ const CategoryController = {
       });
 
       const totalPages = Math.ceil(totalCategory / (limit === 0 ? 1 : limit));
-
+      console.log(categoryWithProductCount);
+      const filteredResponse = categoryWithProductCount.map((eachCategory) => ({
+        _id: eachCategory._id,
+        category_label: eachCategory.category_label,
+        category_type: eachCategory.category_type,
+        category_description: eachCategory.category_description,
+        image: eachCategory.image,
+        brand_id: eachCategory.brand_id._id, 
+        brand_slug: eachCategory.brand_slug,
+        brand_name: eachCategory.brand_name,
+        subCategories: eachCategory.subCategories,
+        createdAt: eachCategory.createdAt,
+        updatedAt: eachCategory.updatedAt,
+        category_slug: eachCategory.category_slug,
+        __v: eachCategory.__v,
+        productCount: eachCategory.productCount,
+      }));
       res.status(200).json({
         status: 200,
         meta: {
@@ -169,7 +185,7 @@ const CategoryController = {
           current_page: page,
           per_page: limit,
         },
-        data: categoryWithProductCount,
+        data: filteredResponse,
       });
     } catch (error) {
       res
