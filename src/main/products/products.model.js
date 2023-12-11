@@ -115,6 +115,10 @@ productSchema.pre("save", async function (next) {
     this.isModified("category_slug") ||
     this.isModified("subcategory_slug")
   ) {
+    if (this.category_slug === undefined || this.subcategory_slug === undefined) {
+      this.category_slug = 'no_category';
+      this.subcategory_slug = "no_sub_category"
+    }
     this.product_slug = `${this.brand_slug}-${this.category_slug}-${this.subcategory_slug}-${slugify(
       `${this.name}`,
       {
