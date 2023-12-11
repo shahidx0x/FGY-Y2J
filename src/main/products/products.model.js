@@ -115,13 +115,13 @@ productSchema.pre("save", async function (next) {
     this.isModified("category_slug") ||
     this.isModified("subcategory_slug")
   ) {
-    this.product_slug = slugify(
-      `${this.brand_slug}_${this.category_slug}_${this.subcategory_slug}_${this.name}`,
+    this.product_slug = `${this.brand_slug}_${this.category_slug}_${this.subcategory_slug}_${slugify(
+      `${this.name}`,
       {
         lower: true,
         strict: true,
       }
-    );
+    )}`;
 
     const existingProduct = await this.constructor.findOne({
       product_slug: this.product_slug,
