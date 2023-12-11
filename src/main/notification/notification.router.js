@@ -15,4 +15,8 @@ notification_router.patch(
   "/notifications/:id",
   notification_controller.updateNotificationById
 );
+notification_router.patch(
+  "/notifications",
+  notification_controller.markAsAllRead
+);
 module.exports = notification_router;

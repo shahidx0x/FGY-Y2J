@@ -87,6 +87,15 @@ const notificationController = {
       res.status(500).json({ message: "Error updating Notification", error });
     }
   },
+  markAsAllRead: async (req, res) => {
+    try {
+      const user_email = req.query.user_email;
+      await Notification.updateMany({ user_email: user_email }, { $set: { read: true } });
+      res.status(200).json({ message: `All notifications for user ${user_email} marked as read successfully.` });
+    } catch (error) {
+      res.status(500).json({ message: 'Error marking notifications as read', error: error.message });
+    }
+  }
 };
 
 module.exports = notificationController;
