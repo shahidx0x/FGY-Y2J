@@ -160,7 +160,6 @@ const CategoryController = {
       });
 
       const totalPages = Math.ceil(totalCategory / (limit === 0 ? 1 : limit));
-      console.log(categoryWithProductCount);
       const filteredResponse = categoryWithProductCount.map((eachCategory) => ({
         _id: eachCategory._id,
         category_label: eachCategory.category_label,

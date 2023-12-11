@@ -35,10 +35,13 @@ const notificationSchema = new mongoose.Schema({
     type: String,
     default: "not-required@app.com",
   },
-
   category: {
     type: String,
     default: "general",
+  },
+  notify_category: {
+    type: String,
+    default:"account information"
   },
   link: {
     type: String,
