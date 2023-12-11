@@ -123,8 +123,6 @@ const ProductsController = {
         data: products,
       });
     } catch (error) {
-      console.log(error);
-
       return res
         .status(500)
         .json({ status: 500, error: "Could not fetch products" });

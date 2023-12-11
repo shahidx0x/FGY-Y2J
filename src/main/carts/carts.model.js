@@ -11,6 +11,8 @@ const cartItemSchema = new mongoose.Schema(
     product_id: {
       type: mongoose.Schema.Types.ObjectId, ref: 'Products'
     },
+    product_unit_type: String,
+    unit_flag:Number,
     quantity: {
       type: Number,
 
