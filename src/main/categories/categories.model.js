@@ -60,8 +60,6 @@ const categorySchema = new mongoose.Schema(
 categorySchema.pre("save", async function (next) {
   const Category = this.model("Category");
 
-  
-
   if (this.isModified("category_label") || this.isModified("brand_slug")) {
     this.category_slug = `${this.brand_slug}_${slugify(this.category_label, {
       lower: true,

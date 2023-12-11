@@ -65,12 +65,29 @@ const ProductsController = {
 
       let products;
       if (limit === -1) {
-        products = await Products.find(query).sort({ createdAt: -1 });
+        products = await Products.find(query)
+          .populate({
+            path: "brand_id",
+            select: "brand_label brand_slug",
+          })
+          .populate({
+            path: "category_id",
+            select: "category_label category_slug",
+          })
+          .sort({ createdAt: -1 });
         limit = totalProducts;
       } else {
         products = await Products.find(query)
           .skip(skip)
           .limit(limit)
+          .populate({
+            path: "brand_id",
+            select: "brand_label brand_slug",
+          })
+          .populate({
+            path: "category_id",
+            select: "category_label category_slug",
+          })
           .sort({ createdAt: -1 });
       }
 
@@ -83,6 +100,15 @@ const ProductsController = {
           return product;
         });
       }
+      products = products.map((each_product) => ({
+        ...each_product.toObject(),
+        brand_id: each_product.brand_id._id,
+        brand_name: each_product.brand_id.brand_label,
+        brand_slug: each_product.brand_id.brand_slug,
+        category_id: each_product.category_id._id,
+        category_name: each_product.category_id.category_label,
+        category_slug: each_product.category_slug.category_slug,
+      }));
 
       const totalPages = Math.ceil(totalProducts / (limit === 0 ? 1 : limit));
 
@@ -97,6 +123,8 @@ const ProductsController = {
         data: products,
       });
     } catch (error) {
+      console.log(error);
+
       return res
         .status(500)
         .json({ status: 500, error: "Could not fetch products" });
