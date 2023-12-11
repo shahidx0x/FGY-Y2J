@@ -41,7 +41,7 @@ const notificationSchema = new mongoose.Schema({
   },
   notify_category: {
     type: String,
-    default:"account information"
+    default:"UserInformation"
   },
   link: {
     type: String,
