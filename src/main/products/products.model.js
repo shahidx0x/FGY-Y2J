@@ -37,11 +37,13 @@ const productSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
+      default:"No Category"
     },
     subcategory_slug: {
       type: String,
       lowercase: true,
       trim: true,
+      default:"No Sub Category"
     },
     brand_slug: {
       type: String,

@@ -2,7 +2,7 @@ const Notification = require("./notification.model");
 const notificationController = {
   createNotification: async (req, res) => {
     try {
-      console.log(req.body);
+   
       const notification = new Notification(req.body);
       await notification.save();
       res
