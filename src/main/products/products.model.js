@@ -37,13 +37,13 @@ const productSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
-      default:"No Category"
+      default:"no_category"
     },
     subcategory_slug: {
       type: String,
       lowercase: true,
       trim: true,
-      default:"No Sub Category"
+      default:"no_sub_category"
     },
     brand_slug: {
       type: String,
@@ -115,7 +115,7 @@ productSchema.pre("save", async function (next) {
     this.isModified("category_slug") ||
     this.isModified("subcategory_slug")
   ) {
-    this.product_slug = `${this.brand_slug}_${this.category_slug}_${this.subcategory_slug}_${slugify(
+    this.product_slug = `${this.brand_slug}-${this.category_slug}-${this.subcategory_slug}-${slugify(
       `${this.name}`,
       {
         lower: true,
