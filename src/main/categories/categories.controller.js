@@ -114,13 +114,20 @@ const CategoryController = {
       const totalCategory = await Category.countDocuments(query);
       let categories;
       if (limit === -1) {
-        categories = await Category.find(query).populate('brand_slug').sort({ createdAt: -1 })
+        categories = await Category.find(query).populate({
+          path: 'brand_id',
+          select: 'brand_slug brand_label'
+        }).sort({ createdAt: -1 })
         limit = totalCategory;
+        
       } else {
         categories = await Category.find(query)
           .skip(skip)
           .limit(limit)
-          .populate('brand_slug')
+          .populate({
+            path: 'brand_id',
+            select: 'brand_slug brand_label'
+          })
           .sort({ createdAt: -1 });
       }
 
@@ -139,10 +146,17 @@ const CategoryController = {
       }, {});
 
       const categoryWithProductCount = categories.map((category) => {
-        return {
+        const updatedCategory = {
           ...category.toObject(),
           productCount: countMap[category._id.toString()] || 0,
         };
+  
+        if (updatedCategory.brand_id) {
+          updatedCategory.brand_name = updatedCategory.brand_id.brand_label;
+          updatedCategory.brand_slug = updatedCategory.brand_id.brand_slug;
+        }
+  
+        return updatedCategory;
       });
 
       const totalPages = Math.ceil(totalCategory / (limit === 0 ? 1 : limit));

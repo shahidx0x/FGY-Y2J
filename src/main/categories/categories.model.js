@@ -45,8 +45,8 @@ const categorySchema = new mongoose.Schema(
     },
     isActive: Boolean,
     image: String,
-    brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brands' },
-    brand_id: String,
+    brand_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Brands' },
+    // brand_id: String,
     brand_slug: String,
     brand_name: String,
     subCategories: [subCategorySchema],
@@ -56,6 +56,8 @@ const categorySchema = new mongoose.Schema(
 
 categorySchema.pre("save", async function (next) {
   const Category = this.model("Category");
+
+  
 
   if (this.isModified("category_label") || this.isModified("brand_slug")) {
     this.category_slug = `${this.brand_slug}_${slugify(this.category_label, {
