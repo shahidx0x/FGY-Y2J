@@ -59,7 +59,10 @@ const productSchema = new mongoose.Schema(
     category_name: String,
     subcategory_id: String,
     subcategory_name: String,
-    product_image: String,
+    product_image: {
+      type: String,
+      default:"https://www.rallis.com/Upload/Images/thumbnail/Product-inside.png"
+    },
     discount: {
       type: Number,
       default : 0

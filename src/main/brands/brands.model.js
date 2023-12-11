@@ -20,7 +20,7 @@ const brandSchema = new mongoose.Schema({
   brand_image: {
     type: String,
     default:
-      "https://www.ivins.com/wp-content/uploads/2020/09/placeholder-1.png",
+      "https://www.rallis.com/Upload/Images/thumbnail/Product-inside.png",
   },
 });
 brandSchema.pre("save", async function (next) {

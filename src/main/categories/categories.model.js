@@ -44,7 +44,10 @@ const categorySchema = new mongoose.Schema(
       unique: true,
     },
     isActive: Boolean,
-    image: String,
+    image: {
+      type: String,
+      default:"https://www.rallis.com/Upload/Images/thumbnail/Product-inside.png"
+    },
     brand_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Brands' },
     // brand_id: String,
     brand_slug: String,
