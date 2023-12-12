@@ -5,22 +5,17 @@ const cartController = {
     try {
       const { product_id, quantity } = req.body;
       const user_email = req.userEmail;
-
       let product = await Products.findById(product_id);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
-
       if (product.discount > 0) {
         product.afterDiscount =
           product.price - (product.price * product.discount) / 100;
       } else if (product.discount === 0 || product.discount < 0) {
         product.afterDiscount = product.price;
       }
-
       const { name, price, afterDiscount, discount, product_image,product_unit_type,unit_flag } = product;
-
-
       let cart = await Cart.findOne({ user_email });
       if (!cart) {
         cart = new Cart({
@@ -41,9 +36,8 @@ const cartController = {
         });
       } else {
         const itemIndex = cart.items.findIndex(
-          (item) => item.product_id === product_id
+          (item) => item.product_id._id === product_id
         );
-
         if (itemIndex > -1) {
           cart.items[itemIndex].quantity += quantity;
         } else {
@@ -54,13 +48,12 @@ const cartController = {
             quantity,
             product_unit_type,
             unit_flag,
-            price,
+            price,  
             afterDiscount,
             discount,
           });
         }
       }
-
       await cart.save();
       res.status(201).json(cart);
     } catch (error) {
