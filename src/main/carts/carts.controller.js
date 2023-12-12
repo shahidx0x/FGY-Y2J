@@ -1,5 +1,6 @@
 const Cart = require("./carts.model");
 const Products = require("../products/products.model");
+const mongoose = require("mongoose");
 const cartController = {
   addItem: async (req, res) => {
     try {
@@ -36,7 +37,7 @@ const cartController = {
         });
       } else {
         const itemIndex = cart.items.findIndex(
-          (item) => item.product_id._id.toString() === mongoose.Types.ObjectId(product_id).toString()
+          (item) => item.product_id._id.toString() === new mongoose.Types.ObjectId(product_id).toString()
         );
         console.log(itemIndex);
         if (itemIndex > -1) {
