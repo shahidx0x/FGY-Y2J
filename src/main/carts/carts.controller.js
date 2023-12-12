@@ -36,8 +36,9 @@ const cartController = {
         });
       } else {
         const itemIndex = cart.items.findIndex(
-          (item) => item.product_id._id === product_id
+          (item) => item.product_id._id.toString() === mongoose.Types.ObjectId(product_id).toString()
         );
+        console.log(itemIndex);
         if (itemIndex > -1) {
           cart.items[itemIndex].quantity += quantity;
         } else {
