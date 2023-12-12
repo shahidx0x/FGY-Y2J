@@ -39,7 +39,7 @@ const cartController = {
         const itemIndex = cart.items.findIndex(
           (item) => item.product_id._id.toString() === new mongoose.Types.ObjectId(product_id).toString()
         );
-        console.log(itemIndex);
+    
         if (itemIndex > -1) {
           cart.items[itemIndex].quantity += quantity;
         } else {
