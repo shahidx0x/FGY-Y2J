@@ -37,7 +37,7 @@ app.use(xss());
 app.use(mongoSanitize());
 app.use(compression());
 app.use(dashbordController.incrementCount);
-app.use(serverLog);
+// app.use(serverLog);
 app.use(auth_router);
 app.use(apps_router);
 app.use(brands_router);
