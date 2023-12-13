@@ -23,8 +23,8 @@ unitRouter.post("/unit-types", async (req, res) => {
         data: savedUnitType,
       });
   } catch (error) {
-    if (error.message === "Unit already registered") {
-      return res.status(409).json({ message: "Unit already registered" });
+    if (error.message === "Unit already exist") {
+      return res.status(409).json({ message: "Unit already exist" });
     }
     res.status(500).json({ message: "Error creating unit", error });
   }

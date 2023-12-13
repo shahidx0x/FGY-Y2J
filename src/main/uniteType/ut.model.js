@@ -8,11 +8,11 @@ const unitTypeSchema = new mongoose.Schema({
   },
   value: {
     type: String,
-    required: true,
+   
   },
   quantity: {
     type: Number,
-    required: true,
+  
   },
   slug: String,
 });
@@ -23,7 +23,7 @@ unitTypeSchema.pre("save", async function (next) {
 
     const existing = await UnitType.findOne({ slug: this.slug });
     if (existing) {
-      throw new Error("Unit already registered");
+      throw new Error("Unit already exist");
     }
   }
   next();
