@@ -35,8 +35,9 @@ unitRouter.patch("/unit-types", async (req, res) => {
     let updatedUnitType;
     if (req.query.unit_type) {
       const updatedUnitType = await UnitType.find({ label: req.query.unit_type });
-      updatedUnitType[0].quantity = req.body.unit_value;
-      await updatedUnitType[0].save();
+      updatedUnitType.quantity = req.body.unit_value;
+      await updatedUnitType.save();
+      
     }
     if (req.query.id) {
         updatedUnitType = await UnitType.findByIdAndUpdate(
