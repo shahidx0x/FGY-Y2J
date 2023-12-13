@@ -15,13 +15,11 @@ unitRouter.post("/unit-types", async (req, res) => {
   try {
     const newUnitType = new UnitType(req.body);
     const savedUnitType = await newUnitType.save();
-    res
-      .status(200)
-      .json({
-        message: "Unit Created Successfully",
-        status: 200,
-        data: savedUnitType,
-      });
+    res.status(200).json({
+      message: "Unit Created Successfully",
+      status: 200,
+      data: savedUnitType,
+    });
   } catch (error) {
     if (error.message === "Unit already exist") {
       return res.status(409).json({ message: "Unit already exist" });
@@ -33,22 +31,27 @@ unitRouter.post("/unit-types", async (req, res) => {
 unitRouter.patch("/unit-types", async (req, res) => {
   try {
     let updatedUnitType;
+
     if (req.query.unit_type) {
-      const updatedUnitType = await UnitType.find({ label: req.query.unit_type });
-      updatedUnitType.quantity = req.body.unit_value;
-      await updatedUnitType.save();
-      
+      updatedUnitType = await UnitType.findOne({ label: req.query.unit_type });
+
+      if (updatedUnitType) {
+        updatedUnitType.quantity = req.body.unit_value;
+        await updatedUnitType.save();
+      }
     }
+
     if (req.query.id) {
-        updatedUnitType = await UnitType.findByIdAndUpdate(
-        req.params.id,
+      updatedUnitType = await UnitType.findByIdAndUpdate(
+        req.query.id,
         req.body,
         { new: true }
       );
     }
- 
+
     res.status(200).json(updatedUnitType);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Error updating unit type" });
   }
 });
