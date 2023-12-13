@@ -34,10 +34,11 @@ unitRouter.patch("/unit-types", async (req, res) => {
 
     if (req.query.unit_type) {
       updatedUnitType = await UnitType.findOne({ label: req.query.unit_type });
-
+   
       if (updatedUnitType) {
-        updatedUnitType.quantity = req.body.unit_value;
+        updatedUnitType.quantity = req.query.unit_value;
         await updatedUnitType.save();
+       
       }
     }
 
@@ -52,7 +53,7 @@ unitRouter.patch("/unit-types", async (req, res) => {
     res.status(200).json(updatedUnitType);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error updating unit type" });
+    res.status(500).json({ error: "Error updating unit type" ,error});
   }
 });
 
