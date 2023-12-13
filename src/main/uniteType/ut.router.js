@@ -12,11 +12,16 @@ unitRouter.get("/unit-types", async (req, res) => {
 });
 
 unitRouter.post("/unit-types", async (req, res) => {
-  const { label, value } = req.body;
   try {
-    const newUnitType = new UnitType({ label, value });
+    const newUnitType = new UnitType(req.body);
     const savedUnitType = await newUnitType.save();
-    res.status(200).json({message : 'Unit Created Successfully',status:200,data:savedUnitType});
+    res
+      .status(200)
+      .json({
+        message: "Unit Created Successfully",
+        status: 200,
+        data: savedUnitType,
+      });
   } catch (error) {
     if (error.message === "Unit already registered") {
       return res.status(409).json({ message: "Unit already registered" });
@@ -26,11 +31,10 @@ unitRouter.post("/unit-types", async (req, res) => {
 });
 
 unitRouter.patch("/unit-types/:id", async (req, res) => {
-  const { label, value } = req.body;
   try {
     const updatedUnitType = await UnitType.findByIdAndUpdate(
       req.params.id,
-      { label, value },
+      req.body,
       { new: true }
     );
     res.status(200).json(updatedUnitType);
