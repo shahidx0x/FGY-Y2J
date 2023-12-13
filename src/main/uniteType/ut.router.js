@@ -30,13 +30,22 @@ unitRouter.post("/unit-types", async (req, res) => {
   }
 });
 
-unitRouter.patch("/unit-types/:id", async (req, res) => {
+unitRouter.patch("/unit-types", async (req, res) => {
   try {
-    const updatedUnitType = await UnitType.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    let updatedUnitType;
+    if (req.query.unit_type) {
+      const updatedUnitType = await UnitType.find({ label: req.query.unit_type });
+      updatedUnitType[0].quantity = req.body.unit_value;
+      await updatedUnitType[0].save();
+    }
+    if (req.query.id) {
+        updatedUnitType = await UnitType.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+      );
+    }
+ 
     res.status(200).json(updatedUnitType);
   } catch (error) {
     res.status(500).json({ error: "Error updating unit type" });
