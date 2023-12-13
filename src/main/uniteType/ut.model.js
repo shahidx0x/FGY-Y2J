@@ -8,11 +8,10 @@ const unitTypeSchema = new mongoose.Schema({
   },
   value: {
     type: String,
-   
   },
   quantity: {
     type: Number,
-  
+    default:1
   },
   slug: String,
 });
