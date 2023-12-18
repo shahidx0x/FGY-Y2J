@@ -3,6 +3,7 @@ const products_router = express.Router();
 const ProductsController = require("./products.controller");
 
 products_router.get("/get/all/products", ProductsController.getAllProducts);
+products_router.get("/products", ProductsController.getSingleProduct);
 products_router.get(
   "/get/all/products/by/brand",
   ProductsController.getAllProductsByBrandId

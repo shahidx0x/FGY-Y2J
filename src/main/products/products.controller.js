@@ -128,6 +128,20 @@ const ProductsController = {
         .json({ status: 500, error: "Could not fetch products" });
     }
   },
+  getSingleProduct: async (req, res) => {
+    try {
+      const single_product = await Products.findById(req.query.id);
+      if (!single_product) {
+        res.status(200).json({ message: "No product found with this id" });
+        return;
+      }
+      res.status(200).json({ product: single_product });
+    } catch (error) {
+    
+      res.status(500).json({ message: "Internal Server Error", error });
+    }
+  },
+  
 
   getAllProductsByBrandId: async (req, res) => {
     try {
