@@ -31,6 +31,7 @@ unitRouter.post("/unit-types", async (req, res) => {
       data: savedUnitType,
     });
   } catch (error) {
+    console.log(error);
     if (error.message === "Unit type already exist") {
       return res.status(409).json({ message: "Unit type already exist" });
     }

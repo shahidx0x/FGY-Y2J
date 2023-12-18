@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const slugify = require("slugify");
 const unitTypeSchema = new mongoose.Schema({
   label: {
     type: String,
