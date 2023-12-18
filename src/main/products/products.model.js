@@ -79,9 +79,12 @@ const productSchema = new mongoose.Schema(
     product_unit_type: {
       type: String,
     },
+    product_unit_quantity: {
+      type: Number,
+      default:1
+    },
     unit_flag: {
       type: Number,
-
     },
     price: Number,
     afterDiscount: Number,

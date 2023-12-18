@@ -16,7 +16,15 @@ const cartController = {
       } else if (product.discount === 0 || product.discount < 0) {
         product.afterDiscount = product.price;
       }
-      const { name, price, afterDiscount, discount, product_image,product_unit_type,unit_flag } = product;
+      const {
+        name,
+        price,
+        afterDiscount,
+        discount,
+        product_image,
+        product_unit_type,
+        unit_flag,
+      } = product;
       let cart = await Cart.findOne({ user_email });
       if (!cart) {
         cart = new Cart({
@@ -37,9 +45,11 @@ const cartController = {
         });
       } else {
         const itemIndex = cart.items.findIndex(
-          (item) => item.product_id._id.toString() === new mongoose.Types.ObjectId(product_id).toString()
+          (item) =>
+            item.product_id._id.toString() ===
+            new mongoose.Types.ObjectId(product_id).toString()
         );
-    
+
         if (itemIndex > -1) {
           cart.items[itemIndex].quantity += quantity;
         } else {
@@ -50,7 +60,7 @@ const cartController = {
             quantity,
             product_unit_type,
             unit_flag,
-            price,  
+            price,
             afterDiscount,
             discount,
           });
@@ -104,13 +114,10 @@ const cartController = {
       if (!cart) {
         return res.status(200).json({ message: "Cart is empty" });
       }
- 
-
       const itemIndex = cart.items.findIndex(
         (item) => item.product_id.toString() === product_id
       );
-   
-  
+
       if (itemIndex > -1) {
         cart.items[itemIndex].quantity = quantity;
       } else {
