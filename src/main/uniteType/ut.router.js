@@ -1,6 +1,7 @@
 const express = require("express");
 const unitRouter = express.Router();
 const UnitType = require("./ut.model");
+const Units = require("./ut.model");
 
 unitRouter.get("/unit-types", async (req, res) => {
   try {
@@ -8,6 +9,15 @@ unitRouter.get("/unit-types", async (req, res) => {
     res.status(200).json(unitTypes);
   } catch (error) {
     res.status(500).json({ error: "Error fetching unit types" });
+  }
+});
+
+unitRouter.get("/units", async (req, res) => {
+  try {
+    const units = await Units.find();
+    res.status(200).json(units);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching units" });
   }
 });
 
@@ -21,6 +31,24 @@ unitRouter.post("/unit-types", async (req, res) => {
       data: savedUnitType,
     });
   } catch (error) {
+    if (error.message === "Unit type already exist") {
+      return res.status(409).json({ message: "Unit type already exist" });
+    }
+    res.status(500).json({ message: "Error creating unit type", error });
+  }
+});
+
+unitRouter.post("/units", async (req, res) => {
+  try {
+    const newUnit = new Units(req.body);
+    const savedUnit = await newUnit.save();
+    res.status(200).json({
+      message: "Unit Created Successfully",
+      status: 200,
+      data: savedUnit,
+    });
+  } catch (error) {
+    console.log(error);
     if (error.message === "Unit already exist") {
       return res.status(409).json({ message: "Unit already exist" });
     }
