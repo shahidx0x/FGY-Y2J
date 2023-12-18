@@ -95,4 +95,13 @@ unitRouter.delete("/unit-types/:id", async (req, res) => {
   }
 });
 
+unitRouter.delete("/units/:id", async (req, res) => {
+  try {
+    const deletedUnitType = await Units.findByIdAndRemove(req.params.id);
+    res.status(200).json(deletedUnitType);
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting unit type" });
+  }
+});
+
 module.exports = unitRouter;
