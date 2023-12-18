@@ -165,6 +165,7 @@ const ProductsController = {
 
   createProduct: async (req, res) => {
     try {
+      console.log(req.body);
       const product = new Products(req.body);
       await product.save();
       res
