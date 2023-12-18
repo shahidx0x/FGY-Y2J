@@ -37,51 +37,52 @@ const productSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
-      default:"no_category"
+      default: "no_category",
     },
     subcategory_slug: {
       type: String,
       lowercase: true,
       trim: true,
-      default:"no_sub_category"
+      default: "no_sub_category",
     },
     brand_slug: {
       type: String,
       lowercase: true,
       trim: true,
     },
-  
+
     description: String,
-    brand_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Brands'},
+    brand_id: { type: mongoose.Schema.Types.ObjectId, ref: "Brands" },
     brand_name: String,
-    category_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
+    category_id: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
     category_name: String,
     subcategory_id: String,
     subcategory_name: String,
     product_image: {
       type: String,
-      default:"https://www.rallis.com/Upload/Images/thumbnail/Product-inside.png"
+      default:
+        "https://www.rallis.com/Upload/Images/thumbnail/Product-inside.png",
     },
     discount: {
       type: Number,
-      default : 0
+      default: 0,
     },
     base_price: Number,
     fet_image: [],
     min_purchease: {
       type: Number,
-      default : 0
+      default: 0,
     },
     max_purchease: {
       type: Number,
-      default : 0
+      default: 0,
     },
     product_unit_type: {
       type: String,
     },
     product_unit_quantity: {
       type: Number,
-      default:1
+      default: 1,
     },
     unit_flag: {
       type: Number,
@@ -122,17 +123,19 @@ productSchema.pre("save", async function (next) {
     this.isModified("category_slug") ||
     this.isModified("subcategory_slug")
   ) {
-    if (this.category_slug === undefined || this.subcategory_slug === undefined) {
-      this.category_slug = 'no_category';
-      this.subcategory_slug = "no_sub_category"
+    if (
+      this.category_slug === undefined ||
+      this.subcategory_slug === undefined
+    ) {
+      this.category_slug = "no_category";
+      this.subcategory_slug = "no_sub_category";
     }
-    this.product_slug = `${this.brand_slug}-${this.category_slug}-${this.subcategory_slug}-${slugify(
-      `${this.name}`,
-      {
-        lower: true,
-        strict: true,
-      }
-    )}`;
+    this.product_slug = `${this.brand_slug}-${this.category_slug}-${
+      this.subcategory_slug
+    }-${slugify(`${this.name}`, {
+      lower: true,
+      strict: true,
+    })}`;
 
     const existingProduct = await this.constructor.findOne({
       product_slug: this.product_slug,
