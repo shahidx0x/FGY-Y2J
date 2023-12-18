@@ -70,7 +70,6 @@ unitRouter.patch("/unit-types", async (req, res) => {
        
       }
     }
-
     if (req.query.id) {
       updatedUnitType = await UnitType.findByIdAndUpdate(
         req.query.id,

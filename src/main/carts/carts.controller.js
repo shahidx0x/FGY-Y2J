@@ -104,11 +104,13 @@ const cartController = {
       if (!cart) {
         return res.status(200).json({ message: "Cart is empty" });
       }
+ 
 
       const itemIndex = cart.items.findIndex(
-        (item) => item.product_id === product_id
+        (item) => item.product_id.toString() === product_id
       );
-
+   
+  
       if (itemIndex > -1) {
         cart.items[itemIndex].quantity = quantity;
       } else {
