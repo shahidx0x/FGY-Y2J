@@ -1,7 +1,7 @@
 const express = require("express");
 const unitRouter = express.Router();
 const UnitType = require("./ut.model");
-const Units = require("./ut.model");
+const Units = require("./uti.model");
 
 unitRouter.get("/unit-types", async (req, res) => {
   try {
