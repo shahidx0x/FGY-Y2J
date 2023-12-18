@@ -10,6 +10,12 @@ const cartController = {
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
+      if (product) {
+        if (product.isDisable) {
+          return res.status(200).json({ message: "Product is not available right now" });
+        }
+        return;
+      }
       if (product.discount > 0) {
         product.afterDiscount =
           product.price - (product.price * product.discount) / 100;
