@@ -5,7 +5,7 @@ const updateCartItemDetails = require("./carts.middleware");
 
 const carts_router = express.Router();
 
-carts_router.post("/add/cart/item", authenticate, cartController.addItem);
+carts_router.post("/add/cart/item",authenticate,  cartController.addItem);
 carts_router.get(
   "/get/cart/user/:user_email",
   authenticate,
