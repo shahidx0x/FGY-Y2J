@@ -3,7 +3,7 @@ const orders_controller = require("./orders.controller");
 const authenticate = require("../../../middleware/authenticate");
 const orders_router = express.Router();
 
-orders_router.get("/orders", authenticate, orders_controller.get_all_orders);
+orders_router.get("/orders",  orders_controller.get_all_orders);
 orders_router.post("/orders", authenticate, orders_controller.create_new_order);
 orders_router.patch(
   "/orders/:id",

@@ -18,6 +18,10 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    default_address: {
+      type: String,
+      required: false,
+    },
     order_status: {
       type: Number,
       default: 0,

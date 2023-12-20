@@ -102,7 +102,7 @@ const SubCategoryController = {
 
       if (!subCategoryData.subcategory_name || !subCategoryData.description) {
         return res.status(400).json({ message: "Invalid subcategory data" });
-      }
+      } 
 
       const category = await Category.findById(categoryId);
       if (!category) {

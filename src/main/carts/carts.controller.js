@@ -29,6 +29,7 @@ const cartController = {
         discount,
         product_image,
         product_unit_type,
+        product_unit_quantity,
         unit_flag,
       } = product;
       let cart = await Cart.findOne({ user_email });
@@ -41,6 +42,8 @@ const cartController = {
               product_image,
               product_id,
               product_unit_type,
+              product_unit: product_unit_type+"/"+product_unit_quantity,
+              product_unit_value :  product_unit_quantity,
               unit_flag,
               quantity,
               price,
@@ -65,6 +68,8 @@ const cartController = {
             product_id,
             quantity,
             product_unit_type,
+            product_unit: product_unit_type+"/"+product_unit_quantity,
+            product_unit_value :  product_unit_quantity,
             unit_flag,
             price,
             afterDiscount,
