@@ -49,15 +49,17 @@ brandSchema.pre("save", async function (next) {
     if (existingBrand) {
       throw new Error("Brand already registered");
     }
-
-    await Signup.updateMany(
-      { company_slug: this.brand_slug }, 
-      { $set: { company: this.brand_label, company_slug: this.brand_slug } } 
-    );
+    try {
+      await Signup.updateMany(
+        { company: this.brand_label },
+        { $set: { company: this.brand_label, company_slug: this.brand_slug } }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
   next();
 });
-
 
 const Brands = mongoose.model("Brands", brandSchema);
 
