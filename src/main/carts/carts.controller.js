@@ -6,7 +6,6 @@ const cartController = {
     try {
       const { product_id, quantity } = req.body;
       const user_email = req.userEmail;
-      console.log(user_email);
       let product = await Products.findById(product_id);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });

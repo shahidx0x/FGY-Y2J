@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
+const Signup = require("../../auths/auth.model");
 
 const brandSchema = new mongoose.Schema({
   brand_label: {
@@ -27,11 +28,14 @@ brandSchema.pre("save", async function (next) {
   if (this.isModified("brand_label")) {
     const baseSlug = slugify(this.brand_label, { lower: true, strict: true });
     this.brand_slug = baseSlug;
-
     const existingBrand = await Brands.findOne({ brand_slug: this.brand_slug });
     if (existingBrand) {
       throw new Error("Brand already registered");
     }
+    await Signup.updateMany(
+      { company_slug: this.brand_slug }, 
+      { $set: { company: this.brand_label, company_slug: this.brand_slug } } 
+    );
   }
   next();
 });
