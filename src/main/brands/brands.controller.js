@@ -1,6 +1,7 @@
 const Brands = require("./brands.model");
 const Category = require("../categories/categories.model");
 const Products = require("../products/products.model");
+const Signup = require("../../auths/auth.model");
 
 const brandsController = {
   createBrand: async (req, res) => {
@@ -212,15 +213,23 @@ const brandsController = {
   },
 
   updateBrandById: async (req, res) => {
+ 
     try {
       const updatedBrand = await Brands.findByIdAndUpdate(
         req.params.id,
         req.body,
         { new: true }
       );
+  
       if (!updatedBrand) {
         return res.status(404).json({ message: "Brand not found" });
       }
+  
+     const result =  await Signup.updateMany(
+        { company_slug: updatedBrand.brand_slug },
+        { $set: { company: updatedBrand.brand_label, company_slug: updatedBrand.brand_slug } }
+      );
+  
       res.status(200).json({
         message: "Brand updated successfully",
         status: 200,
