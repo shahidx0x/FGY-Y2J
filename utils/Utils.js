@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const algorithm = "aes-256-cbc";
-const key = crypto.createHash("sha256").update("12345").digest();
-const iv = crypto.createHash("md5").update("45678").digest();
+const key = crypto.createHash("sha256").update("1234").digest();
+const iv = crypto.createHash("md5").update("4567").digest();
 
 function Encryption(text) {
   let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
