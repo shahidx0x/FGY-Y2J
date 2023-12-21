@@ -76,6 +76,7 @@ const orders_controller = {
 
   create_new_order: async function (req, res) {
     try {
+      console.log(req.body);
       let user_id = req.userId;
       const { user_name, user_email } = req.body;
       const new_order = new Orders(req.body);

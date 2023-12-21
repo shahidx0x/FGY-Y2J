@@ -32,11 +32,38 @@ const OrderSchema = new mongoose.Schema(
     items: [
       new mongoose.Schema(
         {
-          product_name: String,
-          product_image: String,
-          product_quantity: Number,
-          product_price: Number,
-          product_id: String,
+          product_name: {
+            type: String,
+            required:true
+          },
+          product_image: {
+            type: String,
+            required:true
+          },
+          product_quantity: {
+            type: Number,
+            required:true
+          },
+          product_unit_type: {
+            type: String,
+            required:true
+          },
+          product_unit:{
+            type: String,
+            required:true
+          },
+          product_unit_value:{
+            type: Number,
+            required:true
+          },
+          product_price: {
+           type: Number,
+            required:true
+          },
+          product_id: {
+            type: String,
+            required:true
+          },
         },
 
         {
