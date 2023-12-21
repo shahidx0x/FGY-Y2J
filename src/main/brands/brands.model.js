@@ -50,6 +50,7 @@ brandSchema.pre("save", async function (next) {
       throw new Error("Brand already registered");
     }
     try {
+      console.log({company : this.brand_label})
       await Signup.updateMany(
         { company: this.brand_label },
         { $set: { company: this.brand_label, company_slug: this.brand_slug } }
