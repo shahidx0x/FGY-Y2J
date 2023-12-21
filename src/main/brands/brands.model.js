@@ -24,14 +24,32 @@ const brandSchema = new mongoose.Schema({
       "https://www.rallis.com/Upload/Images/thumbnail/Product-inside.png",
   },
 });
+// brandSchema.pre("save", async function (next) {
+//   if (this.isModified("brand_label")) {
+//     const baseSlug = slugify(this.brand_label, { lower: true, strict: true });
+//     this.brand_slug = baseSlug;
+//     const existingBrand = await Brands.findOne({ brand_slug: this.brand_slug });
+//     if (existingBrand) {
+//       throw new Error("Brand already registered");
+//     }
+//     await Signup.updateMany(
+//       { company_slug: this.brand_slug },
+//       { $set: { company: this.brand_label, company_slug: this.brand_slug } }
+//     );
+//   }
+//   next();
+// });
+
 brandSchema.pre("save", async function (next) {
   if (this.isModified("brand_label")) {
     const baseSlug = slugify(this.brand_label, { lower: true, strict: true });
     this.brand_slug = baseSlug;
+
     const existingBrand = await Brands.findOne({ brand_slug: this.brand_slug });
     if (existingBrand) {
       throw new Error("Brand already registered");
     }
+
     await Signup.updateMany(
       { company_slug: this.brand_slug }, 
       { $set: { company: this.brand_label, company_slug: this.brand_slug } } 
@@ -39,6 +57,7 @@ brandSchema.pre("save", async function (next) {
   }
   next();
 });
+
 
 const Brands = mongoose.model("Brands", brandSchema);
 
