@@ -36,8 +36,5 @@ brandSchema.pre("save", async function (next) {
   next();
 });
 
-
-
 const Brands = mongoose.model("Brands", brandSchema);
-
 module.exports = Brands;

@@ -187,11 +187,14 @@ const brandsController = {
   deleteBrandById: async (req, res) => {
     try {
       const brandId = req.params.id;
-      console.log(brandId);
       const brand = await Brands.findByIdAndDelete(brandId);
       if (!brand) {
         return res.status(404).json({ message: "Brand not found" });
       }
+      const result =  await Signup.updateMany(
+        { company_slug: brand.brand_slug },
+        { $set: { company: 'unavailable', company_slug: 'unavilable' } }
+      );
       const categoryDeletionResult = await Category.deleteMany({
         brand_id: brandId,
       });
