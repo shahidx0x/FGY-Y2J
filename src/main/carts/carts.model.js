@@ -38,6 +38,10 @@ const cartSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isUpdating: {
+      type: Boolean,
+      default: false,
+    },
     items: [cartItemSchema],
     total: {
       type: Number,
