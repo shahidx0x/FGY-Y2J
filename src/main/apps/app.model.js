@@ -14,11 +14,7 @@ const appsSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  product_service_policy: [
-    {
-  
-    },
-  ],
+  product_service_policy: [],
   android_version: {
     type: String,
     default: '0.0.0',

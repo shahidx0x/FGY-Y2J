@@ -34,7 +34,8 @@ exports.createAppSettings = async (req, res) => {
   };
   
 
-  exports.updateAppSettings = async (req, res) => {
+exports.updateAppSettings = async (req, res) => {
+  console.log(req.params.id);
     try {
       const updatedAppSettings = await AppSettings.findByIdAndUpdate(
         req.params.id,
@@ -44,8 +45,9 @@ exports.createAppSettings = async (req, res) => {
       if (!updatedAppSettings) {
         return res.status(404).json({ error: 'AppSettings not found' });
       }
-      res.status(200).json(updatedAppSettings);
+      return res.status(200).json({ message: 'settings updated' });
     } catch (error) {
+      console.log(error)
       res.status(500).json({ error: error.message });
     }
   };
