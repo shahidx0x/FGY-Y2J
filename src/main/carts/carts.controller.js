@@ -12,7 +12,9 @@ const cartController = {
       }
       if (product) {
         if (product.isDisable) {
-          return res.status(200).json({ message: "Product is not available right now" });
+          return res
+            .status(200)
+            .json({ message: "Product is not available right now" });
         }
       }
       if (product.discount > 0) {
@@ -41,8 +43,8 @@ const cartController = {
               product_image,
               product_id,
               product_unit_type,
-              product_unit: product_unit_type+"/"+product_unit_quantity,
-              product_unit_value :  product_unit_quantity,
+              product_unit: product_unit_type + "/" + product_unit_quantity,
+              product_unit_value: product_unit_quantity,
               unit_flag,
               quantity,
               price,
@@ -71,8 +73,8 @@ const cartController = {
             product_id,
             quantity,
             product_unit_type,
-            product_unit: product_unit_type+"/"+product_unit_quantity,
-            product_unit_value :  product_unit_quantity,
+            product_unit: product_unit_type + "/" + product_unit_quantity,
+            product_unit_value: product_unit_quantity,
             unit_flag,
             price,
             afterDiscount,
@@ -88,7 +90,6 @@ const cartController = {
     }
   },
 
-
   removeItem: async (req, res) => {
     try {
       const { user_email, product_id } = req.body;
@@ -96,14 +97,15 @@ const cartController = {
       if (!cart) {
         return res.status(200).json({ message: "Cart is empty" });
       }
-      cart.items = cart.items.filter((item) => item.product_id.toString() !== product_id);
+      cart.items = cart.items.filter(
+        (item) => item.product_id.toString() !== product_id
+      );
       await cart.save();
       res.status(200).json(cart);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   },
-
 
   getUserCart: async (req, res) => {
     try {
