@@ -93,6 +93,7 @@ const cartController = {
   removeItem: async (req, res) => {
     try {
       const { user_email, product_id } = req.body;
+
       const cart = await Cart.findOne({ user_email });
       if (!cart) {
         return res.status(200).json({ message: "Cart is empty" });
@@ -100,6 +101,7 @@ const cartController = {
       cart.items = cart.items.filter(
         (item) => item.product_id.toString() !== product_id
       );
+
       await cart.save();
       res.status(200).json(cart);
     } catch (error) {
