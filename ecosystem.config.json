@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "FGI-Y2J-dev",
+      "name": "FGI-Y2J",
       "script": "src/index.js",
       "instances": "max",
       "exec_mode": "cluster",
