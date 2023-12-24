@@ -3,14 +3,14 @@
     {
       "name": "FGI-Y2J",
       "script": "src/index.js",
-      "instances": "max",
-      "exec_mode": "cluster",
+      "instances": 1,
+      "exec_mode": "fork",
       "autorestart": true,
       "watch": false,
       "time": true,
+      "exp_backoff_restart_delay":100,
       "error_file": "./logs/err.log",
       "out_file": "./logs/out.log",
-      "exp_backoff_restart_delay": 101, 
       "env_production": {
         "NODE_ENV": "production",
         "MAINTENANCE_MODE": "false"
