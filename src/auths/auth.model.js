@@ -22,10 +22,6 @@ module.exports = mongoose.model(
         enum: [0, 1, -1],
         default: 0,
       },
-      company_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Brands",
-      },
       company: String,
       company_slug: String,
       isAccountVerified: {
