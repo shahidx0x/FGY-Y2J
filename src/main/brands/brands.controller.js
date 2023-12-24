@@ -149,7 +149,6 @@ const brandsController = {
   },
   getBrandBySlug: async (req, res) => {
     try {
-    
       const brandSlug = req.query.brand_slug || "";
       const searchCondition = brandSlug
         ? {
