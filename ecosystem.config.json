@@ -10,7 +10,7 @@
       "time": true,
       "error_file": "./logs/err.log",
       "out_file": "./logs/out.log",
-      "exp_backoff_restart_delay": 100, 
+      "exp_backoff_restart_delay": 101, 
       "env_production": {
         "NODE_ENV": "production",
         "MAINTENANCE_MODE": "false"
