@@ -6,9 +6,9 @@ const authenticate = require("../../../middleware/authenticate");
 brands_router.post(
   "/create/brands",
   authenticate,
-
   brandsController.createBrand
 );
+brands_router.get("/brand/search", brandsController.getBrandBySlug);
 brands_router.get(
   "/get/all/brands",
 

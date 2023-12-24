@@ -147,6 +147,27 @@ const brandsController = {
       res.status(500).json({ message: "Error fetching brands", error });
     }
   },
+  getBrandBySlug: async (req, res) => {
+    try {
+    
+      const brandSlug = req.query.brand_slug || "";
+      const searchCondition = brandSlug
+        ? {
+            brand_slug: {
+              $regex: new RegExp(brandSlug, "i"),
+            },
+          }
+        : {};
+
+      const brands = await Brands.find(searchCondition);
+      res.status(200).json({
+        status: 200,
+        data: brands,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching brands", error });
+    }
+  },
 
   getAllBrandsIdandName: async (req, res) => {
     try {
