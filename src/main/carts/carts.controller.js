@@ -41,11 +41,11 @@ const cartController = {
       if (!cart) {
         cart = { user_email, items: [] };
       }
-  
+
       const productIndex = cart.items.findIndex(
         (item) => item.product_id === product_id
       );
-  
+
       if (productIndex !== -1) {
         cart.items[productIndex].quantity += quantity;
       } else {
@@ -63,13 +63,18 @@ const cartController = {
           discount,
         });
       }
+
       while (true) {
         try {
           const updatedCart = await Cart.findOneAndUpdate(
             { _id: cart._id },
-            { $set: cart },
+            {
+              $addToSet: { items: { $each: cart.items } },
+              $inc: { "items.$.quantity": quantity },
+            },
             { new: true }
           );
+
           res.status(201).json(updatedCart);
           break;
         } catch (error) {
@@ -85,8 +90,6 @@ const cartController = {
     }
   },
 
-
-  
   removeItem: async (req, res) => {
     try {
       const { user_email, product_id } = req.body;
