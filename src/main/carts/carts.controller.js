@@ -36,36 +36,49 @@ const cartController = {
         unit_flag,
       } = product;
 
-      let cart = await Cart.findOneAndUpdate(
-        { user_email, "items.product_id": product_id },
-        {
-          $inc: { "items.$.quantity": quantity },
-        },
-        { new: true }
-      );
+      let cart = await Cart.findOne({ user_email });
 
       if (!cart) {
-        cart = await Cart.findOneAndUpdate(
-          { user_email },
-          {
-            $push: {
-              items: {
-                product_name: name,
-                product_image,
-                product_id,
-                product_unit_type,
-                product_unit: product_unit_type + "/" + product_unit_quantity,
-                product_unit_value: product_unit_quantity,
-                unit_flag,
-                quantity,
-                price,
-                afterDiscount,
-                discount,
-              },
-            },
-          },
-          { new: true, upsert: true }
-        );
+        cart = { user_email, items: [] };
+      }
+  
+      const productIndex = cart.items.findIndex(
+        (item) => item.product_id === product_id
+      );
+  
+      if (productIndex !== -1) {
+        cart.items[productIndex].quantity += quantity;
+      } else {
+        cart.items.push({
+          product_name: name,
+          product_image,
+          product_id,
+          product_unit_type,
+          product_unit: product_unit_type + "/" + product_unit_quantity,
+          product_unit_value: product_unit_quantity,
+          unit_flag,
+          quantity,
+          price,
+          afterDiscount,
+          discount,
+        });
+      }
+      while (true) {
+        try {
+          const updatedCart = await Cart.findOneAndUpdate(
+            { _id: cart._id },
+            { $set: cart },
+            { new: true }
+          );
+          res.status(201).json(updatedCart);
+          break;
+        } catch (error) {
+          if (error.code === 11000) {
+            cart = await Cart.findOne({ user_email });
+          } else {
+            throw error;
+          }
+        }
       }
 
       res.status(201).json(cart);
@@ -73,6 +86,7 @@ const cartController = {
       res.status(500).json({ message: error.message });
     }
   },
+
 
   
   removeItem: async (req, res) => {
