@@ -90,7 +90,6 @@ const cartController = {
       res.status(500).json({ message: error.message });
     }
   },
-  
   removeItem: async (req, res) => {
     try {
       const { user_email, product_id } = req.body;
