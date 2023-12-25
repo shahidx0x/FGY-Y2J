@@ -54,10 +54,6 @@ const cartController = {
           ],
         });
       } else {
-        if (cart.isUpdating) {
-          return res.status(409).json({ message: "Please Wait ..." });
-        }
-        cart.isUpdating = true;
         const itemIndex = cart.items.findIndex(
           (item) =>
             item.product_id._id.toString() ===
@@ -81,12 +77,10 @@ const cartController = {
             discount,
           });
         }
-        cart.isUpdating = false;
       }
       await cart.save();
       res.status(201).json(cart);
     } catch (error) {
-      console.log(error);
       res.status(500).json({ message: error.message });
     }
   },
