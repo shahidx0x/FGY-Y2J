@@ -7,24 +7,24 @@ const cartController = {
       const { product_id, quantity } = req.body;
       const user_email = req.userEmail;
       let product = await Products.findById(product_id);
-
+  
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
-
+  
       if (product.isDisable) {
         return res
           .status(200)
           .json({ message: "Product is not available right now" });
       }
-
+  
       if (product.discount > 0) {
         product.afterDiscount =
           product.price - (product.price * product.discount) / 100;
       } else if (product.discount === 0 || product.discount < 0) {
         product.afterDiscount = product.price;
       }
-
+  
       const {
         name,
         price,
@@ -35,20 +35,22 @@ const cartController = {
         product_unit_quantity,
         unit_flag,
       } = product;
-
+  
       let cart = await Cart.findOne({ user_email });
-
+  
       if (!cart) {
         cart = { user_email, items: [] };
       }
-
+  
       const productIndex = cart.items.findIndex(
         (item) => item.product_id === product_id
       );
-
+  
       if (productIndex !== -1) {
+        // If the product is already in the cart, update the quantity
         cart.items[productIndex].quantity += quantity;
       } else {
+        // If the product is not in the cart, add a new item
         cart.items.push({
           product_name: name,
           product_image,
@@ -63,24 +65,27 @@ const cartController = {
           discount,
         });
       }
-
+  
       while (true) {
         try {
           const updatedCart = await Cart.findOneAndUpdate(
-            { _id: cart._id },
+            { user_email },
             {
-              $addToSet: { items: { $each: cart.items } },
-              $inc: { "items.$.quantity": quantity },
+              $set: {
+                items: cart.items,
+              },
             },
             { new: true }
           );
-
+  
           res.status(201).json(updatedCart);
           break;
         } catch (error) {
           if (error.code === 11000) {
+            // Reload the cart and retry the update
             cart = await Cart.findOne({ user_email });
           } else {
+            // If the error is not a concurrency issue, throw the error
             throw error;
           }
         }
@@ -89,6 +94,7 @@ const cartController = {
       res.status(500).json({ message: error.message });
     }
   },
+  
 
   removeItem: async (req, res) => {
     try {
