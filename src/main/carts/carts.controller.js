@@ -81,7 +81,7 @@ const cartController = {
         }
       }
 
-      res.status(201).json(cart);
+      
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
