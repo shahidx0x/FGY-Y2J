@@ -8,7 +8,6 @@ addItem: async (req, res) => {
     const { product_id, quantity } = req.body;
     const user_email = req.userEmail;
 
-    // Use findOneAndUpdate with upsert option to handle concurrency
     const cart = await Cart.findOneAndUpdate(
       { user_email, isUpdating: false },
       { $set: { isUpdating: true } },
@@ -72,7 +71,6 @@ addItem: async (req, res) => {
       });
     }
 
-    // Release the lock and save the cart
     cart.isUpdating = false;
     await cart.save();
 
