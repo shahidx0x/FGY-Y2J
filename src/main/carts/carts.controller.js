@@ -6,23 +6,19 @@ const cartController = {
     try {
       const { product_id, quantity } = req.body;
       const user_email = req.userEmail;
-      let cart = await Cart.findOne({ user_email });
 
-      if (!cart) {
-        cart = new Cart({
-          user_email,
-          items: [],
-        });
-      }
+      const cart = await Cart.findOneAndUpdate(
+        { user_email },
+        { $setOnInsert: { user_email }, $set: { isUpdating: true } },
+        { upsert: true, new: true }
+      );
 
-      const isUpdating = cart.isUpdating;
-      if (isUpdating) {
+      if (cart.isUpdating) {
         return res
           .status(409)
           .json({ message: "Please wait for the update to complete." });
       }
 
-      cart.isUpdating = true;
       let product = await Products.findById(product_id);
 
       if (!product) {
@@ -43,7 +39,6 @@ const cartController = {
       } else {
         product.afterDiscount = product.price;
       }
-
       const {
         name,
         price,
@@ -82,6 +77,7 @@ const cartController = {
 
       res.status(201).json(cart);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: error.message });
     }
   },
