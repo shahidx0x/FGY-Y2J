@@ -47,50 +47,40 @@ const cartController = {
       );
   
       if (productIndex !== -1) {
-        // If the product is already in the cart, update the quantity
+    
         cart.items[productIndex].quantity += quantity;
       } else {
-        // If the product is not in the cart, add a new item
-        cart.items.push({
-          product_name: name,
-          product_image,
-          product_id,
-          product_unit_type,
-          product_unit: product_unit_type + "/" + product_unit_quantity,
-          product_unit_value: product_unit_quantity,
-          unit_flag,
-          quantity,
-          price,
-          afterDiscount,
-          discount,
-        });
-      }
-  
-      while (true) {
-        try {
-          const updatedCart = await Cart.findOneAndUpdate(
-            { user_email },
-            {
-              $set: {
-                items: cart.items,
-              },
-            },
-            { new: true }
-          );
-  
-          res.status(201).json(updatedCart);
-          break;
-        } catch (error) {
-          if (error.code === 11000) {
-            // Reload the cart and retry the update
-            cart = await Cart.findOne({ user_email });
-          } else {
-            // If the error is not a concurrency issue, throw the error
-            throw error;
-          }
+        if (cart.isUpdating) {
+          return res.status(409).json({ message: "Please Wait ..." });
         }
+        cart.isUpdating = true;
+        const itemIndex = cart.items.findIndex(
+          (item) =>
+            item.product_id._id.toString() ===
+            new mongoose.Types.ObjectId(product_id).toString()
+        );
+
+        if (itemIndex > -1) {
+          cart.items[itemIndex].quantity += quantity;
+        } else {
+          cart.items.push({
+            product_name: name,
+            product_image,
+            product_id,
+            quantity,
+            product_unit_type,
+            product_unit: product_unit_type + "/" + product_unit_quantity,
+            product_unit_value: product_unit_quantity,
+            unit_flag,
+            price,
+            afterDiscount,
+            discount,
+          });
+        }
+        cart.isUpdating = false;
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: error.message });
     }
   },
