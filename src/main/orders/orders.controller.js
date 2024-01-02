@@ -10,6 +10,7 @@ const orders_controller = {
       const search = req.query.search;
       const orderStatus = req.query.order_status;
       const shouldPopulateUser = req.query.populate === "user";
+      const indiviualOrder = req.query.email;
 
       let query = {};
 
@@ -18,6 +19,9 @@ const orders_controller = {
       }
       if (orderStatus) {
         query.order_status = orderStatus;
+      }
+      if (indiviualOrder) {
+        query.user_email = indiviualOrder;
       }
 
       if (req.query.order_list === "today") {
