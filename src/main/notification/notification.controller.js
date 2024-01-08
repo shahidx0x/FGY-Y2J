@@ -2,7 +2,6 @@ const Notification = require("./notification.model");
 const notificationController = {
   createNotification: async (req, res) => {
     try {
-   
       const notification = new Notification(req.body);
       await notification.save();
       res
@@ -21,11 +20,12 @@ const notificationController = {
       let qemail = req.query.email;
       let notify_filter = req.query.notification;
       let query = {};
-      
+
       if (qemail) {
         query.user_email = qemail;
       }
-
+      let unread = await Notification.find({ read: true }).countDocuments();
+  
       if (notify_filter) {
         query.category = notify_filter;
       }
@@ -56,6 +56,7 @@ const notificationController = {
         status: 200,
         meta: {
           total_Notifications: totalNotifications,
+          unread: unread,
           total_page: totalPages,
           current_page: page,
           per_page: limit,
@@ -90,12 +91,24 @@ const notificationController = {
   markAsAllRead: async (req, res) => {
     try {
       const user_email = req.query.user_email;
-      await Notification.updateMany({ user_email: user_email }, { $set: { read: true } });
-      res.status(200).json({ message: `All notifications for user ${user_email} marked as read successfully.` });
+      await Notification.updateMany(
+        { user_email: user_email },
+        { $set: { read: true } }
+      );
+      res
+        .status(200)
+        .json({
+          message: `All notifications for user ${user_email} marked as read successfully.`,
+        });
     } catch (error) {
-      res.status(500).json({ message: 'Error marking notifications as read', error: error.message });
+      res
+        .status(500)
+        .json({
+          message: "Error marking notifications as read",
+          error: error.message,
+        });
     }
-  }
+  },
 };
 
 module.exports = notificationController;
