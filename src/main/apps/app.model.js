@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const appsSchema = new mongoose.Schema({
-
   check_out_note: {
     type: String,
     required: true,
@@ -17,11 +16,11 @@ const appsSchema = new mongoose.Schema({
   product_service_policy: [],
   android_version: {
     type: String,
-    default: '0.0.0',
+    default: "0.0.0",
   },
   app_current_version: {
     type: String,
-    default: '0.0.0',
+    default: "0.0.0",
   },
   force_update: {
     type: Boolean,
@@ -31,19 +30,27 @@ const appsSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  adv_popup: {
+    type: Boolean,
+    default: false,
+  },
+  adv_banner: {
+    type: Boolean,
+    default: false,
+  },
   popup_image: {
     type: String,
-    default: '',
+    default: "",
   },
   offer_banner: {
     type: String,
-    default: '',
+    default: "",
   },
   offer_text: {
     type: String,
-    default: '',
+    default: "",
   },
 });
 
-const AppSettings = mongoose.model('AppSettings', appsSchema);
+const AppSettings = mongoose.model("AppSettings", appsSchema);
 module.exports = AppSettings;
