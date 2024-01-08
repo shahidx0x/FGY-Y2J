@@ -19,12 +19,17 @@ const notificationController = {
       let skip = (page - 1) * limit;
       let qemail = req.query.email;
       let notify_filter = req.query.notification;
+      let get_unread = req.query.unread;
       let query = {};
+
+      if (get_unread) {
+        query.read = true;
+      }
 
       if (qemail) {
         query.user_email = qemail;
       }
-      let unread = await Notification.find({ read: true }).countDocuments();
+      let unread = await Notification.find(query).countDocuments();
   
       if (notify_filter) {
         query.category = notify_filter;
