@@ -29,8 +29,11 @@ const notificationController = {
       if (qemail) {
         query.user_email = qemail;
       }
-      let unread = await Notification.find(query).countDocuments();
-  
+      let unread = await Notification.find({
+        category: "general",
+        read: false,
+      }).countDocuments();
+
       if (notify_filter) {
         query.category = notify_filter;
       }
@@ -100,18 +103,14 @@ const notificationController = {
         { user_email: user_email },
         { $set: { read: true } }
       );
-      res
-        .status(200)
-        .json({
-          message: `All notifications for user ${user_email} marked as read successfully.`,
-        });
+      res.status(200).json({
+        message: `All notifications for user ${user_email} marked as read successfully.`,
+      });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          message: "Error marking notifications as read",
-          error: error.message,
-        });
+      res.status(500).json({
+        message: "Error marking notifications as read",
+        error: error.message,
+      });
     }
   },
 };
