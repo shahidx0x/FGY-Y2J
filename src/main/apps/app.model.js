@@ -21,7 +21,7 @@ const appsSchema = new mongoose.Schema({
   },
   app_current_version: {
     type: String,
-    default: '0.0.1',
+    default: '0.0.0',
   },
   force_update: {
     type: Boolean,
