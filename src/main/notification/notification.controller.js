@@ -23,7 +23,7 @@ const notificationController = {
       let query = {};
 
       if (get_unread) {
-        query.read = true;
+        query.read = false;
       }
 
       if (qemail) {
