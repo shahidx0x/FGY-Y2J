@@ -5,7 +5,6 @@ const Products = require("../products/products.model");
 const excel = require("exceljs");
 const { ObjectId } = require("mongodb");
 
-
 module.exports = export_controller = {
   export_brands: async (req, res) => {
     try {
@@ -31,7 +30,7 @@ module.exports = export_controller = {
 
       const filePath = path.join(__dirname, fileName);
       await workbook.xlsx.writeFile(filePath);
-
+      res.attachment(fileName);
       res.sendFile(fileName, { root: __dirname });
     } catch (error) {
       console.error("Error:", error);
