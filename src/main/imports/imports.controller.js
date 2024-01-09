@@ -30,10 +30,16 @@ exports.import_companys = async (req, res) => {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const jsonData = xlsx.utils.sheet_to_json(sheet);
-      console.log(jsonData);
+      const toBeInserted = jsonData.filter((item) => ({
+        brand_label: item.brand_label,
+        brand_email: item.brand_email || "",
+        brand_address: item.brand_address || "",
+        brand_image: item.brand_image || "",
+        brand_description: item.brand_description || "",
+      }));
       try {
         await Brands.insertMany(
-          jsonData.map((data) => ({ ...data, _id: new ObjectId() }))
+          toBeInserted.map((data) => ({ ...data, _id: new ObjectId() }))
         );
         res.status(200).json({ message: "Data imported successfully" });
       } catch (error) {
