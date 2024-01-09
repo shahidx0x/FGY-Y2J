@@ -23,11 +23,16 @@ module.exports = export_controller = {
       );
       worksheet.addRow(headers);
 
-      data.forEach((row) => {
+      const xldataOrder = data.map((item) => ({
+        brand_label: item.brand_label,
+        brand_email: item.brand_email || "",
+        brand_address: item.brand_address || "",
+        brand_image: item.brand_image || "",
+        brand_description: item.brand_description || "",
+      }));
+
+      xldataOrder.forEach((row) => {
         const values = Object.values(row);
-        values.splice(0, 1);
-        values.splice(5, 1);
-        values.splice(4, 1);
         worksheet.addRow(values);
       });
       const fileName = "exported_companys.xlsx";
