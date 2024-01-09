@@ -22,6 +22,7 @@ const notification_router = require("./main/notification/notification.router");
 const send_email_router = require("./main/sendEmail/sendemail.router");
 const apps_router = require("./main/apps/apps.router");
 const unitRouter = require("./main/uniteType/ut.router");
+const export_router = require("./main/export/export.router");
 const app = express();
 
 app.use(cors());
@@ -52,4 +53,5 @@ app.use(transaction_router);
 app.use(notification_router);
 app.use(send_email_router);
 app.use(unitRouter);
+app.use(export_router);
 module.exports = app;
