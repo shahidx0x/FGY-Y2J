@@ -39,13 +39,11 @@ exports.import_companys = async (req, res) => {
       } catch (error) {
         console.log(error);
         if (error.code === 11000) {
-          res
-            .status(400)
-            .json({
-              message:
-                    "Duplicate data detected . Ensure that data alrady not in the database .",
-                error
-            });
+          res.status(400).json({
+            message:
+              "Duplicate data detected . Ensure that data alrady not in the database .",
+            error,
+          });
         } else {
           console.error("Error processing file:", error);
           res.status(500).json({ message: "Internal Server Error" });

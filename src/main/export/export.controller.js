@@ -16,7 +16,10 @@ module.exports = export_controller = {
       const workbook = new excel.Workbook();
       const worksheet = workbook.addWorksheet("Sheet 1");
       const headers = Object.keys(data[0]).filter(
-        (key) => !key.startsWith("$") && !key.startsWith("_")
+        (key) =>
+          !key.startsWith("$") &&
+          !key.startsWith("_") &&
+          !key.startsWith("brand_slug")
       );
       worksheet.addRow(headers);
 
@@ -24,6 +27,8 @@ module.exports = export_controller = {
         const values = Object.values(row);
         values.splice(0, 1);
         values.splice(5, 1);
+        values.splice(4, 1);
+
         worksheet.addRow(values);
       });
       const fileName = "exported_companys.xlsx";
