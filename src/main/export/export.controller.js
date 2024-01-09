@@ -27,7 +27,7 @@ module.exports = export_controller = {
         values.splice(5, 1);
         worksheet.addRow(values);
       });
-      const fileName = "exported_brands.xlsx";
+      const fileName = "exported_companys.xlsx";
 
       const filePath = path.join(__dirname, fileName);
       await workbook.xlsx.writeFile(filePath);
