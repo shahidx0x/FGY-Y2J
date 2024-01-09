@@ -89,7 +89,7 @@ const brandsController = {
         return map;
       }, {});
 
-      const finalProducts = brands.map((brand) => {
+      const addedCount = brands.map((brand) => {
         return {
           ...brand.toObject(),
           productCount: countMap[brand._id] || 0,
@@ -98,6 +98,19 @@ const brandsController = {
       });
 
       const total_page = Math.ceil(totalBrands / limit);
+      const orderedBrands = addedCount.map(brand => ({
+        _id: brand._id,
+        brand_label: brand.brand_label || '',
+        brand_email: brand.brand_email || '',
+        brand_address: brand.brand_address || '',
+        brand_image: brand.brand_image || '',
+        brand_slug: brand.brand_slug || '',
+        __v: brand.__v || 0,
+        brand_description: brand.brand_description || '',
+        productCount: brand.productCount || 0,
+        categoryCount: brand.categoryCount || 0
+      }));
+      
 
       res.status(200).json({
         status: 200,
@@ -107,7 +120,7 @@ const brandsController = {
           current_page: page,
           per_page: limit,
         },
-        data: finalProducts,
+        data: orderedBrands,
       });
     } catch (error) {
       res.status(500).json({ message: "Error fetching brands", error });

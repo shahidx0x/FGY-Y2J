@@ -28,7 +28,6 @@ module.exports = export_controller = {
         values.splice(0, 1);
         values.splice(5, 1);
         values.splice(4, 1);
-
         worksheet.addRow(values);
       });
       const fileName = "exported_companys.xlsx";
