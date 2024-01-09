@@ -23,6 +23,7 @@ const send_email_router = require("./main/sendEmail/sendemail.router");
 const apps_router = require("./main/apps/apps.router");
 const unitRouter = require("./main/uniteType/ut.router");
 const export_router = require("./main/export/export.router");
+const imports_router = require("./main/imports/imports.router");
 const app = express();
 
 app.use(cors());
@@ -54,4 +55,5 @@ app.use(notification_router);
 app.use(send_email_router);
 app.use(unitRouter);
 app.use(export_router);
+app.use(imports_router);
 module.exports = app;

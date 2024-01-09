@@ -4,6 +4,7 @@ const config = require("../../configs/config");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
+const xlsx = require("xlsx");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single("file");
@@ -22,7 +23,6 @@ exports.uploadFile = async (req, res) => {
     const randomUID = uuidv4();
     const fileExtension = path.extname(req.file.originalname);
     const filename = `${randomUID}${fileExtension}`;
-
     const outputPath = path.join(__dirname, "..", "..", "uploads", filename);
 
     try {
@@ -43,6 +43,7 @@ exports.uploadFile = async (req, res) => {
     }
   });
 };
+
 exports.deleteImage = (req, res) => {
   const imageName = req.params.imageName;
   const imagePath = path.join(__dirname, "..", "..", "uploads", imageName);
@@ -58,3 +59,5 @@ exports.deleteImage = (req, res) => {
     res.status(500).json(error.message);
   }
 };
+
+
