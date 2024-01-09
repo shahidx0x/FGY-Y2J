@@ -2,9 +2,8 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const xlsx = require("xlsx");
-const config = require("../../../configs/config");
 const Brands = require("../brands/brands.model");
-const { log } = require("console");
+const { default: slugify } = require("slugify");
 const ObjectId = require("mongodb").ObjectId;
 
 const storage = multer.memoryStorage();
@@ -41,11 +40,23 @@ exports.import_companys = async (req, res) => {
         brand_image: item.brand_image || "no image",
         brand_description: item.brand_description || "no desciption",
       }));
-      console.log(toBeInserted);
+      const toBeInsertedWithSlug = toBeInserted.map((data) => ({
+        ...data,
+        brand_slug: slugify(data.brand_label, { lower: true, strict: true }),
+        _id: new ObjectId(),
+      }));
+        
+      const uniqueBrandSlugs = Array.from(
+        new Set(toBeInsertedWithSlug.map((data) => data.brand_slug))
+      );
+      if (toBeInsertedWithSlug.length !== uniqueBrandSlugs.length) {
+        res
+          .status(400)
+          .json({ message: "Duplicate data detected in xl sheet" });
+        return;
+      }
       try {
-        await Brands.insertMany(
-          toBeInserted.map((data) => ({ ...data, _id: new ObjectId() }))
-        );
+        await Brands.insertMany(toBeInsertedWithSlug);
         res.status(200).json({ message: "Data imported successfully" });
       } catch (error) {
         console.log(error);
@@ -60,12 +71,6 @@ exports.import_companys = async (req, res) => {
           res.status(500).json({ message: "Internal Server Error" });
         }
       }
-
-      const fileUrl = `${config.domain}/uploads/${originalFileName}`;
-      //   res.status(200).json({
-      //     message: "File uploaded successfully",
-      //     fileUrl,
-      //   });
     } catch (writeErr) {
       console.log(writeErr);
       res
